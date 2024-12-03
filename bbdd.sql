@@ -1,0 +1,52 @@
+drop database if exists guardias;
+create database guardias;
+
+DROP TABLE IF EXISTS PROFESOR;
+CREATE TABLE PROFESOR (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(32),
+    apellidos VARCHAR(32),
+    nif VARCHAR(9),
+    contrasenya TEXT,
+    admin BOOLEAN,
+    direccion VARCHAR(256),
+    telefono VARCHAR(9),
+    email VARCHAR(256)
+);
+
+DROP TABLE IF EXISTS MATERIA;
+CREATE TABLE MATERIA (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(32)
+);
+
+DROP TABLE IF EXISTS MATERIAPROFESOR;
+CREATE TABLE MATERIAPROFESOR (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    idprofesor INT,
+    idmateria INT,
+    FOREIGN KEY(idprofesor) REFERENCES PROFESOR(id),
+    FOREIGN KEY(idmateria) REFERENCES MATERIA(id)
+);
+
+DROP TABLE IF EXISTS SESION;
+CREATE TABLE SESION (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idprofesor INT,
+    idgrupo INT,
+    idintervalo INT,
+    idmateria INT,
+    aula VARCHAR(16),
+    FOREIGN KEY(idprofesor) REFERENCES PROFESOR(id),
+    FOREIGN KEY(idgrupo) REFERENCES GRUPO(id),
+    FOREIGN KEY(idintervalo) REFERENCES INTERVALO(id),
+    FOREIGN KEY(idmateria) REFERENCES MATERIA(id)
+);
+
+DROP TABLE IF EXISTS GRUPO;
+CREATE TABLE GRUPO (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(10),
+    idtutor INT,
+    FOREIGN KEY(tutor) REFERENCES PROFESOR(id)
+);
