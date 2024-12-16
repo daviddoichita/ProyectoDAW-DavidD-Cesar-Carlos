@@ -1,6 +1,7 @@
 package ies.camp.guardias.repository.entity;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +30,11 @@ public class Intervalo {
     @Column(name = "horafin")
     private LocalTime horaFin;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cuadrante")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "intervalo")
     @ToString.Exclude
-    private Cuadrante cuadrante;
+    private List<Sesion> listaSesiones;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "intervalo")
+    @ToString.Exclude
+    private List<Cuadrante> listaCuadrantes;
 }
