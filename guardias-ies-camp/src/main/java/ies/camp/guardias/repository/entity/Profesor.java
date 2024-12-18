@@ -54,7 +54,7 @@ public class Profesor {
     @ToString.Exclude
     private List<Cuadrante> lisCuadrantes;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "materiaprofesor", joinColumns = @JoinColumn(name = "idprofesor"), inverseJoinColumns = @JoinColumn(name = "idmateria"))
     @ToString.Exclude
     private List<Materia> listaMaterias;
