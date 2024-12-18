@@ -24,7 +24,7 @@ public class Curso {
 
     private String nombre;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cargo")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "curso")
     @ToString.Exclude
     private List<Cuadrante> listaCuadrantes;
 }
