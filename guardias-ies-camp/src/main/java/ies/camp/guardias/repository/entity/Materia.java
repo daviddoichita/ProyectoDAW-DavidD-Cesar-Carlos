@@ -29,7 +29,7 @@ public class Materia {
     @ToString.Exclude
     private List<Sesion> listaSesiones;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "listaMaterias")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "listaMaterias")
     @ToString.Exclude
     private List<Profesor> listaProfesores;
 }
