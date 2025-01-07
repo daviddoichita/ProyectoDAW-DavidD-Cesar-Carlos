@@ -90,3 +90,6 @@ CREATE TABLE cuadrante (
     FOREIGN KEY(idprofesor) REFERENCES profesor(id),
     FOREIGN KEY(idcurso) REFERENCES curso(id)
 );
+
+-- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';
+-- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
