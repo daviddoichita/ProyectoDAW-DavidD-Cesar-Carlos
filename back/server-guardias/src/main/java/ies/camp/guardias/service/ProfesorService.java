@@ -1,6 +1,23 @@
 package ies.camp.guardias.service;
 
-//TODO: Implement
+import java.util.List;
+
+import ies.camp.guardias.model.dto.ProfesorDTO;
+
 public interface ProfesorService {
 
+    /**
+     * Devuelve todos los profesores de la base de datos convertidos a ProfesorDTO
+     * 
+     * @return lista de ProfesorDTO
+     */
+    public List<ProfesorDTO> findAll();
+
+    /**
+     * Devuelve el ProfesorDTO asociado al id introducido o null si no existe
+     * 
+     * @param id ID del Profesor a buscar
+     * @return Profesor si encuentra el id introducido o null en caso contrario
+     */
+    public ProfesorDTO findById(Long id);
 }

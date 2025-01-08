@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "grupo")
-public class Grupo implements Serializable {
+public class Grupo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
