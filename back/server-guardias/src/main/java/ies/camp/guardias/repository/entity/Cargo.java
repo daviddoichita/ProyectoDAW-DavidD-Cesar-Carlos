@@ -23,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "cargo")
-public class Cargo implements Serializable {
+public class Cargo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

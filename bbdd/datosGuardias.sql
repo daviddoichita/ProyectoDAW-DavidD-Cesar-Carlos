@@ -1031,14 +1031,14 @@ insert into materiaprofesor (id, idmateria, idprofesor) values (700, 10, 112);
 
 -- GRUPO
 insert into grupo (id, idtutor, nombre) values (1, 187, '2O');
-insert into grupo (id, idtutor, nombre) values (2, 289, '8C');
+insert into grupo (id, idtutor, nombre) values (2, 77, '8C');
 insert into grupo (id, idtutor, nombre) values (3, 160, '9C');
 insert into grupo (id, idtutor, nombre) values (4, 240, '2E');
 insert into grupo (id, idtutor, nombre) values (5, 288, '5D');
 insert into grupo (id, idtutor, nombre) values (6, 297, '4E');
 insert into grupo (id, idtutor, nombre) values (7, 42, '9E');
 insert into grupo (id, idtutor, nombre) values (8, 63, '6C');
-insert into grupo (id, idtutor, nombre) values (9, 211, '6F');
+insert into grupo (id, idtutor, nombre) values (9, 13, '6F');
 insert into grupo (id, idtutor, nombre) values (10, 173, '1C');
 insert into grupo (id, idtutor, nombre) values (11, 83, '6J');
 insert into grupo (id, idtutor, nombre) values (12, 295, '5F');
@@ -1068,7 +1068,7 @@ insert into grupo (id, idtutor, nombre) values (35, 206, '3A');
 insert into grupo (id, idtutor, nombre) values (36, 19, '6E');
 insert into grupo (id, idtutor, nombre) values (37, 224, '5A');
 insert into grupo (id, idtutor, nombre) values (38, 79, '3M');
-insert into grupo (id, idtutor, nombre) values (39, 120, '7N');
+insert into grupo (id, idtutor, nombre) values (39, 12, '7N');
 insert into grupo (id, idtutor, nombre) values (40, 126, '5O');
 insert into grupo (id, idtutor, nombre) values (41, 144, '5P');
 insert into grupo (id, idtutor, nombre) values (42, 185, '4O');
@@ -1078,7 +1078,7 @@ insert into grupo (id, idtutor, nombre) values (45, 11, '4V');
 insert into grupo (id, idtutor, nombre) values (46, 38, '4D');
 insert into grupo (id, idtutor, nombre) values (47, 26, '4H');
 insert into grupo (id, idtutor, nombre) values (48, 10, '1J');
-insert into grupo (id, idtutor, nombre) values (49, 11, '7N');
+insert into grupo (id, idtutor, nombre) values (49, 52, '7N');
 insert into grupo (id, idtutor, nombre) values (50, 121, '3Z');
 
 -- INTERVALO

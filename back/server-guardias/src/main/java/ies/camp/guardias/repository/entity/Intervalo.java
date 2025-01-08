@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "intervalo")
-public class Intervalo implements Serializable {
+public class Intervalo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,10 @@ public class Intervalo implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "intervalo")
     @ToString.Exclude
     private Set<Cuadrante> cuadrantes;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "intervalo")
+    @ToString.Exclude
+    private Set<Sesion> sesiones;
 
     @Override
     public int hashCode() {

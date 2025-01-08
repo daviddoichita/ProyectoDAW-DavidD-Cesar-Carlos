@@ -1,14 +1,15 @@
 package ies.camp.guardias.repository.entity;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "materia")
-public class Materia implements Serializable {
+public class Materia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,9 @@ public class Materia implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "materias")
     @ToString.Exclude
     private Set<Profesor> profesores;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materia")
+    private Set<Sesion> sesiones;
 
     @Override
     public int hashCode() {
