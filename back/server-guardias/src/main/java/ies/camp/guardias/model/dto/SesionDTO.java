@@ -20,6 +20,7 @@ public class SesionDTO implements Serializable {
     private GrupoDTO grupoDTO;
     private MateriaDTO materiaDTO;
     private IntervaloDTO intervaloDTO;
+    private DiaDTO diaDTO;
 
     /**
      * Recibe una Sesion y la convierte a SesionDTO
@@ -35,6 +36,7 @@ public class SesionDTO implements Serializable {
                 .grupoDTO(GrupoDTO.convertToDTO(sesion.getGrupo()))
                 .materiaDTO(MateriaDTO.convertToDTO(sesion.getMateria()))
                 .intervaloDTO(IntervaloDTO.convertToDTO(sesion.getIntervalo()))
+                .diaDTO(DiaDTO.convertToDTO(sesion.getDia()))
                 .build();
     }
 
@@ -52,6 +54,7 @@ public class SesionDTO implements Serializable {
                 .grupo(GrupoDTO.convertToEntity(sesionDTO.getGrupoDTO()))
                 .materia(MateriaDTO.convertToEntity(sesionDTO.getMateriaDTO()))
                 .intervalo(IntervaloDTO.convertToEntity(sesionDTO.getIntervaloDTO()))
+                .dia(DiaDTO.convertToEntity(sesionDTO.getDiaDTO()))
                 .build();
     }
 }
