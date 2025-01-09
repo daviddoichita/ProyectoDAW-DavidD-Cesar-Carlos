@@ -1,0 +1,19 @@
+<div class="main">
+    <p-dropdown placeholder="Selecciona un profesor"></p-dropdown>
+
+
+<div class="flex justify-content-center">
+    <p-floatLabel>
+        <p-calendar inputId="rango"
+        [(ngModel)]="rangeDates" 
+        selectionMode="range" 
+        [readonlyInput]="true"/>
+        <label for="rango">Selecciona un rango</label>
+    </p-floatLabel>
+</div>
+
+
+<div class="card flex justify-content-center">
+    <p-button label="Submit" />
+</div>
+</div>
