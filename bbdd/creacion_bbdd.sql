@@ -46,6 +46,12 @@ CREATE TABLE intervalo (
     horafin TIME
 );
 
+DROP TABLE IF EXISTS dia;
+CREATE TABLE dia (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(9)
+);
+
 DROP TABLE IF EXISTS sesion;
 CREATE TABLE sesion (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -53,11 +59,13 @@ CREATE TABLE sesion (
     idgrupo INT,
     idintervalo INT,
     idmateria INT,
+    iddia INT,
     aula VARCHAR(16),
     FOREIGN KEY(idprofesor) REFERENCES profesor(id),
     FOREIGN KEY(idgrupo) REFERENCES grupo(id),
     FOREIGN KEY(idintervalo) REFERENCES intervalo(id),
-    FOREIGN KEY(idmateria) REFERENCES materia(id)
+    FOREIGN KEY(idmateria) REFERENCES materia(id),
+    FOREIGN KEY(iddia) REFERENCES dia(id)
 );
 
 DROP TABLE IF EXISTS cargo;
