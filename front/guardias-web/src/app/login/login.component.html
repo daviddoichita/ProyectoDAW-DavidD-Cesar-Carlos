@@ -1,0 +1,12 @@
+<div class="container col-6 mt-4">
+  <h2>Iniciar Sesión</h2>
+  <form (ngSubmit)="login()">
+    <input type="text" pInputText [(ngModel)]="email" />
+    <p-password [(ngModel)]="password" [feedback]="false" />
+  </form>
+
+  <div *ngIf="error" class="alert alert-danger mt-3">
+    {{ error }}
+  </div>
+</div>
+
