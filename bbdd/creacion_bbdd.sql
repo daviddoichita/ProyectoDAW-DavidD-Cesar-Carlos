@@ -53,6 +53,12 @@ CREATE TABLE dia (
     nombre VARCHAR(9)
 );
 
+DROP TABLE IF EXISTS aula;
+CREATE TABLE aula (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(10)
+);
+
 DROP TABLE IF EXISTS sesion;
 CREATE TABLE sesion (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -61,12 +67,13 @@ CREATE TABLE sesion (
     idintervalo INT,
     idmateria INT,
     iddia INT,
-    aula VARCHAR(16),
+    idaula INT,
     FOREIGN KEY(idprofesor) REFERENCES profesor(id),
     FOREIGN KEY(idgrupo) REFERENCES grupo(id),
     FOREIGN KEY(idintervalo) REFERENCES intervalo(id),
     FOREIGN KEY(idmateria) REFERENCES materia(id),
-    FOREIGN KEY(iddia) REFERENCES dia(id)
+    FOREIGN KEY(iddia) REFERENCES dia(id),
+    FOREIGN KEY(idaula) REFERENCES aula(id)
 );
 
 DROP TABLE IF EXISTS cargo;
