@@ -13,7 +13,8 @@ CREATE TABLE profesor (
     admin BOOLEAN DEFAULT FALSE,
     direccion VARCHAR(256),
     telefono VARCHAR(9),
-    email VARCHAR(256)
+    email VARCHAR(256),
+    activo BOOL
 );
 
 DROP TABLE IF EXISTS materia;
