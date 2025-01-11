@@ -1,0 +1,62 @@
+.contenedor1 {
+    padding: 30px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.arriba {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.rango {
+    margin-left: 40px;
+}
+
+.titulo {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.tablas {
+    margin: 50px auto;
+}
+
+.tablaM,
+.tablaT {
+    max-width: 90%;
+}
+
+.tabla2 {
+    max-width: 70%;
+}
+
+.filaGris td {
+    background-color: #f0f0f0;
+}
+
+.filaPequena td {
+    padding: 5px 10px;
+}
+
+.contenedor2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: -60px;
+    margin-left: 10px;
+}
+
+.botones {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 260px;
+}
