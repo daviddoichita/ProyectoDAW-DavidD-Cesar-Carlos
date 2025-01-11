@@ -90,7 +90,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-asignatura>
           <tr>
-            <td><p-checkbox [(ngModel)]="asignatura.seleccionado"></p-checkbox></td>
+            <td><p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true"/></td>
             <td>{{ asignatura.nombre }}</td>
             <td>{{ asignatura.hora }}</td>
             <td>{{ asignatura.dia }}</td>

@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-nueva-falta',
   standalone: true,
   imports: [DropdownModule, CalendarModule, CommonModule, 
-    FormsModule, FloatLabelModule, TableModule, ButtonModule],
+    FormsModule, FloatLabelModule, TableModule, ButtonModule,
+    CheckboxModule],
   templateUrl: './nueva-falta.component.html',
   styleUrls: ['./nueva-falta.component.scss']
 })
