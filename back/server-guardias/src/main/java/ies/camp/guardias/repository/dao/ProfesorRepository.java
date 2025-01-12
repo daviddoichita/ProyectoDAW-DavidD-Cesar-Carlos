@@ -1,12 +1,13 @@
 package ies.camp.guardias.repository.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import ies.camp.guardias.repository.entity.Profesor;
 import jakarta.transaction.Transactional;
 
-//TODO: Implement
 @Repository
 @Transactional
-public interface ProfesorRepository {
+public interface ProfesorRepository extends JpaRepository<Profesor, Long> {
 
 }

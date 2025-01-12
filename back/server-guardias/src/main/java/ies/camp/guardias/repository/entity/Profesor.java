@@ -1,6 +1,5 @@
 package ies.camp.guardias.repository.entity;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -27,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "profesor")
-public class Profesor implements Serializable {
+public class Profesor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

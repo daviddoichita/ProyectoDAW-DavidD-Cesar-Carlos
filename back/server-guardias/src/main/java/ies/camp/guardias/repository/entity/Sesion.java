@@ -1,6 +1,5 @@
 package ies.camp.guardias.repository.entity;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -25,7 +24,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "sesion")
-public class Sesion implements Serializable {
+public class Sesion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +45,18 @@ public class Sesion implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sesion")
     @ToString.Exclude
     private Set<Cuadrante> cuadrantes;
+
+    @ManyToOne
+    @JoinColumn(name = "idintervalo")
+    private Intervalo intervalo;
+
+    @ManyToOne
+    @JoinColumn(name = "idmateria")
+    private Materia materia;
+
+    @ManyToOne
+    @JoinColumn(name = "iddia")
+    private Dia dia;
 
     @Override
     public int hashCode() {
