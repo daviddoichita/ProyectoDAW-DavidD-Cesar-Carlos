@@ -9,45 +9,74 @@ import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button'
 import { ButtonGroupModule } from 'primeng/buttongroup'
-
+import { MessagesModule } from 'primeng/messages';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-
+import { MessageModule } from 'primeng/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, ButtonGroupModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, ButtonGroupModule, MessagesModule, MessageModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  email = '';
-  password = '';
-  error = '';
+  loginForm: FormGroup;
 
-  constructor(
-    private router: Router,
-  ) {}
+  constructor(private fb: FormBuilder, private router: Router) {
+    this.loginForm = this.fb.group({
+      emailOrNif: ['', [Validators.required, this.emailOrNifValidator.bind(this)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
+        ],
+      ],
+      rememberMe: [false],
+    });
+  }
 
   login(): void {
-    if (!this.validarEmail(this.email)) {
-      this.error = 'Formato de email incorrecto';
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
-    if (!this.validarPassword(this.password)) {
-      this.error =
-        'La contraseña debe tener más de 6 caracteres y al menos un número y una letra';
-      return;
+
+    console.log('Inicio de sesión exitoso');
+    // this.router.navigate(['/']);
+  }
+
+  emailOrNifValidator(control: any): { [key: string]: any } | null {
+    const value = control.value;
+    if (!value) {
+      return null;
     }
+
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isNif = /^[0-9]{8}[A-Za-z]$/.test(value) && this.validarNIF(value);
+
+    if (isEmail || isNif) {
+      return null;
+    }
+
+    return { emailOrNifInvalid: true };
   }
 
-  validarEmail(email: string): boolean {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  }
+  private validarNIF(nif: string): boolean {
+    const nifExpresion = /^[0-9]{8}[A-Za-z]$/;
+    if (!nifExpresion.test(nif)) {
+      return false;
+    }
 
-  validarPassword(password: string): boolean {
-    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
-    return re.test(password);
+    const numero = parseInt(nif.slice(0, 8), 10);
+    const letra = nif.slice(8).toUpperCase();
+    const controlLetras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+    const letraEsperada = controlLetras[numero % 23];
+
+    return letra === letraEsperada;
   }
 }
