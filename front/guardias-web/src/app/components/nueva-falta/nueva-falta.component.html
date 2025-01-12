@@ -82,18 +82,18 @@
         [tableStyle]="{ 'max-width': '50rem' }">
         <ng-template pTemplate="header">
           <tr>
-            <th>DEBERES</th>
             <th>ASIGNATURA</th>
             <th>HORA</th>
             <th>DÍA</th>
+            <th>DEBERES</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-asignatura>
           <tr>
-            <td><p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true"/></td>
             <td>{{ asignatura.nombre }}</td>
             <td>{{ asignatura.hora }}</td>
             <td>{{ asignatura.dia }}</td>
+            <td><p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true"/></td>
           </tr>
         </ng-template>
       </p-table>
