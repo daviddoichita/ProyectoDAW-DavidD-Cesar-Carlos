@@ -1,0 +1,142 @@
+@import "primeicons/primeicons.css";
+
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 98vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #95D3D1;
+  font-family: 'Roboto', sans-serif;
+
+}
+
+.container {
+  width: 70%;
+  height: 80%;
+  display: flex;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 7px;
+  background-color: white;
+}
+
+.login-section {
+  width: 30%;
+  padding: 45px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-section h2 {
+  font-weight: 1;
+  color: #333333;
+  opacity: 65%;
+  text-align: center;
+}
+
+.inputUsuario {
+  margin-bottom: 20px;
+}
+
+.inputContraseña {
+  margin-bottom: 10px;
+}
+
+hr {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  width: 80%;
+  opacity: 60%;
+  background-color: #333333;
+}
+
+.separador {
+  margin-top: 50%;
+}
+
+.textoDivider {
+  font-size: 14px;
+  opacity: 60%;
+  color: #333333;
+}
+
+.recuerdame {
+  margin-left: 5px;
+  font-size: 14px;
+  opacity: 65%;
+  color: #333333;
+}
+
+#checkboxRecordar {
+  margin-top: 15px;
+}
+
+.login-section a {
+  font-size: 14px;
+  text-align: right;
+  margin-top: -3px;
+  margin-bottom: 20px;
+  opacity: 65%;
+  color: #333333;
+  text-decoration: none;
+}
+
+.login-section a:hover {
+  text-decoration: underline;
+}
+
+.p-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 13px;
+  margin-bottom: 15px;
+}
+
+.avisarAdmin {
+  width: 100%;
+  text-align: left;
+  color: white;
+  background-color: #95D3D1;
+  border: none;
+}
+
+.avisarAdmin:hover {
+  background-color: #7fc5c2;
+  cursor: pointer;
+}
+
+.iconoFondo {
+  background-color: #95D3D1;
+  color: white;
+  border-right: 1px solid white;
+}
+
+.imagenInstituto {
+  width: 70%;
+  background: url('/assets/imgs/loginfoto.png') no-repeat center center/cover;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.inputUsuario input:focus,
+.inputContraseña input:focus {
+  border-color: #95D3D1;
+  box-shadow: 0 0 5px rgba(120, 210, 230, 0.5);
+}
+
+.inputUsuario i,
+.inputContraseña i {
+  font-size: 18px;
+}
+
+.contenedorError {
+  margin-top: 10px;
+}
+
+.contenedorDobleError {
+  margin-top: 5px;
+}
+
