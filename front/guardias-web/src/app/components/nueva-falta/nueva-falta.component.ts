@@ -48,16 +48,16 @@ export class NuevaFaltaComponent {
 
   asignaturasSeleccionadas = [
     {
-      deberes: false,
       nombre: 'Programacion',
       hora: '8:20 - 9:15',
       dia: 'Lunes',
+      deberes: false,
     },
     {
-      deberes: true,
       nombre: 'bbdd',
       hora: '9:15 - 10:10',
       dia: 'Martes',
+      deberes: true,
     },
   ];
 }
