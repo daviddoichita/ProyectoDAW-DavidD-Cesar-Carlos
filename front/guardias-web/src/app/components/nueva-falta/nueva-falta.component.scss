@@ -15,8 +15,9 @@
     margin-bottom: 30px;
 }
 
-.rango {
-    margin-left: 40px;
+.rango p-calendar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 .titulo {
@@ -26,15 +27,35 @@
 
 .tablas {
     margin: 50px auto;
+    border: 2px solid #c0c0c0;
+    border-collapse: collapse;
 }
 
-.tablaM,
-.tablaT {
-    max-width: 90%;
+.tablaM, .tablaT {
+    width: 60%;
+    margin-bottom: 40px;
 }
 
 .tabla2 {
-    max-width: 70%;
+    width: 60%;
+    margin: 0;
+}
+
+.tablaM thead th, 
+.tablaT thead th,
+.tabla2 thead th {
+    background-color: #f0f0f0;
+    font-size: 22px;
+}
+
+th, td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #c0c0c0;
+}
+
+td {
+    font-size: 18px;
 }
 
 .filaGris td {
@@ -47,16 +68,21 @@
 
 .contenedor2 {
     display: flex;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 40px;
-    margin-top: -60px;
-    margin-left: 10px;
+    margin-top: 40px;
+    margin-left: 450px;
+    width: 60%;
 }
 
 .botones {
     display: flex;
-    flex-direction: row;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 260px;
+    gap: 20px;
+    margin-top: 300px;
+    margin-right: 100px;
+}
+
+button {
+    width: 120px;
+    height: 40px;
 }

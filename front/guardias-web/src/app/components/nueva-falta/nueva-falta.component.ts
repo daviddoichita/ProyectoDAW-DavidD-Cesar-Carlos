@@ -7,6 +7,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-nueva-falta',
@@ -15,7 +16,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     FormsModule, FloatLabelModule, TableModule, ButtonModule,
     CheckboxModule],
   templateUrl: './nueva-falta.component.html',
-  styleUrls: ['./nueva-falta.component.scss']
+  styleUrls: ['./nueva-falta.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NuevaFaltaComponent {
   rangeDates: Date[] | undefined;
