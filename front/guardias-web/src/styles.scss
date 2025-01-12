@@ -1,1 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+body {
+  background-color: #95d3d1;
+}
+
+$paddings: 5;
+@mixin p-x {
+  @for $i from 1 through $paddings {
+    .pt-#{$i} {
+      padding-top: $i * 0.5rem;
+    }
+    .pb-#{$i} {
+      padding-bottom: $i * 0.5rem;
+    }
+    .pl-#{$i} {
+      padding-left: $i * 0.5rem;
+    }
+    .pr-#{$i} {
+      padding-right: $i * 0.5rem;
+    }
+    .p-#{$i} {
+      padding: $i * 0.5rem;
+    }
+  }
+}
+
+.p-0 {
+  padding: 0;
+}
+
+@include p-x;
+
+$margins: 5;
+@mixin m-x {
+  @for $i from 1 through $margins {
+    .mt-#{$i} {
+      margin-top: $i * 0.5rem;
+    }
+    .mb-#{$i} {
+      margin-bottom: $i * 0.5rem;
+    }
+    .ml-#{$i} {
+      margin-left: $i * 0.5rem;
+    }
+    .mr-#{$i} {
+      margin-right: $i * 0.5rem;
+    }
+    .m-#{$i} {
+      margin: $i * 0.5rem;
+    }
+  }
+}
+
+.m-0 {
+  margin: 0;
+}
+
+@include m-x;
+
+.bg-dark {
+  background-color: #333333;
+  color: white;
+}
