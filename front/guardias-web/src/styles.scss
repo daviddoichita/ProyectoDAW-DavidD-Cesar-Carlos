@@ -15,7 +15,7 @@ body {
 .app-layout {
   display: grid;
   grid-template-rows: minmax(6vh, auto) minmax(
-      calc(100vh - 6vh - 0.5rem - 10px),
+      calc(100vh - 6vh - 0.5rem - 30px),
       auto
     );
   gap: 0.5rem;
