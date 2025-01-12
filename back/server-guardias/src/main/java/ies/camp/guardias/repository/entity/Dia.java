@@ -8,55 +8,29 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "sesion")
-public class Sesion {
+@Table(name = "dia")
+public class Dia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String aula;
+    private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "idprofesor")
-    @ToString.Exclude
-    private Profesor profesor;
-
-    @ManyToOne
-    @JoinColumn(name = "idgrupo")
-    @ToString.Exclude
-    private Grupo grupo;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "sesion")
-    @ToString.Exclude
-    private Set<Cuadrante> cuadrantes;
-
-    @ManyToOne
-    @JoinColumn(name = "idintervalo")
-    private Intervalo intervalo;
-
-    @ManyToOne
-    @JoinColumn(name = "idmateria")
-    private Materia materia;
-
-    @ManyToOne
-    @JoinColumn(name = "iddia")
-    private Dia dia;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "dia")
+    private Set<Sesion> sesiones;
 
     @Override
     public int hashCode() {
@@ -77,7 +51,7 @@ public class Sesion {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Sesion other = (Sesion) obj;
+        Dia other = (Dia) obj;
         if (id == null) {
             if (other.id != null) {
                 return false;
