@@ -2,6 +2,31 @@
 
 body {
   background-color: #95d3d1;
+  margin: 5px;
+  overflow: hidden;
+}
+
+.p-sidebar-left {
+  height: calc(100vh - 10px);
+  margin-top: 5px;
+  margin-left: 5px;
+  border-radius: 4px;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-rows: minmax(6vh, auto) minmax(
+      calc(100vh - 6vh - 0.5rem - 10px),
+      auto
+    );
+  gap: 0.5rem;
+}
+
+.main-section {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow: auto;
 }
 
 $paddings: 5;
@@ -61,4 +86,12 @@ $margins: 5;
 .bg-dark {
   background-color: #333333;
   color: white;
+}
+
+.hover-dark:hover {
+  background-color: #555555;
+}
+
+.border-transparent {
+  border-color: transparent;
 }

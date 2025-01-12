@@ -1,5 +1,11 @@
-<p-toolbar styleClass="bg-dark p-0 pl-2 pr-2">
+<p-sidebar styleClass="bg-dark" [(visible)]="sidebarVisible"></p-sidebar>
+<p-toolbar styleClass="bg-dark p-0 m-0 pl-2 pr-2 border-transparent">
   <div class="p-toolbar-group-start">
+    <p-button
+      (onClick)="sidebarVisible = true"
+      styleClass="mr-2 p-1 bg-dark border-transparent hover-dark"
+      icon="pi pi-bars"
+    ></p-button>
     <h2>{{ titulo }}</h2>
   </div>
   <!-- <div class="p-toolbar-group-center">
