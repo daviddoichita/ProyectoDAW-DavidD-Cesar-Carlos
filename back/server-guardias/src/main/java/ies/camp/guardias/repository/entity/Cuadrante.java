@@ -1,6 +1,6 @@
 package ies.camp.guardias.repository.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -26,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "cuadrante")
-public class Cuadrante {
+public class Cuadrante implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Cuadrante {
 
     private Boolean deberes;
 
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     @ManyToOne
     @JoinColumn(name = "idprofesor")
@@ -93,5 +93,10 @@ public class Cuadrante {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Cuadrante clone() throws CloneNotSupportedException {
+        return (Cuadrante) super.clone();
     }
 }
