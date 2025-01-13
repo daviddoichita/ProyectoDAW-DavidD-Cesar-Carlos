@@ -16,7 +16,7 @@ public class AulaDTO {
     private String nombre;
 
     /**
-     * Recibe un Aula y la convierte a AulaDTO
+     * Recibe un Aula y la convierte a AulaDTO sin ninguna relacion
      * 
      * @param aula Aula a convertir
      * @return aula convertida a AulaDTO
@@ -29,7 +29,7 @@ public class AulaDTO {
     }
 
     /**
-     * Recibe un AulaDTO y la convierte a Aula
+     * Recibe un AulaDTO y la convierte a Aula sin ninguna relacion
      * 
      * @param aulaDTO AulaDTO a convertir
      * @return aula convertida a Aula
