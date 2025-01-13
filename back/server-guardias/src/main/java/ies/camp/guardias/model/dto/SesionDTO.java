@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 public class SesionDTO implements Serializable {
 
     private Long id;
-    private String aula;
     private ProfesorDTO profesorDTO;
     private GrupoDTO grupoDTO;
     private MateriaDTO materiaDTO;
     private IntervaloDTO intervaloDTO;
     private DiaDTO diaDTO;
+    private AulaDTO aulaDTO;
 
     /**
      * Recibe una Sesion y la convierte a SesionDTO
@@ -31,12 +31,12 @@ public class SesionDTO implements Serializable {
     public static SesionDTO convertToDTO(Sesion sesion) {
         return SesionDTO.builder()
                 .id(sesion.getId())
-                .aula(sesion.getAula())
                 .profesorDTO(ProfesorDTO.convertToDTO(sesion.getProfesor()))
                 .grupoDTO(GrupoDTO.convertToDTO(sesion.getGrupo()))
                 .materiaDTO(MateriaDTO.convertToDTO(sesion.getMateria()))
                 .intervaloDTO(IntervaloDTO.convertToDTO(sesion.getIntervalo()))
                 .diaDTO(DiaDTO.convertToDTO(sesion.getDia()))
+                .aulaDTO(AulaDTO.convertToDTO(sesion.getAula()))
                 .build();
     }
 
@@ -49,12 +49,12 @@ public class SesionDTO implements Serializable {
     public static Sesion convertToEntity(SesionDTO sesionDTO) {
         return Sesion.builder()
                 .id(sesionDTO.getId())
-                .aula(sesionDTO.getAula())
                 .profesor(ProfesorDTO.convertToEntity(sesionDTO.getProfesorDTO()))
                 .grupo(GrupoDTO.convertToEntity(sesionDTO.getGrupoDTO()))
                 .materia(MateriaDTO.convertToEntity(sesionDTO.getMateriaDTO()))
                 .intervalo(IntervaloDTO.convertToEntity(sesionDTO.getIntervaloDTO()))
                 .dia(DiaDTO.convertToEntity(sesionDTO.getDiaDTO()))
+                .aula(AulaDTO.convertToEntity(sesionDTO.getAulaDTO()))
                 .build();
     }
 }

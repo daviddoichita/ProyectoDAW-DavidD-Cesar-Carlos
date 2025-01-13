@@ -30,8 +30,6 @@ public class Sesion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String aula;
-
     @ManyToOne
     @JoinColumn(name = "idprofesor")
     @ToString.Exclude
@@ -57,6 +55,10 @@ public class Sesion {
     @ManyToOne
     @JoinColumn(name = "iddia")
     private Dia dia;
+
+    @ManyToOne
+    @JoinColumn(name = "idaula")
+    private Aula aula;
 
     @Override
     public int hashCode() {
