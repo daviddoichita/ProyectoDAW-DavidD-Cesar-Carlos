@@ -14,7 +14,7 @@ CREATE TABLE profesor (
     direccion VARCHAR(256),
     telefono VARCHAR(9),
     email VARCHAR(256),
-    activo BOOL
+    activo BOOL DEFAULT TRUE
 );
 
 DROP TABLE IF EXISTS materia;
