@@ -7,5 +7,4 @@ export const routes: Routes = [
   { path: 'cuadrante', component: CuadranteProfesorComponent },
   { path: 'login', component: LoginComponent },
   { path: 'nueva-falta', component: NuevaFaltaComponent },
-  { path: 'cuadrante-profesor', component: CuadranteProfesorComponent } 
 ];

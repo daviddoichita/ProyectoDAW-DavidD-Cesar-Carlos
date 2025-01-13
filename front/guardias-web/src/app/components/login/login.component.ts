@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, ButtonGroupModule, MessagesModule, MessageModule, RouterModule
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
