@@ -1,5 +1,7 @@
 package ies.camp.guardias.repository.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +32,7 @@ public class Aula {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "aula")
     @ToString.Exclude
-    private Sesion sesiones;
+    private Set<Sesion> sesiones;
 
     @Override
     public boolean equals(Object obj) {
