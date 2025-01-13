@@ -1,6 +1,5 @@
 package ies.camp.guardias.repository.entity;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;

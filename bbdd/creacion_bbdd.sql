@@ -107,5 +107,14 @@ CREATE TABLE cuadrante (
     FOREIGN KEY(idcurso) REFERENCES curso(id)
 );
 
+DROP TABLE IF EXISTS cuadrantesesion;
+CREATE TABLE cuadrantesesion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    idcuadrante INT,
+    idsesion INT,
+    FOREIGN KEY(idcuadrante) REFERENCES cuadrante(id),
+    FOREIGN KEY(idsesion) REFERENCES sesion(id)
+);
+
 -- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';
 -- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
