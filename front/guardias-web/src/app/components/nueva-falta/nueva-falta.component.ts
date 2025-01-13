@@ -9,13 +9,14 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ViewEncapsulation } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-nueva-falta',
   standalone: true,
   imports: [DropdownModule, CalendarModule, CommonModule,
     FormsModule, FloatLabelModule, TableModule, ButtonModule,
-    CheckboxModule, HeaderComponent],
+    CheckboxModule, HeaderComponent, RippleModule],
   templateUrl: './nueva-falta.component.html',
   styleUrls: ['./nueva-falta.component.scss'],
   encapsulation: ViewEncapsulation.None

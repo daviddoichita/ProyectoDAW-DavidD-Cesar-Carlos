@@ -12,8 +12,7 @@
       </div>
 
       <h2 class="titulo">MAÑANAS</h2>
-      <p-table [value]="horariosManana" styleClass="p-datatable-gridlines" class="tablas tablaM"
-        [tableStyle]="{ 'max-width': '90rem' }">
+      <p-table [value]="horariosManana" styleClass="p-datatable-gridlines" class="tablas tablaM">
         <ng-template pTemplate="header">
           <tr>
             <th>HORA</th>
@@ -39,8 +38,7 @@
       </p-table>
 
       <h2 class="titulo">TARDES</h2>
-      <p-table [value]="horariosTarde" styleClass="p-datatable-gridlines" class="tablas tablaT"
-        [tableStyle]="{ 'max-width': '90rem' }">
+      <p-table [value]="horariosTarde" styleClass="p-datatable-gridlines" class="tablas tablaT">
         <ng-template pTemplate="header">
           <tr>
             <th class="columnaHora">HORA</th>
@@ -90,8 +88,8 @@
     </div>
 
     <div class="botones">
-      <button pButton label="Cancelar" class="p-button-danger"></button>
-      <button pButton label="Guardar" class="p-button-success"></button>
+      <button pButton pRipple label="Guardar" class="p-button-success"></button>
+      <button pButton pRipple label="Cancelar" class="p-button-danger"></button>
     </div>
   </div>
 </div>
