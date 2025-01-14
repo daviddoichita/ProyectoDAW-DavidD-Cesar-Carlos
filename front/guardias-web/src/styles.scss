@@ -6,6 +6,10 @@ body {
   padding: 0;
 }
 
+.p-sidebar-content {
+  padding: 0rem;
+}
+
 .p-sidebar-left {
   height: calc(100vh - 10px);
   margin-top: 5px;
@@ -86,6 +90,17 @@ $margins: 5;
 
 @include m-x;
 
+$widths: 100, 75, 50, 25;
+@mixin w-x {
+  @each $w in $widths {
+    .w-#{$w} {
+      width: $w * 1%;
+    }
+  }
+}
+
+@include w-x;
+
 .bg-dark {
   background-color: #333333;
   color: white;
@@ -101,4 +116,8 @@ $margins: 5;
 
 .border-squared {
   border-radius: 0;
+}
+
+.circle {
+  border-radius: 360px;
 }
