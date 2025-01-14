@@ -1,18 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { SidebarModule } from 'primeng/sidebar';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ToolbarModule } from 'primeng/toolbar';
+import { StyleClassModule } from 'primeng/styleclass';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-header',
@@ -23,13 +18,16 @@ import { RippleModule } from 'primeng/ripple';
     SplitButtonModule,
     InputTextModule,
     SidebarModule,
-    AvatarModule,
     RippleModule,
+    StyleClassModule,
+    AvatarModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('sidebar') sidebar!: Sidebar;
+
   titulo = 'HEADER';
   sidebarVisible = false;
 
@@ -37,5 +35,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.titulo = this.router.url.split('/')[1].toUpperCase().replace('-', ' ');
+  }
+
+  closeCallback(e: Event): void {
+    this.sidebar.close(e);
   }
 }

@@ -1,4 +1,58 @@
-<p-sidebar styleClass="bg-dark" [(visible)]="sidebarVisible"></p-sidebar>
+<p-sidebar styleClass="bg-dark" #sidebar [(visible)]="sidebarVisible">
+  <ng-template pTemplate="headless">
+    <div class="flex flex-column h-full">
+      <div
+        class="flex align-items-center justify-content-end px-4 pt-3 flex-shrink-0"
+      >
+        <span>
+          <p-button
+            type="button"
+            (onClick)="closeCallback($event)"
+            icon="pi pi-times"
+            styleClass="h-2rem w-2rem bg-dark border-none text-400"
+          ></p-button>
+        </span>
+      </div>
+      <div class="overflow-y-auto">
+        <ul class="list-none p-0 m-2 mt-4 overflow-hidden">
+          <li>
+            <a
+              pRipple
+              class="flex align-items-center cursor-pointer p-3 border-round text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
+              routerLink="/cuadrante"
+            >
+              <i class="pi pi-home mr-2"></i>
+              <span class="font-medium">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a
+              pRipple
+              class="flex align-items-center cursor-pointer p-3 border-round text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
+              routerLink="/nueva-falta"
+            >
+              <i class="pi pi-calendar-clock mr-2"></i>
+              <span class="font-medium">Nueva falta</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="mt-auto">
+        <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+        <a
+          pRipple
+          class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple"
+        >
+          <p-avatar
+            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+            shape="circle"
+          />
+          <span class="font-bold">David Doichita</span>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</p-sidebar>
 <p-toolbar styleClass="bg-dark p-0 pl-1 pr-1 border-transparent border-squared">
   <div class="p-toolbar-group-start">
     <p-button
