@@ -26,7 +26,7 @@ import lombok.ToString;
 @Builder
 @Entity
 @Table(name = "cuadrante")
-public class Cuadrante {
+public class Cuadrante implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
