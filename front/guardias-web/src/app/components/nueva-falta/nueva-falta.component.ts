@@ -7,7 +7,6 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { ViewEncapsulation } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { RippleModule } from 'primeng/ripple';
 import { AccordionModule } from 'primeng/accordion';
@@ -19,8 +18,6 @@ import { AccordionModule } from 'primeng/accordion';
     FormsModule, FloatLabelModule, TableModule, ButtonModule,
     CheckboxModule, HeaderComponent, RippleModule, AccordionModule],
   templateUrl: './nueva-falta.component.html',
-  styleUrls: ['./nueva-falta.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class NuevaFaltaComponent {
   rangeDates: Date[] | undefined;

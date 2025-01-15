@@ -1,97 +1,116 @@
 <div class="app-layout">
-    <app-header></app-header>
-    <div class="main-section">
-        <div class="p-2.rem bg-white flex flex-column align-items-center text-xl">
-            <p-dropdown placeholder="Selecciona un profesor" class="dropdown-profesor" />
-            <p-floatLabel class="border-round-md text-base">
-                <p-calendar inputId="rango" [(ngModel)]="rangeDates" selectionMode="range"
-                    [readonlyInput]="true"></p-calendar>
-                <label for="rango">Selecciona un rango</label>
-            </p-floatLabel>
-
-            <p-accordion [multiple]="true" [activeIndex]="[0]">
-                <p-accordionTab header="MAÑANAS" styleClass="w-6rem">
-                    <h2 class="text-center m-4 m-0 -mr-4 m-0">MAÑANAS</h2>
-                    <p-table [value]="horariosManana" styleClass="p-datatable-gridlines"
-                        class="m-6 m-auto border-1 border-solid border-gray" [tableStyle]=" {'min-width': '50rem' }">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th class="columnaHora">HORA</th>
-                                <th></th>
-                                <th class="columnaDia">LUNES</th>
-                                <th class="columnaDia">MARTES</th>
-                                <th class="columnaDia">MIERCOLES</th>
-                                <th class="columnaDia">JUEVES</th>
-                                <th class="columnaDia">VIERNES</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-horario>
-                            <tr [ngClass]="{ 'filaGris': !horario.indice, 'filaPequena': !horario.indice }">
-                                <td class="columnaHora">{{ horario.hora }}</td>
-                                <td>{{ horario.indice || '' }}</td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-accordionTab>
-
-                <p-accordionTab header="TARDES">
-                    <h2>TARDES</h2>
-                    <p-table [value]="horariosTarde" styleClass="p-datatable-gridlines"
-                        [tableStyle]=" {'min-width': '50rem' }">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th class="columnaHora">HORA</th>
-                                <th></th>
-                                <th class="columnaDia">LUNES</th>
-                                <th class="columnaDia">MARTES</th>
-                                <th class="columnaDia">MIERCOLES</th>
-                                <th class="columnaDia">JUEVES</th>
-                                <th class="columnaDia">VIERNES</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-horario>
-                            <tr [ngClass]="{ 'filaGris': !horario.indice, 'filaPequena': !horario.indice }">
-                                <td class="columnaHora">{{ horario.hora }}</td>
-                                <td>{{ horario.indice || '' }}</td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                                <td class="columnaDia"></td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-accordionTab>
-            </p-accordion>
-
-            <h2>DEBERES</h2>
-            <p-table [value]="asignaturasSeleccionadas" styleClass="p-datatable-gridlines"
-                [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>ASIGNATURA</th>
-                        <th>HORA</th>
-                        <th>DÍA</th>
-                        <th>DEBERES</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-asignatura>
-                    <tr>
-                        <td>{{ asignatura.nombre }}</td>
-                        <td>{{ asignatura.hora }}</td>
-                        <td>{{ asignatura.dia }}</td>
-                        <td><p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true" /></td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <button pButton pRipple label="Guardar" class="p-button-success"></button>
-            <button pButton pRipple label="Cancelar" class="p-button-danger"></button>
-        </div>
+  <app-header></app-header>
+  <div class="main-section">
+    <div class="flex justify-content-center align-items-center gap-6 mb-5">
+      <p-dropdown placeholder="Selecciona un profesor" class="w-20rem"></p-dropdown>
+      <p-floatLabel class="w-20rem">
+        <p-calendar
+          inputId="rango"
+          [(ngModel)]="rangeDates"
+          selectionMode="range"
+          [readonlyInput]="true"
+          class="w-full">
+        </p-calendar>
+        <label for="rango">Selecciona un rango</label>
+      </p-floatLabel>
     </div>
+
+    <p-accordion [multiple]="true" [activeIndex]="[0]">
+      <p-accordionTab header="MAÑANAS">
+        <div class="flex flex-column align-items-center">
+          <h2 class="text-base mb-3">MAÑANAS</h2>
+          <p-table
+            [value]="horariosManana"
+            styleClass="p-datatable-gridlines"
+            class="w-9 border-round-md border-1 border-gray-300">
+            <ng-template pTemplate="header">
+              <tr class="bg-gray-200">
+                <th class="bg-red text-center">HORA</th>
+                <th></th>
+                <th class="text-center">LUNES</th>
+                <th class="text-center">MARTES</th>
+                <th class="text-center">MIÉRCOLES</th>
+                <th class="text-center">JUEVES</th>
+                <th class="text-center">VIERNES</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-horario let-i="index">
+              <tr>
+                <td class="text-center">{{ horario.hora }}</td>
+                <td class="text-center">{{ horario.indice || '' }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab header="TARDES">
+        <h2 class="text-center text-base m-4">TARDES</h2>
+        <p-table
+          [value]="horariosTarde"
+          styleClass="p-datatable-gridlines"
+          class="w-8 p-2 border-round-md border-1 border-gray-300">
+          <ng-template pTemplate="header">
+            <tr class="bg-gray-200">
+              <th class="text-center">HORA</th>
+              <th></th>
+              <th class="text-center">LUNES</th>
+              <th class="text-center">MARTES</th>
+              <th class="text-center">MIÉRCOLES</th>
+              <th class="text-center">JUEVES</th>
+              <th class="text-center">VIERNES</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-horario>
+            <tr>
+              <td class="text-center">{{ horario.hora }}</td>
+              <td class="text-center">{{ horario.indice || '' }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-accordionTab>
+    </p-accordion>
+
+    <h2 class="text-center text-base m-4">DEBERES</h2>
+    <div class="flex justify-content-center">
+      <p-table
+        [value]="asignaturasSeleccionadas"
+        styleClass="p-datatable-gridlines"
+        class="w-6 p-2 border-round-md border-1 border-gray-300">
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-200">
+            <th class="text-center">ASIGNATURA</th>
+            <th class="text-center">HORA</th>
+            <th class="text-center">DÍA</th>
+            <th class="text-center">DEBERES</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asignatura>
+          <tr>
+            <td class="text-center">{{ asignatura.nombre }}</td>
+            <td class="text-center">{{ asignatura.hora }}</td>
+            <td class="text-center">{{ asignatura.dia }}</td>
+            <td class="text-center">
+              <p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true"></p-checkbox>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="flex  justify-content-center gap-4 mt-4">
+      <button pButton pRipple label="Guardar" class="p-button-success"></button>
+      <button pButton pRipple label="Cancelar" class="p-button-danger"></button>
+    </div>
+  </div>
 </div>
