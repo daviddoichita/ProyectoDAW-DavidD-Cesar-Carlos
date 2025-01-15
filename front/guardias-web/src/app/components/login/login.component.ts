@@ -15,11 +15,13 @@ import { MessageModule } from 'primeng/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, ButtonGroupModule, MessagesModule, MessageModule, RouterModule
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, RippleModule
+    , ButtonGroupModule, MessagesModule, MessageModule, RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

@@ -11,7 +11,6 @@ body {
   align-items: center;
   background-color: #95D3D1;
   font-family: 'Roboto', sans-serif;
-
 }
 
 .container {
@@ -23,18 +22,25 @@ body {
   background-color: white;
 }
 
-.flex-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh; 
-}
-
 .login-section {
   width: 30%;
   padding: 45px;
   display: flex;
   flex-direction: column;
+}
+
+.imagenInstituto {
+  width: 72%;
+  background: url('/assets/imgs/loginfoto.png') no-repeat center center/cover;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
 }
 
 .login-section h2 {
@@ -81,12 +87,12 @@ hr {
   margin-top: 15px;
 }
 
-.olvidadoContra{
+.olvidadoContra {
   text-align: right;
   margin-top: -5px;
 }
 
-.olvidadoContra a{
+.olvidadoContra a {
   font-size: 14px;
   opacity: 65%;
   color: #333333;
@@ -104,32 +110,10 @@ hr {
   margin-bottom: 15px;
 }
 
-.avisarAdmin {
-  width: 100%;
-  text-align: left;
-  padding-left: 15px;
-  color: white;
-  background-color: #95D3D1;
-  border: none;
-}
-
-.avisarAdmin:hover {
-  background-color: #7fc5c2;
-  cursor: pointer;
-}
-
-
 .iconoFondo {
   background-color: #95D3D1;
   color: white;
   border-right: 1px solid white;
-}
-
-.imagenInstituto {
-  width: 70%;
-  background: url('/assets/imgs/loginfoto.png') no-repeat center center/cover;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
 .inputUsuario input:focus,
@@ -151,18 +135,76 @@ hr {
   margin-top: 5px;
 }
 
-.entrarSinSesion{
+.entrarSinSesion {
   text-align: center;
   margin-top: 10px;
 }
 
-.entrarSinSesion a{
+.entrarSinSesion a {
   font-size: 14px;
-  opacity: 65%;
+  opacity: 70%;
   color: #333333;
-  text-decoration: none;
 }
 
-.entrarSinSesion a:hover {
-  text-decoration: underline;
+.avisarAdmin {
+  background-color: #90d1cf;
+  border-color: #95D3D1;
+  color: white;
+  padding: 10px 24px;
+  font-weight: lighter;
+  font-size: 15px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  text-align: left;
+  padding-left: 15px;
+  border: none;
+}
+
+.avisarAdmin:hover {
+  background-color: #7bbab8;
+  border-color: #7bbab8;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.avisarAdmin:active {
+  background-color: #5fa09e;
+  border-color: #5fa09e;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.colorBtn {
+  background-color: #90d1cf;
+  border-color: #95D3D1;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.colorBtn:hover {
+  background-color: #7bbab8;
+  border-color: #7bbab8;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.colorBtn:active {
+  background-color: #5fa09e;
+  border-color: #5fa09e;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.iconoFondo{
+  background-color: #95D3D1;
+  border-right: 1px solid white;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
 }

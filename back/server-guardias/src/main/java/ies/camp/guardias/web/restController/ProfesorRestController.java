@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +30,9 @@ public class ProfesorRestController {
      * @return lista de ProfesorDTO
      */
     @GetMapping(path = "")
-    public List<ProfesorDTO> findAll() {
+    public List<ProfesorDTO> findAll(@AuthenticationPrincipal User user) {
         log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
+        log.info(this.getClass().getSimpleName() + "Usuario logeado:" +user);
 
         return this.profesorService.findAll();
     }
