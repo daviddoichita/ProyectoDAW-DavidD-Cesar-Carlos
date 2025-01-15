@@ -14,7 +14,7 @@ CREATE TABLE profesor (
     direccion VARCHAR(256),
     telefono VARCHAR(9),
     email VARCHAR(256),
-    activo BOOL
+    activo BOOL DEFAULT TRUE
 );
 
 DROP TABLE IF EXISTS materia;
@@ -105,6 +105,15 @@ CREATE TABLE cuadrante (
     FOREIGN KEY(idsesion) REFERENCES sesion(id),
     FOREIGN KEY(idprofesor) REFERENCES profesor(id),
     FOREIGN KEY(idcurso) REFERENCES curso(id)
+);
+
+DROP TABLE IF EXISTS cuadrantesesion;
+CREATE TABLE cuadrantesesion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    idcuadrante INT,
+    idsesion INT,
+    FOREIGN KEY(idcuadrante) REFERENCES cuadrante(id),
+    FOREIGN KEY(idsesion) REFERENCES sesion(id)
 );
 
 -- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';

@@ -1,9 +1,63 @@
-<p-sidebar styleClass="bg-dark" [(visible)]="sidebarVisible"></p-sidebar>
-<p-toolbar styleClass="bg-dark p-0 m-0 pl-2 pr-2 border-transparent">
+<p-sidebar styleClass="bg-dark" #sidebar [(visible)]="sidebarVisible">
+  <ng-template pTemplate="headless">
+    <div class="flex flex-column h-full">
+      <div
+        class="flex align-items-center justify-content-end px-4 pt-3 flex-shrink-0"
+      >
+        <span>
+          <p-button
+            type="button"
+            (onClick)="closeCallback($event)"
+            icon="pi pi-times"
+            styleClass="h-2rem w-2rem bg-dark border-none text-400 mt-1"
+          ></p-button>
+        </span>
+      </div>
+      <div class="overflow-y-auto">
+        <ul class="list-none p-0 m-2 mt-4 overflow-hidden">
+          <li>
+            <a
+              pRipple
+              class="flex align-items-center cursor-pointer p-3 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
+              routerLink="/cuadrante"
+            >
+              <i class="pi pi-home mr-3 text-lg"></i>
+              <span class="text-lg mt-1">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a
+              pRipple
+              class="flex align-items-center cursor-pointer p-3 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
+              routerLink="/nueva-falta"
+            >
+              <i class="pi pi-calendar-clock mr-3 text-lg"></i>
+              <span class="text-lg mt-1">Nueva falta</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="mt-auto">
+        <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+        <a
+          pRipple
+          class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple"
+        >
+          <p-avatar image="/assets/imgs/avatar.jpg" shape="circle" />
+          <span class="font-bold">David Doichita</span>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</p-sidebar>
+<p-toolbar
+  styleClass="bg-dark text-200 p-0 pl-2 pr-2 border-none border-noround"
+>
   <div class="p-toolbar-group-start">
     <p-button
       (onClick)="sidebarVisible = true"
-      styleClass="mr-2 p-1 bg-dark border-transparent hover-dark"
+      styleClass="mr-2 p-1 text-200 hover:surface-700"
+      [text]="true"
       icon="pi pi-bars"
     ></p-button>
     <h2>{{ titulo }}</h2>

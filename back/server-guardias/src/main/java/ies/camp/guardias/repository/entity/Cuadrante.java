@@ -1,13 +1,17 @@
 package ies.camp.guardias.repository.entity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Table(name = "cuadrante")
-public class Cuadrante {
+public class Cuadrante implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +38,7 @@ public class Cuadrante {
 
     private Boolean deberes;
 
-    private LocalDateTime fecha;
+    private LocalDate fecha;
 
     @ManyToOne
     @JoinColumn(name = "idprofesor")
@@ -56,10 +60,10 @@ public class Cuadrante {
     @ToString.Exclude
     private Cargo cargo;
 
-    @ManyToOne
-    @JoinColumn(name = "idsesion")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(name = "cuadrantesesion", joinColumns = @JoinColumn(name = "idcuadrante"), inverseJoinColumns = @JoinColumn(name = "idsesion"))
     @ToString.Exclude
-    private Sesion sesion;
+    private Set<Sesion> sesiones;
 
     @Override
     public int hashCode() {
@@ -89,5 +93,10 @@ public class Cuadrante {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Cuadrante clone() throws CloneNotSupportedException {
+        return (Cuadrante) super.clone();
     }
 }
