@@ -9,37 +9,40 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CargoDTO implements Serializable {
 
     private Long id;
     private String nombre;
+    private String abreviacion;
 
     /**
-     * Recibe un Cargo y lo convierte a CargoDTO sin ninguna relacion
-     *
-     * @param cargo Cargo a convertir
-     * @return cargo convertido a CargoDTO
+     * Convierte un Cargo a CargoDTO sin la relacion con sesion
+     * 
+     * @param cargo Cargo a convertir a DTO
+     * @return cargo convertido a DTO
      */
     public static CargoDTO convertToDTO(Cargo cargo) {
         return CargoDTO.builder()
                 .id(cargo.getId())
                 .nombre(cargo.getNombre())
+                .abreviacion(cargo.getAbreviacion())
                 .build();
     }
 
     /**
-     * Recibe un CargoDTO y lo convierte a Cargo sin ninguna relacion
-     *
-     * @param cargoDTO a convertir
-     * @return cargoDTO convertido a Cargo
+     * Convierte un CargoDTO a Cargo
+     * 
+     * @param cargoDTO CargoDTO a convertir a entidad
+     * @return cargoDTO convertido a entidad
      */
     public static Cargo convertToEntity(CargoDTO cargoDTO) {
         return Cargo.builder()
                 .id(cargoDTO.getId())
                 .nombre(cargoDTO.getNombre())
+                .abreviacion(cargoDTO.getAbreviacion())
                 .build();
     }
 }
