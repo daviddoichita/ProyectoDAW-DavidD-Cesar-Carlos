@@ -1,7 +1,7 @@
 <div class="app-layout">
   <app-header></app-header>
   <div class="main-section">
-    <div class="flex justify-content-center align-items-center gap-6 mb-5">
+    <div class="flex justify-content-center align-items-center gap-6 mb-5 mt-2">
       <p-dropdown placeholder="Selecciona un profesor" class="w-20rem"></p-dropdown>
       <p-floatLabel class="w-20rem">
         <p-calendar
@@ -15,92 +15,94 @@
       </p-floatLabel>
     </div>
 
-    <p-accordion [multiple]="true" [activeIndex]="[0]">
-      <p-accordionTab header="MAÑANAS">
+      <p-accordion [multiple]="true" [activeIndex]="[0]">
+      <p-accordionTab header="MAÑANAS" headerStyleClass="font-bold text-4xl">
         <div class="flex flex-column align-items-center">
-          <h2 class="text-base mb-3">MAÑANAS</h2>
+          <h2 class="text-center mb-3 text-3xl">MAÑANAS</h2>
           <p-table
             [value]="horariosManana"
-            styleClass="p-datatable-gridlines"
-            class="w-9 border-round-md border-1 border-gray-300">
+            styleClass="p-datatable-gridlines table-border"
+            class="w-9 border-round-md border-2 border-gray-400">
             <ng-template pTemplate="header">
-              <tr class="bg-gray-200">
-                <th class="bg-red text-center">HORA</th>
-                <th></th>
-                <th class="text-center">LUNES</th>
-                <th class="text-center">MARTES</th>
-                <th class="text-center">MIÉRCOLES</th>
-                <th class="text-center">JUEVES</th>
-                <th class="text-center">VIERNES</th>
+              <tr>
+                <th class="text-2xl bg-gray-300 text-center border">HORA</th>
+                <th class="text-2xl bg-gray-300 text-center border"></th>
+                <th class="text-2xl bg-gray-300 text-center border">LUNES</th>
+                <th class="text-2xl bg-gray-300 text-center border">MARTES</th>
+                <th class="text-2xl bg-gray-300 text-center border">MIÉRCOLES</th>
+                <th class="text-2xl bg-gray-300 text-center border">JUEVES</th>
+                <th class="text-2xl bg-gray-300 text-center border">VIERNES</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-horario let-i="index">
-              <tr>
-                <td class="text-center">{{ horario.hora }}</td>
-                <td class="text-center">{{ horario.indice || '' }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+              <tr [ngClass]="{ 'bg-gray-300': !horario.indice }">
+                <td class="text-xl text-center border">{{ horario.hora }}</td>
+                <td class="text-xl text-center border">{{ horario.indice || '' }}</td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
               </tr>
             </ng-template>
           </p-table>
         </div>
       </p-accordionTab>
 
-      <p-accordionTab header="TARDES">
-        <h2 class="text-center text-base m-4">TARDES</h2>
-        <p-table
-          [value]="horariosTarde"
-          styleClass="p-datatable-gridlines"
-          class="w-8 p-2 border-round-md border-1 border-gray-300">
-          <ng-template pTemplate="header">
-            <tr class="bg-gray-200">
-              <th class="text-center">HORA</th>
-              <th></th>
-              <th class="text-center">LUNES</th>
-              <th class="text-center">MARTES</th>
-              <th class="text-center">MIÉRCOLES</th>
-              <th class="text-center">JUEVES</th>
-              <th class="text-center">VIERNES</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-horario>
-            <tr>
-              <td class="text-center">{{ horario.hora }}</td>
-              <td class="text-center">{{ horario.indice || '' }}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </ng-template>
-        </p-table>
+      <p-accordionTab header="TARDES" headerStyleClass="font-bold text-4xl">
+        <div class="flex flex-column align-items-center">
+          <h2 class="text-center mb-3 text-3xl">TARDES</h2>
+          <p-table
+            [value]="horariosTarde"
+            styleClass="p-datatable-gridlines"
+            class="w-9 border-round-md border border-gray-400 table-border">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-2xl bg-gray-300 text-center border">HORA</th>
+                <th class="text-2xl bg-gray-300 text-center border"></th>
+                <th class="text-2xl bg-gray-300 text-center border">LUNES</th>
+                <th class="text-2xl bg-gray-300 text-center border">MARTES</th>
+                <th class="text-2xl bg-gray-300 text-center border">MIÉRCOLES</th>
+                <th class="text-2xl bg-gray-300 text-center border">JUEVES</th>
+                <th class="text-2xl bg-gray-300 text-center border">VIERNES</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-horario let-i="index">
+              <tr [ngClass]="{ 'bg-gray-300': !horario.indice }">
+                <td class="text-xl text-center border">{{ horario.hora }}</td>
+                <td class="text-xl text-center border">{{ horario.indice || '' }}</td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+                <td class="text-xl text-center border"></td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </p-accordionTab>
     </p-accordion>
 
-    <h2 class="text-center text-base m-4">DEBERES</h2>
+    <h2 class="text-center text-2x1 m-4">DEBERES</h2>
     <div class="flex justify-content-center">
       <p-table
         [value]="asignaturasSeleccionadas"
         styleClass="p-datatable-gridlines"
-        class="w-6 p-2 border-round-md border-1 border-gray-300">
+        class="w-6 border-round-md border-2 border-gray-400">
         <ng-template pTemplate="header">
-          <tr class="bg-gray-200">
-            <th class="text-center">ASIGNATURA</th>
-            <th class="text-center">HORA</th>
-            <th class="text-center">DÍA</th>
-            <th class="text-center">DEBERES</th>
+          <tr>
+            <th class="bg-gray-300 text-center text-xl">ASIGNATURA</th>
+            <th class="bg-gray-300 text-center text-xl">HORA</th>
+            <th class="bg-gray-300 text-center text-xl">DÍA</th>
+            <th class="bg-gray-300 text-center text-xl">DEBERES</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-asignatura>
+        <ng-template pTemplate="body" let-asignatura let-i="index">
           <tr>
-            <td class="text-center">{{ asignatura.nombre }}</td>
-            <td class="text-center">{{ asignatura.hora }}</td>
-            <td class="text-center">{{ asignatura.dia }}</td>
-            <td class="text-center">
+            <td class="text-center text-xl">{{ asignatura.nombre }}</td>
+            <td class="text-center text-xl">{{ asignatura.hora }}</td>
+            <td class="text-center text-xl">{{ asignatura.dia }}</td>
+            <td class="text-center text-xl">
               <p-checkbox [(ngModel)]="asignatura.deberes" [binary]="true"></p-checkbox>
             </td>
           </tr>
@@ -108,9 +110,9 @@
       </p-table>
     </div>
 
-    <div class="flex  justify-content-center gap-4 mt-4">
-      <button pButton pRipple label="Guardar" class="p-button-success"></button>
-      <button pButton pRipple label="Cancelar" class="p-button-danger"></button>
+    <div class="flex justify-content-center gap-4 mt-6">
+      <button pButton pRipple label="Guardar" class="p-button-success p-button-lg w-13rem"></button>
+      <button pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-13rem"></button>
     </div>
   </div>
 </div>
