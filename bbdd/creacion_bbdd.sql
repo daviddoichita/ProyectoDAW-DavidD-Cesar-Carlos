@@ -100,20 +100,13 @@ DROP TABLE IF EXISTS cuadrante;
 CREATE TABLE cuadrante (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     idcargo INT,
+    idguardia INT,
     fecha DATE,
     incidencias TEXT,
     firma TEXT,
     deberes BOOLEAN,
-    FOREIGN KEY(idcargo) REFERENCES cargo(id)
-);
-
-DROP TABLE IF EXISTS sesionguardia;
-CREATE TABLE sesionguardia (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    idsesion INT,
-    idcuadrante INT,
-    FOREIGN KEY(idsesion) REFERENCES sesion(id),
-    FOREIGN KEY(idcuadrante) REFERENCES cuadrante(id)
+    FOREIGN KEY(idcargo) REFERENCES cargo(id),
+    FOREIGN KEY(idguardia) REFERENCES sesion(id)
 );
 
 DROP TABLE IF EXISTS sesionfalta;
