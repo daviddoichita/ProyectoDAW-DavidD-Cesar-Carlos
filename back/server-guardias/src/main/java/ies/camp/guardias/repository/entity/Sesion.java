@@ -17,11 +17,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "sesion")
 public class Sesion {
 
@@ -35,29 +35,55 @@ public class Sesion {
     private Profesor profesor;
 
     @ManyToOne
+    @JoinColumn(name = "idmateria")
+    @ToString.Exclude
+    private Materia materia;
+
+    @ManyToOne
     @JoinColumn(name = "idgrupo")
     @ToString.Exclude
     private Grupo grupo;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "sesiones")
+    @ManyToOne
+    @JoinColumn(name = "idaula")
     @ToString.Exclude
-    private Set<Cuadrante> cuadrantes;
+    private Aula aula;
 
     @ManyToOne
     @JoinColumn(name = "idintervalo")
+    @ToString.Exclude
     private Intervalo intervalo;
 
     @ManyToOne
-    @JoinColumn(name = "idmateria")
-    private Materia materia;
+    @JoinColumn(name = "idcurso")
+    @ToString.Exclude
+    private Curso curso;
 
     @ManyToOne
     @JoinColumn(name = "iddia")
+    @ToString.Exclude
     private Dia dia;
 
-    @ManyToOne
-    @JoinColumn(name = "idaula")
-    private Aula aula;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "faltas")
+    @ToString.Exclude
+    private Set<Cuadrante> cuadrantes;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Sesion other = (Sesion) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
     @Override
     public int hashCode() {
@@ -65,27 +91,5 @@ public class Sesion {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Sesion other = (Sesion) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
     }
 }

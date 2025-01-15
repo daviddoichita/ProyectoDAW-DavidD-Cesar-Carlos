@@ -11,6 +11,4 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CursoRepository extends JpaRepository<Curso, Long> {
 
-    @Query(value = "SELECT * FROM curso ORDER BY id DESC", nativeQuery = true)
-    public Curso getLast();
 }
