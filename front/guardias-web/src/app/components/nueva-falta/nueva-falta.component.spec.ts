@@ -9,8 +9,8 @@ describe('NuevaFaltaComponent', () => {
     await TestBed.configureTestingModule({
       imports: [NuevaFaltaComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(NuevaFaltaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
