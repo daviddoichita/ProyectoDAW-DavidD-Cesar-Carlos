@@ -31,7 +31,7 @@ public class ProfesorDTO implements Serializable {
      * Convierte un Profesor a ProfesorDTO sin la relacion con sesion
      * 
      * @param profesor Profesor a convertir a DTO
-     * @return profesor convertido a DTO
+     * @return profesor convertido a ProfesorDTO
      */
     public static ProfesorDTO convertToDTO(Profesor profesor) {
         return ProfesorDTO.builder()
