@@ -1,23 +1,15 @@
 package ies.camp.guardias.service;
 
-import java.util.List;
-
-import ies.camp.guardias.model.dto.SesionDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface SesionService {
 
     /**
-     * Devuelve todas las sesiones como SesionDTO
-     *
-     * @return lista de SesionDTO
+     * Lee todas las sesiones desde un archivo .CSV y carga en la base de datos toda
+     * la informacion de todas las entidades
+     * 
+     * @param csv Archivo CSV con la informacion de la base de datos
+     * @return true si la carga ha sido exitosa o false en caso contrario
      */
-    public List<SesionDTO> findAll();
-
-    /**
-     * Devuelve la SesionDTO asociada al id introducido
-     *
-     * @param id ID de la SesionDTO a buscar
-     * @return SesionDTO si se encuentra o null en caso contrario
-     */
-    public SesionDTO findById(Long id);
+    public boolean loadFromCSV(MultipartFile csv);
 }

@@ -21,8 +21,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "materia")
-public class Materia {
+@Table(name = "aula")
+public class Aula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,8 @@ public class Materia {
     private Long numero;
     private String abreviacion;
     private String nombre;
-    private String codigo;
-    private Integer horas;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materia")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "aula")
     @ToString.Exclude
     private Set<Sesion> sesiones;
 
@@ -45,7 +43,7 @@ public class Materia {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Materia other = (Materia) obj;
+        Aula other = (Aula) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
