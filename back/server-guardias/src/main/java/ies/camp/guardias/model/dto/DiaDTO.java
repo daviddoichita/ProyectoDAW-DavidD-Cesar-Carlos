@@ -9,37 +9,40 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class DiaDTO implements Serializable {
 
     private Long id;
     private String nombre;
+    private String abreviacion;
 
     /**
-     * Recibe un Dia y lo convierte a DiaDTO sin ninguna relacion
-     *
-     * @param dia Dia a convertir
-     * @return dia convertido a DiaDTO
+     * Convierte un Dia a DiaDTO sin la relacion con sesion
+     * 
+     * @param dia Dia a convertir a DTO
+     * @return dia convertido a DTO
      */
     public static DiaDTO convertToDTO(Dia dia) {
         return DiaDTO.builder()
                 .id(dia.getId())
                 .nombre(dia.getNombre())
+                .abreviacion(dia.getAbreviacion())
                 .build();
     }
 
     /**
-     * Recibe un DiaDTO y lo convertir a Dia sin ninguna relacion
-     *
-     * @param diaDTO DiaDTO a convertir
-     * @return diaDTO convertido a Dia
+     * Convierte un DiaDTO a Dia
+     * 
+     * @param diaDTO DiaDTO a convertir a entidad
+     * @return diaDTO convertido a entidad
      */
     public static Dia convertToEntity(DiaDTO diaDTO) {
         return Dia.builder()
                 .id(diaDTO.getId())
                 .nombre(diaDTO.getNombre())
+                .abreviacion(diaDTO.getAbreviacion())
                 .build();
     }
 }

@@ -10,8 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class IntervaloDTO implements Serializable {
 
@@ -20,10 +20,10 @@ public class IntervaloDTO implements Serializable {
     private LocalTime horaFin;
 
     /**
-     * Recibe un Intervalo y lo convierte a IntervaloDTO sin ninguna relacion
-     *
-     * @param intervalo Intervalo a convertir
-     * @return intervalo convertido a IntervaloDTO
+     * Convierte un Intervalo a IntervaloDTO sin la relacion con sesion
+     * 
+     * @param intervalo Intervalo a convertir a DTO
+     * @return intervalo convertido a DTO
      */
     public static IntervaloDTO convertToDTO(Intervalo intervalo) {
         return IntervaloDTO.builder()
@@ -34,10 +34,10 @@ public class IntervaloDTO implements Serializable {
     }
 
     /**
-     * Recibe un IntervaloDTO y lo convierte a Intervalo sin ninguna relacion
-     *
-     * @param intervaloDTO IntervaloDTO a convertir
-     * @return intervaloDTO convertido a Intervalo
+     * Convierte un IntervaloDTO a Intervalo
+     * 
+     * @param intervaloDTO IntervaloDTO a convertir a entidad
+     * @return intervaloDTO convertido a entidad
      */
     public static Intervalo convertToEntity(IntervaloDTO intervaloDTO) {
         return Intervalo.builder()

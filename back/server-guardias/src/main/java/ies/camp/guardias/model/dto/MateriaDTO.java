@@ -9,37 +9,49 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class MateriaDTO implements Serializable {
 
     private Long id;
+    private Long numero;
+    private String abreviacion;
     private String nombre;
+    private String codigo;
+    private Integer horas;
 
     /**
-     * Recibe una Materia y la convierte a MateriaDTO sin ninguna relacion
-     *
-     * @param materia Materia a convertir
-     * @return materia convertida a MateriaDTO
+     * Convierte una Materia a MateriaDTO sin la relacion con sesion
+     * 
+     * @param materia Materia a convertir a DTO
+     * @return materia convertida a DTO
      */
     public static MateriaDTO convertToDTO(Materia materia) {
         return MateriaDTO.builder()
                 .id(materia.getId())
+                .numero(materia.getNumero())
+                .abreviacion(materia.getAbreviacion())
                 .nombre(materia.getNombre())
+                .codigo(materia.getCodigo())
+                .horas(materia.getHoras())
                 .build();
     }
 
     /**
-     * Recibe una MateriaDTO y la convierte a Materia sin ninguna relacion
-     *
-     * @param materiaDTO MateriaDTO a convertir
-     * @return materiaDTO convertida a Materia
+     * Convierte una MateriaDTO a Materia
+     * 
+     * @param materiaDTO MateriaDTO a convertir entidad
+     * @return materiaDTO convertida a entidad
      */
     public static Materia convertToEntity(MateriaDTO materiaDTO) {
         return Materia.builder()
                 .id(materiaDTO.getId())
+                .numero(materiaDTO.getNumero())
+                .abreviacion(materiaDTO.getAbreviacion())
                 .nombre(materiaDTO.getNombre())
+                .codigo(materiaDTO.getCodigo())
+                .horas(materiaDTO.getHoras())
                 .build();
     }
 }
