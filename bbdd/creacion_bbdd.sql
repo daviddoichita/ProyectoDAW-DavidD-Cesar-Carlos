@@ -26,9 +26,9 @@ DROP TABLE IF EXISTS materia;
 CREATE TABLE materia (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     numero INT,
-	abreviacion VARCHAR(20),
-    nombre VARCHAR(32),
-    codigo VARCHAR(10),
+	abreviacion VARCHAR(60),
+    nombre VARCHAR(60),
+    codigo VARCHAR(60),
     horas INT
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE grupo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	numero INT,
     abreviacion VARCHAR(20),
-    nombre VARCHAR(32),
+    nombre VARCHAR(60),
     curso VARCHAR(20)
 );
 
