@@ -1,37 +1,39 @@
 package ies.camp.guardias.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import ies.camp.guardias.model.dto.SesionDTO;
-import ies.camp.guardias.repository.dao.SesionRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class SesionServiceImpl implements SesionService {
 
     private static final Logger log = LoggerFactory.getLogger(SesionServiceImpl.class);
 
-    @Autowired
-    private SesionRepository sesionRepository;
-
     @Override
-    public List<SesionDTO> findAll() {
-        log.info(this.getClass().getSimpleName() + " findAll: devolver todas las sesiones");
+    public boolean loadFromCSV(MultipartFile csv) {
+        log.info(this.getClass().getSimpleName() + " loadFromCSV: empezar a cargar la base de datos desde un CSV");
 
-        return this.sesionRepository.findAll().stream().map(s -> SesionDTO.convertToDTO(s))
-                .collect(Collectors.toList());
-    }
+        try {
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(csv.getInputStream(), StandardCharsets.ISO_8859_1));
+            StringBuilder stringBuilder = new StringBuilder();
 
-    @Override
-    public SesionDTO findById(Long id) {
-        log.info(this.getClass().getSimpleName() + " findById: devolver sesion con id: {}", id);
+            bufferedReader.lines().forEach(stringBuilder::append);
 
-        return this.sesionRepository.findById(id).map(SesionDTO::convertToDTO).orElse(null);
+            log.warn(this.getClass().getSimpleName() + " loadFromCSV: archivo csv: {}", stringBuilder.toString());
+
+        } catch (IOException e) {
+            log.error(this.getClass().getSimpleName() + " loadFromCSV: error leyendo el archivo: {}", e);
+            return false;
+        }
+
+        return false;
     }
 
 }

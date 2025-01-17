@@ -20,50 +20,52 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "cuadrante")
 public class Cuadrante implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String incidencias;
-
-    private String firma;
-
-    private Boolean deberes;
-
     private LocalDate fecha;
-
-    @ManyToOne
-    @JoinColumn(name = "idprofesor")
-    @ToString.Exclude
-    private Profesor profesor;
-
-    @ManyToOne
-    @JoinColumn(name = "idintervalo")
-    @ToString.Exclude
-    private Intervalo intervalo;
-
-    @ManyToOne
-    @JoinColumn(name = "idcurso")
-    @ToString.Exclude
-    private Curso curso;
+    private String incidencias;
+    private String firma;
+    private Boolean deberes;
 
     @ManyToOne
     @JoinColumn(name = "idcargo")
     @ToString.Exclude
     private Cargo cargo;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinTable(name = "cuadrantesesion", joinColumns = @JoinColumn(name = "idcuadrante"), inverseJoinColumns = @JoinColumn(name = "idsesion"))
+    @ManyToOne
+    @JoinColumn(name = "idguardia")
     @ToString.Exclude
-    private Set<Sesion> sesiones;
+    private Sesion guardia;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "sesionfalta", joinColumns = @JoinColumn(name = "idcuadrante"), inverseJoinColumns = @JoinColumn(name = "idsesion"))
+    private Set<Sesion> faltas;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Cuadrante other = (Cuadrante) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 
     @Override
     public int hashCode() {
@@ -71,32 +73,5 @@ public class Cuadrante implements Cloneable {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Cuadrante other = (Cuadrante) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public Cuadrante clone() throws CloneNotSupportedException {
-        return (Cuadrante) super.clone();
     }
 }

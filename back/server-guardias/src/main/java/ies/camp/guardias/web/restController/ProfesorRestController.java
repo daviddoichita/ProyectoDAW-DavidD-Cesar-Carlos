@@ -50,4 +50,28 @@ public class ProfesorRestController {
 
         return this.profesorService.findById(id);
     }
+
+    /**
+     * Borra el Profesor con id introducido
+     *
+     * @param id ID del Profesor a borrar
+     */
+    @GetMapping(path = "/{id}/delete")
+    public void delete(@PathVariable Long id) {
+        log.info(this.getClass().getSimpleName() + " deleteById: borrar profesor con id: {}", id);
+
+        this.profesorService.delete(id);
+    }
+
+    /**
+     * Guarda el ProfesorDTO introducido en la base de datos
+     *
+     * @param profesorDTO ProfesorDTO a guardar
+     */
+    @GetMapping(path = "/{id}/save")
+    public void save(@PathVariable Long id) {
+        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", id);
+
+        this.profesorService.save(this.profesorService.findById(id));
+    }
 }

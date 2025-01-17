@@ -11,6 +11,8 @@ public interface ProfesorService {
      * 
      * @return lista de ProfesorDTO
      */
+    // public List<ProfesorDTO> findAll();
+
     public List<ProfesorDTO> findAll();
 
     /**
@@ -20,4 +22,18 @@ public interface ProfesorService {
      * @return Profesor si encuentra el id introducido o null en caso contrario
      */
     public ProfesorDTO findById(Long id);
+
+    /**
+     * Borra el Profesor asociado al id introducido
+     * 
+     * @param id ID del Profesor a borrar
+     */
+    public void delete(Long id);
+
+    /**
+     * Guarda el ProfesorDTO introducido en la base de datos
+     * 
+     * @param profesorDTO ProfesorDTO a guardar
+     */
+    public void save(ProfesorDTO profesorDTO);
 }
