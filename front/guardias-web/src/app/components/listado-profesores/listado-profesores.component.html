@@ -1,0 +1,123 @@
+<div class="app-layout">
+    <app-header></app-header>
+    <div class="main-section">
+        <!--<p-table>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Nif</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-profesor>
+                <tr>
+                    <td>prueba</td>
+                    <td>{{ profesor.id }}</td>
+                    <td>{{ profesor.nombre }}</td>
+                    <td>{{ profesor.apellidos }}</td>
+                    <td>{{ profesor.nif }}</td>
+                    <td>{{ profesor.email }}</td>
+                    <td>{{ profesor.telefono }}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+                <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" />
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+                <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text" />
+            </ng-template>
+        </p-table>-->
+
+        <p-table #dt1 [value]="prueba" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+            selectionMode="single" [(selection)]="prueba" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }"
+            [rows]="5" [paginator]="true" stateStorage="session" stateKey="statedemo-session">
+            <ng-template pTemplate="caption">
+                <p-iconField iconPosition="right">
+                    <p-inputIcon>
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target, 'contains')"
+                        placeholder="Busca" />
+                </p-iconField>
+                <p-iconField right>
+                    <p-button label="Submit" />
+                </p-iconField>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="id" style="width:25%">
+                        Id <p-sortIcon field="id" />
+                    </th>
+                    <th pSortableColumn="nombre" style="width:25%">
+                        Nombre <p-sortIcon field="nombre" />
+                    </th>
+                    <th pSortableColumn="apellidos" style="width:25%">
+                        Apellidos <p-sortIcon field="apellidos" />
+                    </th>
+                    <th pSortableColumn="nif" style="width:25%">
+                        Nif <p-sortIcon field="nif" />
+                    </th>
+                    <th pSortableColumn="email" style="width:25%">
+                        Email <p-sortIcon field="email" />
+                    </th>
+                    <th pSortableColumn="telefono" style="width:25%">
+                        Telefono <p-sortIcon field="telefono" />
+                    </th>
+                    <th pSortableColumn="editar" style="width:25%">
+                        Editar <p-sortIcon field="editar" />
+                    </th>
+                    <th pSortableColumn="eliminar" style="width:25%">
+                        Eliminar <p-sortIcon field="eliminar" />
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr [pSelectableRow]="customer">
+                    <td>
+                        <span class="p-column-title">id</span>
+                        {{ customer.id }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Nombre</span>
+                        {{ customer.nombre }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Apellidos</span>
+                        {{ customer.apellidos }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Nif</span>
+                        {{ customer.nif }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Email</span>
+                        {{ customer.email }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Telefono</span>
+                        {{ customer.telefono }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Telefono</span>
+                        {{ customer.telefono }}
+                    </td>
+                    <td>
+                        <span class="p-column-title">Telefono</span>
+                        {{ customer.telefono }}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No customers found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
