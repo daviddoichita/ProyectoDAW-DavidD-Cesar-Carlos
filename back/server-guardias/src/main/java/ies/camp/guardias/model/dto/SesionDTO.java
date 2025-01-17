@@ -33,10 +33,6 @@ public class SesionDTO implements Serializable {
      * @return sesion convertida a DTO
      */
     public static SesionDTO convertToDTO(Sesion sesion) {
-        GrupoDTO grupoDTO = sesion.getGrupo() == null ? null : GrupoDTO.convertToDTO(sesion.getGrupo());
-        MateriaDTO materiaDTO = sesion.getMateria() == null ? null : MateriaDTO.convertToDTO(sesion.getMateria());
-        AulaDTO aulaDTO = sesion.getAula() == null ? null : AulaDTO.convertToDTO(sesion.getAula());
-
         return SesionDTO.builder()
                 .id(sesion.getId())
                 .profesor(ProfesorDTO.convertToDTO(sesion.getProfesor()))
@@ -56,11 +52,6 @@ public class SesionDTO implements Serializable {
      * @return sesionDTO convertida a entidad
      */
     public static Sesion convertToEntity(SesionDTO sesionDTO) {
-        Grupo grupo = sesionDTO.getGrupoDTO() == null ? null : GrupoDTO.convertToEntity(sesionDTO.getGrupoDTO());
-        Materia materia = sesionDTO.getMateriaDTO() == null ? null
-                : MateriaDTO.convertToEntity(sesionDTO.getMateriaDTO());
-        Aula aula = sesionDTO.getAulaDTO() == null ? null : AulaDTO.convertToEntity(sesionDTO.getAulaDTO());
-
         return Sesion.builder()
                 .id(sesionDTO.getId())
                 .profesor(ProfesorDTO.convertToEntity(sesionDTO.getProfesor()))
