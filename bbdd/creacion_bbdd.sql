@@ -9,10 +9,10 @@ USE guardiascamp;
 DROP TABLE IF EXISTS profesor;
 CREATE TABLE profesor (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(32),
-    apellidos VARCHAR(32),
+    nombre VARCHAR(60),
+    apellidos VARCHAR(60),
     numero INT,
-    abreviacion varchar(20),
+    abreviacion varchar(60),
     nif VARCHAR(9),
     contrasenya TEXT,
     admin BOOLEAN DEFAULT FALSE,
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS materia;
 CREATE TABLE materia (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     numero INT,
-	abreviacion VARCHAR(60),
+	  abreviacion VARCHAR(60),
     nombre VARCHAR(60),
     codigo VARCHAR(60),
     horas INT
@@ -36,8 +36,8 @@ DROP TABLE IF EXISTS aula;
 CREATE TABLE aula (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     numero INT,
-    abreviacion VARCHAR(20),
-    nombre VARCHAR(32)
+    abreviacion VARCHAR(60),
+    nombre VARCHAR(60)
 );
 
 DROP TABLE IF EXISTS intervalo;
@@ -47,10 +47,27 @@ CREATE TABLE intervalo (
     horafin time
 );
 
+INSERT INTO intervalo (horainicio, horafin)
+VALUES
+("08:20:00", "09:15:00"),
+("09:15:00", "10:10:00"),
+("10:10:00", "11:00:00"),
+("11:25:00", "12:20:00"),
+("12:20:00", "13:10:00"),
+("13:10:00", "14:00:00"),
+("14:10:00", "15:00:00"),
+("15:15:00", "16:05:00"),
+("16:05:00", "17:00:00"),
+("17:00:00", "17:50:00"),
+("18:10:00", "19:00:00"),
+("19:00:00", "19:50:00"),
+("19:50:00", "20:40:00"),
+("20:50:00", "21:40:00");
+
 DROP TABLE IF EXISTS dia;
 CREATE TABLE dia (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(20),
+    nombre VARCHAR(60),
     abreviacion VARCHAR(1)
 );
 
@@ -58,17 +75,22 @@ DROP TABLE IF EXISTS grupo;
 CREATE TABLE grupo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	numero INT,
-    abreviacion VARCHAR(20),
+    abreviacion VARCHAR(60),
     nombre VARCHAR(60),
-    curso VARCHAR(20)
+    curso VARCHAR(60)
 );
 
 DROP TABLE IF EXISTS curso;
 CREATE TABLE curso (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(32),
-    abreviacion VARCHAR(20)
+    nombre VARCHAR(60),
+    abreviacion VARCHAR(60)
 );
+
+INSERT INTO curso (nombre, abreviacion)
+VALUES 
+("Curso 2024-2025", "24/25"),
+("Curso 2025-2026", "25/26");
 
 DROP TABLE IF EXISTS sesion;
 CREATE TABLE sesion (
@@ -92,9 +114,23 @@ CREATE TABLE sesion (
 DROP TABLE IF EXISTS cargo;
 CREATE TABLE cargo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(32),
-    abreviacion VARCHAR(20)
+    nombre VARCHAR(60),
+    abreviacion VARCHAR(60)
 );
+
+INSERT INTO cargo (nombre, abreviacion)
+VALUES
+("COOR", "Coordinador"),
+("IT1", "Itinerante 1"),
+("IT2", "Itinerante 2"),
+("IT3", "Itinerante 3"),
+("IT4", "Itinerante 4"),
+("IT5", "Itinerante 5"),
+("IT6", "Itinerante 6"),
+("P0", "Planta 0"),
+("P1", "Planta 1"),
+("P2", "Planta 2"),
+("CONVIV", "Convivencia");
 
 DROP TABLE IF EXISTS cuadrante;
 CREATE TABLE cuadrante (
