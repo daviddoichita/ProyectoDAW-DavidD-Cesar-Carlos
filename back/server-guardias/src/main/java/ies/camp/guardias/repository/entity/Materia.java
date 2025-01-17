@@ -29,10 +29,10 @@ public class Materia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @EqualsAndHashCode.Include
     private Long numero;
     private String abreviacion;
     private String nombre;
-    @EqualsAndHashCode.Include
     private String codigo;
     private Integer horas;
 

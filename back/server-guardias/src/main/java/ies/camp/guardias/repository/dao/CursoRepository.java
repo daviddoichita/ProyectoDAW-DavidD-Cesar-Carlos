@@ -1,5 +1,7 @@
 package ies.camp.guardias.repository.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,4 +13,6 @@ import jakarta.transaction.Transactional;
 @Transactional
 public interface CursoRepository extends JpaRepository<Curso, Long> {
 
+	@Query(value = "SELECT * FROM curso WHERE abreviacion = '24/25'", nativeQuery = true)
+	public Optional<Curso> getCurrent();
 }
