@@ -2,6 +2,9 @@ package ies.camp.guardias.service;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import ies.camp.guardias.model.dto.ProfesorDTO;
 
 public interface ProfesorService {
@@ -36,4 +39,8 @@ public interface ProfesorService {
      * @param profesorDTO ProfesorDTO a guardar
      */
     public void save(ProfesorDTO profesorDTO);
+    
+    public String login(String email, String contrasenya);
+
+	UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
 }

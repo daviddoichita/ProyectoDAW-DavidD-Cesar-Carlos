@@ -1,10 +1,8 @@
 package ies.camp.guardias.configuration;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,9 +19,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
-                        requests -> requests.anyRequest().authenticated())
-                .httpBasic(withDefaults());
-
+                        requests -> requests
+                                .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated()
+                                );
         return http.build();
     }
 
@@ -65,7 +64,6 @@ public class WebSecurityConfig {
 	}
 	
 	@Bean
-	@Lazy
 	public PasswordEncoder passwordEncoder() {
 	
 		return new BCryptPasswordEncoder();
