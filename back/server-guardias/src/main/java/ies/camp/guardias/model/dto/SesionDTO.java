@@ -2,9 +2,6 @@ package ies.camp.guardias.model.dto;
 
 import java.io.Serializable;
 
-import ies.camp.guardias.repository.entity.Aula;
-import ies.camp.guardias.repository.entity.Grupo;
-import ies.camp.guardias.repository.entity.Materia;
 import ies.camp.guardias.repository.entity.Sesion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
