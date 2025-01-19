@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
@@ -27,9 +30,12 @@ public class ProfesorServiceImpl implements ProfesorService {
 
 	@Autowired
 	private ProfesorRepository profesorRepository;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/*
 	 * @Override public List<ProfesorDTO> findAll() {
@@ -87,7 +93,8 @@ public class ProfesorServiceImpl implements ProfesorService {
 	@Override
 	public void save(ProfesorDTO profesorDTO) {
 		log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
-
+		// Cifrar la contraseña antes de guardar
+		profesorDTO.setContrasenya(passwordEncoder.encode(profesorDTO.getContrasenya()));
 		Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
 		profesorRepository.save(profesor);
 	}
@@ -95,22 +102,37 @@ public class ProfesorServiceImpl implements ProfesorService {
 	@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Profesor profesor = profesorRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("Profesor con email: " + email + " no encontrado"));
 
         return new User(profesor.getEmail(), profesor.getContrasenya(), List.of());
     }
+
+    @Override
+    public String login(String email, String contrasenya) {
+		
+        Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(() -> {
+            log.error("No se ha encontrado al profesor con email: {}", email);
+            return new RuntimeException("No se ha encontrado al profesor");
+        });
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, contrasenya));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return String.valueOf(profesor.getId());
+
+        } catch (BadCredentialsException e) {
+            log.error("Credenciales incorrectas para el email: {}", email);
+            throw new RuntimeException("Email o contraseña incorrectos");
+        }
+    }
+
+	public static void main(String[] args) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String rawPassword = "cesar1";
+        String encodedPassword = encoder.encode(rawPassword);
+        System.out.println("Contraseña cifrada: " + encodedPassword);
+    }
+
 	
-	@Override
-	public String login(String email, String contrasenya) {
-
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, contrasenya));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(() -> {
-			log.error("No se ha encontrado al profesor con email: ", email);
-			return new RuntimeException("No se ha encontrado al profesor");
-		});
-
-		return String.valueOf(profesor.getId());
-	}
 }

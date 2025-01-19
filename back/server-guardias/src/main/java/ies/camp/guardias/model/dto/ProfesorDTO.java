@@ -3,6 +3,10 @@ package ies.camp.guardias.model.dto;
 import java.io.Serializable;
 
 import ies.camp.guardias.repository.entity.Profesor;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

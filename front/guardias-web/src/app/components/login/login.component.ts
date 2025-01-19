@@ -49,7 +49,7 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
-
+  
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log('Inicio de sesión exitoso');
@@ -60,7 +60,7 @@ export class LoginComponent {
         if (error.status === 401) {
           console.error('Credenciales incorrectas');
         } else {
-          console.error('Otro error ocurrió');
+          console.error('Error');
         }
       }
     });

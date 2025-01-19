@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000'; // Asegúrate de que esta URL sea correcta
+  private apiUrl = 'http://localhost:8000/api/profesores';
 
   constructor(private http: HttpClient) {}
 
   login(credentials: { emailOrNif: string, password: string }): Observable<any> {
-    return this.http.get(`${this.apiUrl}/login?email=${credentials.emailOrNif}&contraseña=${credentials.password}`);
+    const params = new HttpParams()
+      .set('email', credentials.emailOrNif)
+      .set('contrasenya', credentials.password);
+    return this.http.post(`${this.apiUrl}/login`, null, { params });
   }
 
   logout(): Observable<any> {

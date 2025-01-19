@@ -1,17 +1,18 @@
 package ies.camp.guardias.web.restController;
 
-import java.awt.Container;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,13 +73,12 @@ public class ProfesorRestController {
      *
      * @param profesorDTO ProfesorDTO a guardar
      */
-    @GetMapping(path = "/{id}/save")
-    public void save(@PathVariable Long id) {
-        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", id);
-
-        this.profesorService.save(this.profesorService.findById(id));
+    @PostMapping(path = "/save")
+    public void save(@RequestBody ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
+        this.profesorService.save(profesorDTO);
     }
-    
+
     @PostMapping(path = "/login")
     public ResponseEntity<String> login(@RequestParam String email, @RequestParam String contrasenya) {
         log.info("Intentando iniciar sesión para el email: {}", email);
@@ -86,10 +86,11 @@ public class ProfesorRestController {
             String usuarioId = profesorService.login(email, contrasenya);
             log.info("Inicio de sesión exitoso para el usuario con ID: {}", usuarioId);
             return ResponseEntity.ok(usuarioId);
+
         } catch (Exception e) {
-            log.error("Error en el inicio de sesión para el email: {}. Causa: {}", email, e.getMessage());
-            return ResponseEntity.status(401).body("error");
+            log.error("Error en el inicio de sesión para el email: {}", email, e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o contraseña incorrectos");
         }
     }
-
+    
 }
