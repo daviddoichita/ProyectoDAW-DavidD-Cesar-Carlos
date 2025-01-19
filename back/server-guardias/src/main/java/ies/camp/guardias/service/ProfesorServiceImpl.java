@@ -3,8 +3,6 @@ package ies.camp.guardias.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class ProfesorServiceImpl implements ProfesorService {
      * public List<ProfesorDTO> findAll() {
      * log.info(this.getClass().getSimpleName() +
      * " findAll: devolver todos los profesores");
-     * 
+     *
      * return this.profesorRepository.findAll().stream().map(p ->
      * ProfesorDTO.convertToDTO(p))
      * .collect(Collectors.toList());
@@ -53,7 +51,7 @@ public class ProfesorServiceImpl implements ProfesorService {
      * public ProfesorDTO findById(Long id) {
      * log.info(this.getClass().getSimpleName() +
      * " findById: devolver profesor con id: {}", id);
-     * 
+     *
      * return
      * this.profesorRepository.findById(id).map(ProfesorDTO::convertToDTO).orElse(
      * null);
