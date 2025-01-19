@@ -131,18 +131,6 @@ public class SesionServiceImpl implements SesionService {
             Long idIntervalo = Long.valueOf(fields[17]);
             if (idIntervalo != 15 && idIntervalo != 16) {
                 if (fields[6].trim() != "") {
-                    // Profesor profesor =
-                    // this.profesorRepository.findByNumero(Long.parseLong(fields[13].trim()))
-                    // .orElse(null);
-                    // Materia materia =
-                    // this.materiaRepository.findByNumero(Long.parseLong(fields[0].trim()))
-                    // .orElse(null);
-                    // Grupo grupo =
-                    // this.grupoRepository.findByNumero(Long.parseLong(fields[6].trim())).orElse(null);
-                    // Aula aula =
-                    // this.aulaRepository.findByNumero(Long.parseLong(fields[10].trim())).orElse(null);
-                    // Dia dia =
-                    // this.diaRepository.findByAbreviacion(fields[16].trim()).orElse(null);
                     Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
                     Materia materia = materias.get(Long.parseLong(fields[0].trim()));
                     Grupo grupo = grupos.get(Long.parseLong(fields[6].trim()));
@@ -150,15 +138,6 @@ public class SesionServiceImpl implements SesionService {
                     Dia dia = dias.get(fields[16].trim());
                     Intervalo intervalo = intervalos.get(idIntervalo);
 
-                    // this.sesionRepository.save(Sesion.builder()
-                    // .profesor(profesor)
-                    // .materia(materia)
-                    // .grupo(grupo)
-                    // .aula(aula)
-                    // .intervalo(this.intervaloRepository.findById(idIntervalo).orElse(null))
-                    // .curso(curso)
-                    // .dia(dia)
-                    // .build());
                     this.sesionRepository.save(Sesion.builder()
                             .profesor(profesor)
                             .materia(materia)
