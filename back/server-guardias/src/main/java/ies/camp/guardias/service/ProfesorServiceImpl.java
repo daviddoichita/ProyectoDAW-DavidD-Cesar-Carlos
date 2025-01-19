@@ -25,7 +25,11 @@ public class ProfesorServiceImpl implements ProfesorService {
      * public List<ProfesorDTO> findAll() {
      * log.info(this.getClass().getSimpleName() +
      * " findAll: devolver todos los profesores");
+     * <<<<<<< HEAD
      *
+     * =======
+     *
+     * >>>>>>> main
      * return this.profesorRepository.findAll().stream().map(p ->
      * ProfesorDTO.convertToDTO(p))
      * .collect(Collectors.toList());
@@ -51,7 +55,11 @@ public class ProfesorServiceImpl implements ProfesorService {
      * public ProfesorDTO findById(Long id) {
      * log.info(this.getClass().getSimpleName() +
      * " findById: devolver profesor con id: {}", id);
+     * <<<<<<< HEAD
      *
+     * =======
+     *
+     * >>>>>>> main
      * return
      * this.profesorRepository.findById(id).map(ProfesorDTO::convertToDTO).orElse(
      * null);
@@ -84,5 +92,5 @@ public class ProfesorServiceImpl implements ProfesorService {
 
         Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
         profesorRepository.save(profesor);
-    }
-}
+    }<<<<<<<HEAD
+}=======}>>>>>>>main
