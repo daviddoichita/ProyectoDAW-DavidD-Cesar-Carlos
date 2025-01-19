@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,7 @@ import ies.camp.guardias.repository.entity.Aula;
 import ies.camp.guardias.repository.entity.Curso;
 import ies.camp.guardias.repository.entity.Dia;
 import ies.camp.guardias.repository.entity.Grupo;
+import ies.camp.guardias.repository.entity.Intervalo;
 import ies.camp.guardias.repository.entity.Materia;
 import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.repository.entity.Sesion;
@@ -105,25 +107,43 @@ public class SesionServiceImpl implements SesionService {
 
     private void loadSesiones(List<String> lines) {
         Curso curso = this.cursoRepository.getCurrent().orElse(null);
+
+        // Cargar las tablas a HashTables para menor numero de peticiones a base de
+        // datos
+        Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
+        this.profesorRepository.findAll().forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
+        Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
+        this.materiaRepository.findAll().forEach(materia -> materias.put(materia.getNumero(), materia));
+        Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
+        this.grupoRepository.findAll().forEach(grupo -> grupos.put(grupo.getNumero(),
+                grupo));
+        Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
+        this.aulaRepository.findAll().forEach(aula -> aulas.put(aula.getNumero(),
+                aula));
+        Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
+        this.diaRepository.findAll().forEach(dia -> dias.put(dia.getAbreviacion(),
+                dia));
+        Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
+        this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
+
         for (String line : lines) {
             String[] fields = line.split(";");
             Long idIntervalo = Long.valueOf(fields[17]);
             if (idIntervalo != 15 && idIntervalo != 16) {
                 if (fields[6].trim() != "") {
-                    Profesor profesor = this.profesorRepository.findByNumero(Long.parseLong(fields[13].trim()))
-                            .orElse(null);
-                    Materia materia = this.materiaRepository.findByNumero(Long.parseLong(fields[0].trim()))
-                            .orElse(null);
-                    Grupo grupo = this.grupoRepository.findByNumero(Long.parseLong(fields[6].trim())).orElse(null);
-                    Aula aula = this.aulaRepository.findByNumero(Long.parseLong(fields[10].trim())).orElse(null);
-                    Dia dia = this.diaRepository.findByAbreviacion(fields[16].trim()).orElse(null);
+                    Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
+                    Materia materia = materias.get(Long.parseLong(fields[0].trim()));
+                    Grupo grupo = grupos.get(Long.parseLong(fields[6].trim()));
+                    Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
+                    Dia dia = dias.get(fields[16].trim());
+                    Intervalo intervalo = intervalos.get(idIntervalo);
 
                     this.sesionRepository.save(Sesion.builder()
                             .profesor(profesor)
                             .materia(materia)
                             .grupo(grupo)
                             .aula(aula)
-                            .intervalo(this.intervaloRepository.findById(idIntervalo).orElse(null))
+                            .intervalo(intervalo)
                             .curso(curso)
                             .dia(dia)
                             .build());

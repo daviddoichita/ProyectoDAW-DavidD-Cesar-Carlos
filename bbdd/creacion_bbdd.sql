@@ -1,8 +1,8 @@
--- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';
--- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
-
 DROP DATABASE IF EXISTS guardiascamp;
 CREATE DATABASE guardiascamp;
+
+-- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';
+-- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
 
 USE guardiascamp;
 
