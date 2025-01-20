@@ -129,26 +129,24 @@ public class SesionServiceImpl implements SesionService {
         for (String line : lines) {
             String[] fields = line.split(";");
             Long idIntervalo = Long.valueOf(fields[17]);
-            if (idIntervalo != 15 && idIntervalo != 16) {
-                if (fields[6].trim() != "") {
-                    Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
-                    Materia materia = materias.get(Long.parseLong(fields[0].trim()));
-                    Grupo grupo = grupos.get(Long.parseLong(fields[6].trim()));
-                    Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
-                    Dia dia = dias.get(fields[16].trim());
-                    Intervalo intervalo = intervalos.get(idIntervalo);
+            Long idGrupo = fields[6].trim() == "" ? null : Long.parseLong(fields[6].trim());
 
-                    this.sesionRepository.save(Sesion.builder()
-                            .profesor(profesor)
-                            .materia(materia)
-                            .grupo(grupo)
-                            .aula(aula)
-                            .intervalo(intervalo)
-                            .curso(curso)
-                            .dia(dia)
-                            .build());
-                }
-            }
+            Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
+            Materia materia = materias.get(Long.parseLong(fields[0].trim()));
+            Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
+            Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
+            Dia dia = dias.get(fields[16].trim());
+            Intervalo intervalo = intervalos.get(idIntervalo);
+
+            this.sesionRepository.save(Sesion.builder()
+                    .profesor(profesor)
+                    .materia(materia)
+                    .grupo(grupo)
+                    .aula(aula)
+                    .intervalo(intervalo)
+                    .curso(curso)
+                    .dia(dia)
+                    .build());
         }
     }
 
