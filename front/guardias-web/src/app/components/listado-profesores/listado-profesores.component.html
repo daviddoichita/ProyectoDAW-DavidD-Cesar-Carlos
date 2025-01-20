@@ -33,9 +33,10 @@
             </ng-template>
         </p-table>-->
 
-        <p-table #dt1 [value]="prueba" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-            selectionMode="single" [(selection)]="prueba" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }"
-            [rows]="5" [paginator]="true" stateStorage="session" stateKey="statedemo-session">
+        <p-table #dt1 [value]="profesores"
+            [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']" selectionMode="single"
+            [(selection)]="profesores" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }" [rows]="5"
+            [paginator]="true" stateStorage="session" stateKey="statedemo-session">
             <ng-template pTemplate="caption">
                 <p-iconField iconPosition="right">
                     <p-inputIcon>
