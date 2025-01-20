@@ -29,7 +29,7 @@ public class SesionRestController {
      * @param file Archivo CSV
      * @return true si la carga fue exitosa false en caso contrario
      */
-    @PostMapping(path = "/loadFromCSV")
+    @PostMapping(path = "/load")
     public String loadFromCSV(@RequestParam MultipartFile file) {
         log.info(this.getClass().getSimpleName() + " loadFromCSV: mandar archivo CSV a SesionService");
 
