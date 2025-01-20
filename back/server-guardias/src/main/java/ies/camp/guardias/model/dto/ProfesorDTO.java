@@ -25,7 +25,7 @@ public class ProfesorDTO implements Serializable {
     private String abreviacion;
     private String nif;
     private String contrasenya;
-    private Boolean admin;
+    private String rol;
     private String direccion;
     private Long telefono;
     private String email;
@@ -46,7 +46,7 @@ public class ProfesorDTO implements Serializable {
                 .abreviacion(profesor.getAbreviacion())
                 .nif(profesor.getNif())
                 .contrasenya(profesor.getContrasenya())
-                .admin(profesor.getAdmin())
+                .rol(profesor.getRol())
                 .direccion(profesor.getDireccion())
                 .telefono(profesor.getTelefono())
                 .email(profesor.getEmail())
@@ -69,7 +69,7 @@ public class ProfesorDTO implements Serializable {
                 .abreviacion(profesorDTO.getAbreviacion())
                 .nif(profesorDTO.getNif())
                 .contrasenya(profesorDTO.getContrasenya())
-                .admin(profesorDTO.getAdmin())
+                .rol(profesorDTO.getRol())
                 .direccion(profesorDTO.getDireccion())
                 .telefono(profesorDTO.getTelefono())
                 .email(profesorDTO.getEmail())

@@ -36,7 +36,7 @@ public class Profesor {
     @Column(nullable = false)
     private String contrasenya;
 
-    private Boolean admin;
+    private String rol;
     private String direccion;
     private Long telefono;
 

@@ -6,18 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api/profesores';
+  private apiUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) {}
 
   login(credentials: { emailOrNif: string, password: string }): Observable<any> {
     const params = new HttpParams()
-      .set('email', credentials.emailOrNif)
+      .set('usuario', credentials.emailOrNif)
       .set('contrasenya', credentials.password);
-    return this.http.post(`${this.apiUrl}/login`, null, { params });
+    return this.http.get(`${this.apiUrl}/login`, { params });
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {});
+    return this.http.get(`${this.apiUrl}/logout`, {});
   }
 }

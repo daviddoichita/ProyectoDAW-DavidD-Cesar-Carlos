@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.service.ProfesorService;
 
 @RestController
-@RequestMapping("/api/profesores")
 public class ProfesorRestController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfesorRestController.class);
@@ -34,10 +36,10 @@ public class ProfesorRestController {
      *
      * @return lista de ProfesorDTO
      */
-    @GetMapping(path = "")
+    @GetMapping(path = "/api/profesores")
     public List<ProfesorDTO> findAll(@AuthenticationPrincipal User user) {
         log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
-        log.info(this.getClass().getSimpleName() + "Usuario logeado:" +user);
+        log.info(this.getClass().getSimpleName() + "Usuario logeado:" + user);
 
         return this.profesorService.findAll();
     }
@@ -49,7 +51,7 @@ public class ProfesorRestController {
      * @return ProfesorDTO en formato JSON o null si no se encuentra la id
      *         introducida
      */
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/api/profesores/{id}")
     public ProfesorDTO findById(@PathVariable Long id) {
         log.info(this.getClass().getSimpleName() + " findById: devolver profesor con id: {}", id);
 
@@ -61,7 +63,7 @@ public class ProfesorRestController {
      *
      * @param id ID del Profesor a borrar
      */
-    @GetMapping(path = "/{id}/delete")
+    @GetMapping(path = "/api/profesores/{id}/delete")
     public void delete(@PathVariable Long id) {
         log.info(this.getClass().getSimpleName() + " deleteById: borrar profesor con id: {}", id);
 
@@ -73,24 +75,24 @@ public class ProfesorRestController {
      *
      * @param profesorDTO ProfesorDTO a guardar
      */
-    @PostMapping(path = "/save")
+    @PostMapping(path = "/api/profesores/save")
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
         this.profesorService.save(profesorDTO);
     }
 
-    @PostMapping(path = "/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String contrasenya) {
-        log.info("Intentando iniciar sesión para el email: {}", email);
+    @GetMapping(path = "/login")
+    public ResponseEntity<ProfesorDTO> login(@RequestParam String usuario, @RequestParam String contrasenya) {
+        log.info("Intentando iniciar sesión para el email: {}", usuario);
         try {
-            String usuarioId = profesorService.login(email, contrasenya);
-            log.info("Inicio de sesión exitoso para el usuario con ID: {}", usuarioId);
-            return ResponseEntity.ok(usuarioId);
+            profesorService.login(usuario, contrasenya);
+            String username =  SecurityContextHolder.getContext().getAuthentication().getName();
+
+            return ResponseEntity.ok(this.profesorService.findByEmail(username));
 
         } catch (Exception e) {
-            log.error("Error en el inicio de sesión para el email: {}", email, e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o contraseña incorrectos");
+            log.error("Error en el inicio de sesión para el email: {}", usuario);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-    
 }

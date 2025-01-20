@@ -39,8 +39,11 @@ public interface ProfesorService {
      * @param profesorDTO ProfesorDTO a guardar
      */
     public void save(ProfesorDTO profesorDTO);
-    
-    public String login(String email, String contrasenya);
 
-	UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
+    public void login(String usuario, String contrasenya);
+
+    public ProfesorDTO findByEmail(String email);
+
+    public ProfesorDTO findByNif(String nif);
+
 }

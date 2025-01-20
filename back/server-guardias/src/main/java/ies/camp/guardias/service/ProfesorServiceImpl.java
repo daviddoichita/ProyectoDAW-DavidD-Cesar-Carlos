@@ -1,6 +1,7 @@
 package ies.camp.guardias.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,31 +12,30 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
 import ies.camp.guardias.repository.entity.Profesor;
 
 @Service
-public class ProfesorServiceImpl implements ProfesorService {
+public class ProfesorServiceImpl implements ProfesorService, UserDetailsService {
 
 	private static final Logger log = LoggerFactory.getLogger(ProfesorServiceImpl.class);
 
 	@Autowired
 	private ProfesorRepository profesorRepository;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	/*
 	 * @Override public List<ProfesorDTO> findAll() {
@@ -100,39 +100,63 @@ public class ProfesorServiceImpl implements ProfesorService {
 	}
 
 	@Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Profesor profesor = profesorRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Profesor con email: " + email + " no encontrado"));
+	public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
 
-        return new User(profesor.getEmail(), profesor.getContrasenya(), List.of());
-    }
+		if (usuario.contains("@")) { // Comprobar si es Email o no (si contiene @ o no)
+			Profesor profesor = profesorRepository.findByEmail(usuario).orElseThrow(() -> {
+				log.error("No se ha encontrado al profesor con email: {}", usuario);
+				return new RuntimeException("No se ha encontrado al profesor");
+			});
 
-    @Override
-    public String login(String email, String contrasenya) {
-		
-        Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(() -> {
-            log.error("No se ha encontrado al profesor con email: {}", email);
-            return new RuntimeException("No se ha encontrado al profesor");
-        });
-
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, contrasenya));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return String.valueOf(profesor.getId());
-
-        } catch (BadCredentialsException e) {
-            log.error("Credenciales incorrectas para el email: {}", email);
-            throw new RuntimeException("Email o contraseña incorrectos");
-        }
-    }
-
-	public static void main(String[] args) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = "cesar1";
-        String encodedPassword = encoder.encode(rawPassword);
-        System.out.println("Contraseña cifrada: " + encodedPassword);
-    }
-
+			if (profesor != null) {
+			
+				Collection<GrantedAuthority> rol = new ArrayList<>();
+				rol.add(new SimpleGrantedAuthority(profesor.getRol()));
 	
+				return new User(profesor.getEmail(), profesor.getContrasenya(), rol);
+	
+			} else {
+				throw new UsernameNotFoundException(usuario);
+			}
+
+		} else{
+			Profesor profesor = profesorRepository.findByNif(usuario).orElseThrow(() -> {
+				log.error("No se ha encontrado al profesor con nif: {}", usuario);
+				return new RuntimeException("No se ha encontrado al profesor");
+			});
+
+			if (profesor != null) {
+			
+				Collection<GrantedAuthority> rol = new ArrayList<>();
+				rol.add(new SimpleGrantedAuthority(profesor.getRol()));
+	
+				return new User(profesor.getNif(), profesor.getContrasenya(), rol);
+	
+			} else {
+				throw new UsernameNotFoundException(usuario);
+			}
+		}
+	}
+
+	@Override
+	public ProfesorDTO findByEmail(String email) {
+		Profesor p = this.profesorRepository.findByEmail(email).orElse(null);
+		p.setContrasenya(null);
+		return ProfesorDTO.convertToDTO(p);
+	}
+
+	@Override
+    public ProfesorDTO findByNif(String nif) {
+        Profesor p = this.profesorRepository.findByNif(nif).orElse(null);
+        p.setContrasenya(null);
+        return ProfesorDTO.convertToDTO(p);
+    }
+
+	@Override
+	public void login(String usuario, String contrasenya) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(usuario, contrasenya);
+		SecurityContext context = SecurityContextHolder.getContext();
+		context.setAuthentication(token);
+	}
+
 }
