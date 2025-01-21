@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +18,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ies.camp.guardias.repository.dao.AulaRepository;
+import ies.camp.guardias.repository.dao.CargoRepository;
+import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
 import ies.camp.guardias.repository.dao.GrupoRepository;
@@ -27,6 +33,8 @@ import ies.camp.guardias.repository.dao.MateriaRepository;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
 import ies.camp.guardias.repository.dao.SesionRepository;
 import ies.camp.guardias.repository.entity.Aula;
+import ies.camp.guardias.repository.entity.Cargo;
+import ies.camp.guardias.repository.entity.Cuadrante;
 import ies.camp.guardias.repository.entity.Curso;
 import ies.camp.guardias.repository.entity.Dia;
 import ies.camp.guardias.repository.entity.Grupo;
@@ -56,6 +64,10 @@ public class SesionServiceImpl implements SesionService {
     private SesionRepository sesionRepository;
     @Autowired
     private IntervaloRepository intervaloRepository;
+    @Autowired
+    private CuadranteRepository cuadranteRepository;
+    @Autowired
+    private CargoRepository cargoRepository;
 
     @Override
     public boolean loadFromCSV(MultipartFile csv) {
@@ -100,9 +112,58 @@ public class SesionServiceImpl implements SesionService {
         profesores.forEach(this.profesorRepository::save);
         dias.forEach(this.diaRepository::save);
 
+        this.cuadranteRepository.deleteAllInBatch();
+        this.sesionRepository.deleteAllInBatch();
+
         this.loadSesiones(lines.subList(1, lines.size()));
+        this.loadCuadrantes();
 
         return true;
+    }
+
+    private void loadCuadrantes() {
+        LocalDate start = LocalDate.of(LocalDate.now().getYear(), 9, 9);
+        LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
+
+        List<Sesion> sesiones = this.sesionRepository.findSesionesGuardia();
+        List<Intervalo> intervalos = this.intervaloRepository.findAll();
+        List<Cargo> cargos = this.cargoRepository.findAll();
+
+        List<Object> cuadrantes = new ArrayList<>();
+        String[] dias = { "L", "M", "X", "J", "V" };
+
+        while (!start.isAfter(end)) {
+            if (start.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                start = start.plusDays(2);
+            } else {
+                final LocalDate startFinal = start;
+
+                List<Sesion> sesionesDia = sesiones.stream()
+                        .filter(ses -> ses.getDia().getAbreviacion()
+                                .equals(dias[startFinal.getDayOfWeek().getValue() - 1]))
+                        .collect(Collectors.toList());
+
+                for (Intervalo inter : intervalos) {
+                    List<Sesion> sesionesIntervalo = sesionesDia.stream()
+                            .filter(ses -> ses.getIntervalo().equals(inter))
+                            .collect(Collectors.toList());
+
+                    Collections.shuffle(cargos);
+
+                    for (int i = 0; i < sesionesIntervalo.size(); i++) {
+                        cuadrantes.add(Cuadrante.builder()
+                                .cargo(cargos.get(i))
+                                .guardia(sesionesIntervalo.get(i))
+                                .fecha(startFinal)
+                                .deberes(true)
+                                .build());
+                    }
+                }
+                start = start.plusDays(1);
+            }
+        }
+
+        this.saveWithLimit(cuadrantes, 1000, this.cuadranteRepository);
     }
 
     private void loadSesiones(List<String> lines) {
@@ -126,29 +187,39 @@ public class SesionServiceImpl implements SesionService {
         Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
         this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
 
+        List<Object> sesiones = new ArrayList<>();
+
         for (String line : lines) {
             String[] fields = line.split(";");
             Long idIntervalo = Long.valueOf(fields[17]);
-            if (idIntervalo != 15 && idIntervalo != 16) {
-                if (fields[6].trim() != "") {
-                    Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
-                    Materia materia = materias.get(Long.parseLong(fields[0].trim()));
-                    Grupo grupo = grupos.get(Long.parseLong(fields[6].trim()));
-                    Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
-                    Dia dia = dias.get(fields[16].trim());
-                    Intervalo intervalo = intervalos.get(idIntervalo);
+            Long idGrupo = fields[6].trim() == "" ? null : Long.parseLong(fields[6].trim());
 
-                    this.sesionRepository.save(Sesion.builder()
-                            .profesor(profesor)
-                            .materia(materia)
-                            .grupo(grupo)
-                            .aula(aula)
-                            .intervalo(intervalo)
-                            .curso(curso)
-                            .dia(dia)
-                            .build());
-                }
-            }
+            Profesor profesor = profesores.get(Long.parseLong(fields[13].trim()));
+            Materia materia = materias.get(Long.parseLong(fields[0].trim()));
+            Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
+            Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
+            Dia dia = dias.get(fields[16].trim());
+            Intervalo intervalo = intervalos.get(idIntervalo);
+
+            sesiones.add(Sesion.builder()
+                    .profesor(profesor)
+                    .materia(materia)
+                    .grupo(grupo)
+                    .aula(aula)
+                    .intervalo(intervalo)
+                    .curso(curso)
+                    .dia(dia)
+                    .build());
+        }
+
+        this.saveWithLimit(sesiones, 1000, this.sesionRepository);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void saveWithLimit(List<Object> list, int limit, Object repo) {
+        for (int i = 0; i < list.size(); i += limit) {
+            ((JpaRepository) repo).saveAll(list.subList(i, Math.min(i + limit,
+                    list.size())));
         }
     }
 
