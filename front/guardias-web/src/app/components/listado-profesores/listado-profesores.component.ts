@@ -2,29 +2,45 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { TableModule } from 'primeng/table';
 import { ProfesorService } from '../../services/profesor.service';
-import { Button } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-listado-profesores',
   standalone: true,
-  imports: [HeaderComponent, TableModule, Button, IconFieldModule, InputIconModule],
+  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule],
   templateUrl: './listado-profesores.component.html'
 })
 export class ListadoProfesoresComponent implements OnInit {
 
   profesores!: any[];
 
-  rangeDates: Date[] | undefined;
+  filtrarProfesores!: any[];
+
+  searchValue: string = '';
 
   constructor(private ProfesorService: ProfesorService) { }
 
   ngOnInit() {
     this.ProfesorService.findAll().subscribe((profesores: any[]) => {
       this.profesores = profesores;
+      this.filtrarProfesores = profesores;
       console.log(profesores)
+    });
+  }
+
+  buscarNombre(): void {
+    const search = this.searchValue.toLowerCase().trim();
+    this.filtrarProfesores = this.profesores.filter(profesor =>
+      profesor.nombre.toLowerCase().includes(search)
+    );
+  }
+
+  delete(profesor: any): void {
+    this.ProfesorService.delete(profesor.id).subscribe(() => {
+      this.profesores = this.profesores.filter((p: any) => p.id !== profesor.id);
     });
   }
 }

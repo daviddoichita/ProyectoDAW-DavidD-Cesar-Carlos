@@ -1,27 +1,52 @@
-<div class="app-layout">
+<div class="app-layout p-3">
     <app-header></app-header>
     <div class="main-section">
-        <p-table [value]="profesores" [(selection)]="profesores" [tableStyle]="{ 'min-width': '50rem' }">
+        <div class="flex justify-content-between align-items-center mb-4">
+            <div class="flex align-items-center w-full max-w-20rem">
+                <span class="p-input-icon-right w-full">
+                    <input pInputText type="text" [(ngModel)]="searchValue" (input)="buscarNombre()" placeholder="Buscar por nombre" class="p-inputtext-lg border-round-lg border-1 surface-border px-3 py-2 shadow-2"/>
+                    <i class="pi pi-search text-xl mr-7"></i>
+                </span>
+            </div>
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary p-button-lg w-9rem text-xl"></button>
+        </div>
+
+        <p-table [value]="filtrarProfesores" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" class="text-lg w-9">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Nif</th>
-                    <th>Email</th>
-                    <th>Telefono</th>
-                    <th>Eliminar</th>
-                    <th>Modificar</th>
+                    <th class="text-2xl bg-gray-300 text-center">Id</th>
+                    <th class="text-2xl bg-gray-300 text-center">Nombre</th>
+                    <th class="text-2xl bg-gray-300 text-center">Apellidos</th>
+                    <th class="text-2xl bg-gray-300 text-center">NIF</th>
+                    <th class="text-2xl bg-gray-300 text-center">Email</th>
+                    <th class="text-2xl bg-gray-300 text-center">Teléfono</th>
+                    <th class="text-2xl bg-gray-300 text-center">Eliminar</th>
+                    <th class="text-2xl bg-gray-300 text-center">Modificar</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-profesores>
+
+           <ng-template pTemplate="body" let-profesor>
                 <tr>
-                    <td>{{ profesores.id }}</td>
-                    <td>{{ profesores.nombre }}</td>
-                    <td>{{ profesores.apellidos }}</td>
-                    <td>{{ profesores.nif }}</td>
-                    <td>{{ profesores.email }}</td>
-                    <td>{{ profesores.telefono }}</td>
+                    <td class="text-xl text-center">{{ profesor.id }}</td>
+                    <td class="text-xl text-center">{{ profesor.nombre }}</td>
+                    <td class="text-xl text-center">{{ profesor.apellidos }}</td>
+                    <td class="text-xl text-center">{{ profesor.nif }}</td>
+                    <td class="text-xl text-center">{{ profesor.email }}</td>
+                    <td class="text-xl text-center">{{ profesor.telefono }}</td>
+                    <td class="text-center">
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-icon-only w-4rem h-4rem" (click)="delete(profesor)" pTooltip="Eliminar"></button>
+                    </td>
+                    <td class="text-center">
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-primary p-button-lg w-4rem h-4rem" pTooltip="Modificar"></button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="text-center text-2xl">
+                        No se encontraron profesores.
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

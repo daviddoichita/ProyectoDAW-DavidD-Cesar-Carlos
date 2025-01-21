@@ -59,7 +59,7 @@ public class ProfesorServiceImpl implements ProfesorService {
      */
     @Override
     public ProfesorDTO findById(Long id) {
-        log.info(this.getClass().getSimpleName() + " findById: devolver todos los profesores");
+        log.info(this.getClass().getSimpleName() + " findById: devolver profesor con id: {}", id);
 
         Optional<Profesor> profesor = profesorRepository.findById(id);
         if (profesor.isPresent()) {
