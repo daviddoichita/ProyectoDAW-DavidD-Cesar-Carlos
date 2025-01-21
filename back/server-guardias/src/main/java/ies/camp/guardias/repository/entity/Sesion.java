@@ -24,11 +24,12 @@ import lombok.ToString;
 @Builder
 @Entity
 @Table(name = "sesion")
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Sesion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne
@@ -68,6 +69,5 @@ public class Sesion {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "faltas")
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Set<Cuadrante> cuadrantes;
 }

@@ -8,12 +8,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ies.camp.guardias.repository.dao.AulaRepository;
+import ies.camp.guardias.repository.dao.CargoRepository;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
@@ -33,6 +33,7 @@ import ies.camp.guardias.repository.dao.MateriaRepository;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
 import ies.camp.guardias.repository.dao.SesionRepository;
 import ies.camp.guardias.repository.entity.Aula;
+import ies.camp.guardias.repository.entity.Cargo;
 import ies.camp.guardias.repository.entity.Cuadrante;
 import ies.camp.guardias.repository.entity.Curso;
 import ies.camp.guardias.repository.entity.Dia;
@@ -65,6 +66,8 @@ public class SesionServiceImpl implements SesionService {
     private IntervaloRepository intervaloRepository;
     @Autowired
     private CuadranteRepository cuadranteRepository;
+    @Autowired
+    private CargoRepository cargoRepository;
 
     @Override
     public boolean loadFromCSV(MultipartFile csv) {
@@ -121,26 +124,46 @@ public class SesionServiceImpl implements SesionService {
     private void loadCuadrantes() {
         LocalDate start = LocalDate.of(LocalDate.now().getYear(), 9, 9);
         LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
+
         List<Sesion> sesiones = this.sesionRepository.findSesionesGuardia();
+        List<Intervalo> intervalos = this.intervaloRepository.findAll();
+        List<Cargo> cargos = this.cargoRepository.findAll();
+
         List<Object> cuadrantes = new ArrayList<>();
+        String[] dias = { "L", "M", "X", "J", "V" };
 
         while (!start.isAfter(end)) {
             if (start.getDayOfWeek() == DayOfWeek.SATURDAY) {
                 start = start.plusDays(2);
             } else {
-                for (Sesion s : sesiones) {
-                    cuadrantes.add(Cuadrante.builder()
-                            .guardia(s)
-                            .fecha(start)
-                            .deberes(false)
-                            .build());
+                final LocalDate startFinal = start;
+
+                List<Sesion> sesionesDia = sesiones.stream()
+                        .filter(ses -> ses.getDia().getAbreviacion()
+                                .equals(dias[startFinal.getDayOfWeek().getValue() - 1]))
+                        .collect(Collectors.toList());
+
+                for (Intervalo inter : intervalos) {
+                    List<Sesion> sesionesIntervalo = sesionesDia.stream()
+                            .filter(ses -> ses.getIntervalo().equals(inter))
+                            .collect(Collectors.toList());
+
+                    Collections.shuffle(cargos);
+
+                    for (int i = 0; i < sesionesIntervalo.size(); i++) {
+                        cuadrantes.add(Cuadrante.builder()
+                                .cargo(cargos.get(i))
+                                .guardia(sesionesIntervalo.get(i))
+                                .fecha(startFinal)
+                                .deberes(true)
+                                .build());
+                    }
                 }
                 start = start.plusDays(1);
             }
         }
 
-        // Separar la insercion en bloques de 10000 mejora el rendimiento en un 9000%
-        this.saveWithLimit(cuadrantes, 10000, this.cuadranteRepository);
+        this.saveWithLimit(cuadrantes, 1000, this.cuadranteRepository);
     }
 
     private void loadSesiones(List<String> lines) {
