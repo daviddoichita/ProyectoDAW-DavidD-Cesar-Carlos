@@ -106,17 +106,18 @@ public class SesionServiceImpl implements SesionService {
         }
 
         // Cargar las tablas
-        materias.forEach(this.materiaRepository::save);
-        grupos.forEach(this.grupoRepository::save);
-        aulas.forEach(this.aulaRepository::save);
-        profesores.forEach(this.profesorRepository::save);
-        dias.forEach(this.diaRepository::save);
+        try {
+            materias.forEach(this.materiaRepository::save);
+            grupos.forEach(this.grupoRepository::save);
+            aulas.forEach(this.aulaRepository::save);
+            profesores.forEach(this.profesorRepository::save);
+            dias.forEach(this.diaRepository::save);
 
-        this.cuadranteRepository.deleteAllInBatch();
-        this.sesionRepository.deleteAllInBatch();
-
-        this.loadSesiones(lines.subList(1, lines.size()));
-        this.loadCuadrantes();
+            this.loadSesiones(lines.subList(1, lines.size()));
+            this.loadCuadrantes();
+        } catch (Exception e) {
+            log.error(this.getClass().getSimpleName() + " loadFromCSV: error al guardar datos: {}", e);
+        }
 
         return true;
     }

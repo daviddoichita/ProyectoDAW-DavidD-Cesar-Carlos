@@ -1,0 +1,45 @@
+package ies.camp.guardias.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.repository.dao.ProfesorRepository;
+
+@Configuration
+public class ApplicationConfiguration {
+
+    @Autowired
+    private ProfesorRepository profesorRepository;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> profesorRepository.findByEmail(username).map(ProfesorDTO::convertToDTO)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(this.userDetailsService());
+        provider.setPasswordEncoder(this.passwordEncoder());
+        return provider;
+    }
+}
