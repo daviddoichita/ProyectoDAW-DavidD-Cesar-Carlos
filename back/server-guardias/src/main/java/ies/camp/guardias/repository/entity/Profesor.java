@@ -39,13 +39,13 @@ public class Profesor {
     @Column(nullable = false)
     private String contrasenya;
 
-    private String rol;
+    private boolean admin;
     private String direccion;
     private Long telefono;
 
     @Column(nullable = false, unique = true)
     private String email;
-    
+
     private Boolean activo;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profesor")

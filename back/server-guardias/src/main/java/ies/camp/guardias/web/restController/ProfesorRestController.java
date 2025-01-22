@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.entity.Profesor;
-import ies.camp.guardias.security.JwtTokenProvider;
 import ies.camp.guardias.service.ProfesorService;
 
 @RestController
@@ -31,9 +30,6 @@ public class ProfesorRestController {
 
     @Autowired
     private ProfesorService profesorService;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
 
     /**
      * Devuelve todos los ProfesorDTO en formato JSON
@@ -83,31 +79,5 @@ public class ProfesorRestController {
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
         this.profesorService.save(profesorDTO);
-    }
-
-    @GetMapping(path = "/login")
-    public ResponseEntity<JwtAuthenticationResponse> login(@RequestParam String usuario, @RequestParam String contrasenya) {
-        log.info("Intentando iniciar sesión para el email: {}", usuario);
-        try {
-            profesorService.login(usuario, contrasenya);
-            String username =  SecurityContextHolder.getContext().getAuthentication().getName();
-            String token;
-            ProfesorDTO profesor;
-
-            if (username.contains("@")) { // Comprobar si es Email o no (si contiene @ o no)
-                 profesor = this.profesorService.findByEmail(username);
-                 token = jwtTokenProvider.generateToken(profesor.getEmail());
-
-            } else {
-                profesor = this.profesorService.findByNif(username);
-                token = jwtTokenProvider.generateToken(profesor.getNif());
-            }
-
-            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-
-        } catch (Exception e) {
-            log.error("Error en el inicio de sesión para el email: {} \n {}", usuario, e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
     }
 }

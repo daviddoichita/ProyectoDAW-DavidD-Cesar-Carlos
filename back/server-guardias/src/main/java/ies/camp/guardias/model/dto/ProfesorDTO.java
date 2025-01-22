@@ -1,6 +1,11 @@
 package ies.camp.guardias.model.dto;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import ies.camp.guardias.repository.entity.Profesor;
 import lombok.AllArgsConstructor;
@@ -12,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProfesorDTO implements Serializable {
+public class ProfesorDTO implements UserDetails {
 
     private Long id;
     private String nombre;
@@ -21,7 +26,7 @@ public class ProfesorDTO implements Serializable {
     private String abreviacion;
     private String nif;
     private String contrasenya;
-    private String rol;
+    private boolean admin;
     private String direccion;
     private Long telefono;
     private String email;
@@ -29,7 +34,7 @@ public class ProfesorDTO implements Serializable {
 
     /**
      * Convierte un Profesor a ProfesorDTO sin la relacion con sesion
-     * 
+     *
      * @param profesor Profesor a convertir a DTO
      * @return profesor convertido a ProfesorDTO
      */
@@ -42,7 +47,7 @@ public class ProfesorDTO implements Serializable {
                 .abreviacion(profesor.getAbreviacion())
                 .nif(profesor.getNif())
                 .contrasenya(profesor.getContrasenya())
-                .rol(profesor.getRol())
+                .admin(profesor.isAdmin())
                 .direccion(profesor.getDireccion())
                 .telefono(profesor.getTelefono())
                 .email(profesor.getEmail())
@@ -52,7 +57,7 @@ public class ProfesorDTO implements Serializable {
 
     /**
      * Convierte un ProfesorDTO a Profesor
-     * 
+     *
      * @param profesorDTO ProfesorDTO a convertir a entidad
      * @return profesorDTO convertido a entidad
      */
@@ -65,11 +70,26 @@ public class ProfesorDTO implements Serializable {
                 .abreviacion(profesorDTO.getAbreviacion())
                 .nif(profesorDTO.getNif())
                 .contrasenya(profesorDTO.getContrasenya())
-                .rol(profesorDTO.getRol())
+                .admin(profesorDTO.isAdmin())
                 .direccion(profesorDTO.getDireccion())
                 .telefono(profesorDTO.getTelefono())
                 .email(profesorDTO.getEmail())
                 .activo(profesorDTO.getActivo())
                 .build();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.contrasenya;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 }
