@@ -30,7 +30,6 @@ public class SesionDTO implements Serializable {
      * @return sesion convertida a DTO
      */
     public static SesionDTO convertToDTO(Sesion sesion) {
-
         return SesionDTO.builder()
                 .id(sesion.getId())
                 .profesor(ProfesorDTO.convertToDTO(sesion.getProfesor()))
