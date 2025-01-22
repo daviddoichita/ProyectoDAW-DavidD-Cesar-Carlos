@@ -86,20 +86,24 @@ public class ProfesorRestController {
     }
 
     @GetMapping(path = "/login")
-    public ResponseEntity<String> login(@RequestParam String usuario, @RequestParam String contrasenya) {
+    public ResponseEntity<JwtAuthenticationResponse> login(@RequestParam String usuario, @RequestParam String contrasenya) {
         log.info("Intentando iniciar sesión para el email: {}", usuario);
         try {
             profesorService.login(usuario, contrasenya);
             String username =  SecurityContextHolder.getContext().getAuthentication().getName();
-
+            String token;
             ProfesorDTO profesor;
-            if (username.contains("@")) {
+
+            if (username.contains("@")) { // Comprobar si es Email o no (si contiene @ o no)
                  profesor = this.profesorService.findByEmail(username);
+                 token = jwtTokenProvider.generateToken(profesor.getEmail());
+
             } else {
                 profesor = this.profesorService.findByNif(username);
+                token = jwtTokenProvider.generateToken(profesor.getNif());
             }
 
-            return ResponseEntity.ok(jwtTokenProvider.generateToken(profesor.getEmail()));
+            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
 
         } catch (Exception e) {
             log.error("Error en el inicio de sesión para el email: {} \n {}", usuario, e);
