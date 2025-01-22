@@ -31,11 +31,24 @@ export class ListadoProfesoresComponent implements OnInit {
     });
   }
 
-  buscarNombre(): void {
+  buscador(): void {
     const search = this.searchValue.toLowerCase().trim();
-    this.filtrarProfesores = this.profesores.filter(profesor =>
+    this.filtrarProfesores = [];
+    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
       profesor.nombre.toLowerCase().includes(search)
-    );
+    ));
+    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
+      profesor.apellidos.toLowerCase().includes(search)
+    ));
+    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
+      profesor.nif.toLowerCase().includes(search)
+    ));
+    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
+      profesor.email.toLowerCase().includes(search)
+    ));
+    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
+      profesor.telefono.toString().includes(search)
+    ));
   }
 
   delete(profesor: any): void {
