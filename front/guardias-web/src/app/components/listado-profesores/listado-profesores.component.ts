@@ -5,12 +5,13 @@ import { ProfesorService } from '../../services/profesor.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-listado-profesores',
   standalone: true,
-  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule],
+  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, CommonModule],
   templateUrl: './listado-profesores.component.html'
 })
 export class ListadoProfesoresComponent implements OnInit {
@@ -18,6 +19,8 @@ export class ListadoProfesoresComponent implements OnInit {
   profesores!: any[];
 
   filtrarProfesores!: any[];
+
+  profesorSeleccionado: any[] = [];
 
   searchValue: string = '';
 
@@ -27,7 +30,7 @@ export class ListadoProfesoresComponent implements OnInit {
     this.ProfesorService.findAll().subscribe((profesores: any[]) => {
       this.profesores = profesores;
       this.filtrarProfesores = profesores;
-      console.log(profesores)
+      console.log('Profesores cargados:', this.profesores);
     });
   }
 
