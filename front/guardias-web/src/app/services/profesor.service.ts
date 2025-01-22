@@ -17,12 +17,19 @@ export class ProfesorService {
     return this.http.get<any[]>(this.apiUrl, { headers });
   }
 
-  findById(id: number): any {
+  /*findById(id: number): any {
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa('admin:admin')
     });
 
     return this.http.get<any[]>(`${this.apiUrl}/${id}`, { headers });
+  }*/
+
+  findById(): any {
+    const headers = new HttpHeaders({
+      'Authorization': 'Basic ' + btoa('admin:admin')
+    });
+    return this.http.get<any[]>(this.apiUrl, { headers });
   }
 
   save(profesor: any): any {
@@ -39,5 +46,13 @@ export class ProfesorService {
     });
 
     return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  update(profesor: any): any {
+    const headers = new HttpHeaders({
+      'Authorization': 'Basic ' + btoa('admin:admin')
+    });
+
+    return this.http.put<any[]>(`${this.apiUrl}/${profesor.id}`, profesor, { headers });
   }
 }

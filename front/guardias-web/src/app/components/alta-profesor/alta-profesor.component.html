@@ -1,0 +1,43 @@
+<div class="app-layout">
+    <app-header></app-header>
+    <div class="main-section">
+        <div class="field col-12 md:col-6">
+            <label for="nombre" class="text-lg font-bold">Nombre</label>
+            <input id="nombre" type="text" pInputText placeholder="Nombre" class="w-full p-inputtext-lg"
+                [(ngModel)]="nombre" />
+        </div>
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="apellidos" class="text-lg font-bold">Apellidos</label>
+        <input id="apellidos" type="text" pInputText placeholder="Apellidos" class="w-full p-inputtext-lg"
+            [(ngModel)]="apellidos" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="contrasenia" class="text-lg font-bold">Contraseña</label>
+        <input id="contrasenia" type="password" pInputText placeholder="Contraseña" class="w-full p-inputtext-lg"
+            [(ngModel)]="contrasenya" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="nif" class="text-lg font-bold">NIF</label>
+        <input id="nif" type="text" pInputText placeholder="NIF" class="w-full p-inputtext-lg" [(ngModel)]="nif" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="direccion" class="text-lg font-bold">Dirección</label>
+        <input id="direccion" type="text" pInputText placeholder="Dirección" class="w-full p-inputtext-lg"
+            [(ngModel)]="direccion" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="telefono" class="text-lg font-bold">Teléfono</label>
+        <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full p-inputtext-lg"
+            [(ngModel)]="telefono" />
+    </div>
+    <div class="field col-12 md:col-6">
+        <label for="sustituye" class="text-lg font-bold">Sustituye a...</label>
+        <p-dropdown id="sustituye" [options]="profesores" placeholder="Sustituye a..." class="w-full"
+            [(ngModel)]="sustituye"></p-dropdown>
+    </div>
+    <div class="flex justify-content-end gap-3 mt-4">
+        <button pButton label="Cancelar" class="p-button-danger p-button-lg text-lg" (click)="cancelar()"></button>
+        <button pButton label="Guardar" class="p-button-success p-button-lg text-lg" (click)="guardar()"></button>
+    </div>
+</div>

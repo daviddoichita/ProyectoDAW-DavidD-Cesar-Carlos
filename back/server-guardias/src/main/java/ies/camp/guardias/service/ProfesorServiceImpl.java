@@ -82,4 +82,12 @@ public class ProfesorServiceImpl implements ProfesorService {
         Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
         profesorRepository.save(profesor);
     }
+
+    @Override
+    public void update(ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", profesorDTO.getId());
+
+        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        profesorRepository.save(profesor);
+    }
 }
