@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class ListadoProfesoresComponent implements OnInit {
 
   searchValue: string = '';
 
-  constructor(private ProfesorService: ProfesorService) { }
+  constructor(private ProfesorService: ProfesorService, private router: Router) { }
 
   ngOnInit() {
     this.ProfesorService.findAll().subscribe((profesores: any[]) => {
@@ -32,6 +33,10 @@ export class ListadoProfesoresComponent implements OnInit {
       this.filtrarProfesores = profesores;
       console.log('Profesores cargados:', this.profesores);
     });
+  }
+
+  altaProfesor(): void {
+    this.router.navigate(['/alta-profesor']);
   }
 
   buscador(): void {

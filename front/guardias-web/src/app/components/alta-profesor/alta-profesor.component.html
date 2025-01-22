@@ -1,43 +1,63 @@
 <div class="app-layout">
     <app-header></app-header>
     <div class="main-section">
-        <div class="field col-12 md:col-6">
-            <label for="nombre" class="text-lg font-bold">Nombre</label>
-            <input id="nombre" type="text" pInputText placeholder="Nombre" class="w-full p-inputtext-lg"
-                [(ngModel)]="nombre" />
+        <div class="">
+            <div class="">
+                <input id="nombre" type="text" pInputText placeholder="Nombre"
+                    class=""
+                    [(ngModel)]="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{1,50}" required />
+            </div>
+            <div class="">
+                <input id="apellidos" type="text" pInputText placeholder="Apellidos"
+                    class=""
+                    [(ngModel)]="apellidos" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{1,50}" required />
+            </div>
         </div>
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="apellidos" class="text-lg font-bold">Apellidos</label>
-        <input id="apellidos" type="text" pInputText placeholder="Apellidos" class="w-full p-inputtext-lg"
-            [(ngModel)]="apellidos" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="contrasenia" class="text-lg font-bold">Contraseña</label>
-        <input id="contrasenia" type="password" pInputText placeholder="Contraseña" class="w-full p-inputtext-lg"
-            [(ngModel)]="contrasenya" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="nif" class="text-lg font-bold">NIF</label>
-        <input id="nif" type="text" pInputText placeholder="NIF" class="w-full p-inputtext-lg" [(ngModel)]="nif" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="direccion" class="text-lg font-bold">Dirección</label>
-        <input id="direccion" type="text" pInputText placeholder="Dirección" class="w-full p-inputtext-lg"
-            [(ngModel)]="direccion" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="telefono" class="text-lg font-bold">Teléfono</label>
-        <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full p-inputtext-lg"
-            [(ngModel)]="telefono" />
-    </div>
-    <div class="field col-12 md:col-6">
-        <label for="sustituye" class="text-lg font-bold">Sustituye a...</label>
-        <p-dropdown id="sustituye" [options]="profesores" placeholder="Sustituye a..." class="w-full"
-            [(ngModel)]="sustituye"></p-dropdown>
-    </div>
-    <div class="flex justify-content-end gap-3 mt-4">
-        <button pButton label="Cancelar" class="p-button-danger p-button-lg text-lg" (click)="cancelar()"></button>
-        <button pButton label="Guardar" class="p-button-success p-button-lg text-lg" (click)="guardar()"></button>
+
+        <div class="">
+            <div class="">
+                <input id="contrasenia" type="password" pInputText placeholder="Contraseña"
+                    class=""
+                    [(ngModel)]="contrasenya" pattern=".{6,}" required />
+            </div>
+            <div class="">
+                <input id="nif" type="text" pInputText placeholder="NIF"
+                    class=""
+                    [(ngModel)]="nif" pattern="[0-9]{8}[A-Za-z]" required />
+            </div>
+        </div>
+
+        <div class="">
+            <div class="">
+                <input id="direccion" type="text" pInputText placeholder="Dirección"
+                    class=""
+                    [(ngModel)]="direccion" pattern=".{1,100}" required />
+            </div>
+            <div class="">
+                <input id="email" type="email" pInputText placeholder="Correo electrónico"
+                    class=""
+                    [(ngModel)]="email" required />
+            </div>
+        </div>
+
+        <div class="">
+            <div class="">
+                <input id="telefono" type="text" pInputText placeholder="Teléfono"
+                    class=""
+                    [(ngModel)]="telefono" pattern="[0-9]{9}" required />
+            </div>
+            <div class="">
+                <p-dropdown id="sustituye" [options]="profesores" optionLabel="nombre"
+                    placeholder="Sustituye a..." [(ngModel)]="sustituye"
+                    class="p-dropdown-lg w-full border-1 border-gray-300"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="p-d-flex p-jc-end p-gap-4 p-mt-6">
+            <button pButton label="Cancelar" class="p-button-danger p-button-lg w-10rem text-lg"
+                (click)="cancelar()"></button>
+            <button pButton label="Guardar" class="p-button-success p-button-lg w-10rem text-lg"
+                (click)="guardar()"></button>
+        </div>
     </div>
 </div>
