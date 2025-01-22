@@ -109,7 +109,6 @@ public class ProfesorServiceImpl implements ProfesorService, UserDetailsService 
 			});
 
 			if (profesor != null) {
-			
 				Collection<GrantedAuthority> rol = new ArrayList<>();
 				rol.add(new SimpleGrantedAuthority(profesor.getRol()));
 	

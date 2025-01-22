@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.entity.Profesor;
+import ies.camp.guardias.security.JwtTokenProvider;
 import ies.camp.guardias.service.ProfesorService;
 
 @RestController
@@ -30,6 +31,9 @@ public class ProfesorRestController {
 
     @Autowired
     private ProfesorService profesorService;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     /**
      * Devuelve todos los ProfesorDTO en formato JSON
@@ -82,16 +86,23 @@ public class ProfesorRestController {
     }
 
     @GetMapping(path = "/login")
-    public ResponseEntity<ProfesorDTO> login(@RequestParam String usuario, @RequestParam String contrasenya) {
+    public ResponseEntity<String> login(@RequestParam String usuario, @RequestParam String contrasenya) {
         log.info("Intentando iniciar sesión para el email: {}", usuario);
         try {
             profesorService.login(usuario, contrasenya);
             String username =  SecurityContextHolder.getContext().getAuthentication().getName();
 
-            return ResponseEntity.ok(this.profesorService.findByEmail(username));
+            ProfesorDTO profesor;
+            if (username.contains("@")) {
+                 profesor = this.profesorService.findByEmail(username);
+            } else {
+                profesor = this.profesorService.findByNif(username);
+            }
+
+            return ResponseEntity.ok(jwtTokenProvider.generateToken(profesor.getEmail()));
 
         } catch (Exception e) {
-            log.error("Error en el inicio de sesión para el email: {}", usuario);
+            log.error("Error en el inicio de sesión para el email: {} \n {}", usuario, e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }

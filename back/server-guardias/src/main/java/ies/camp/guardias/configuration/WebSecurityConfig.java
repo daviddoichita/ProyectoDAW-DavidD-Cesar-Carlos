@@ -34,27 +34,6 @@ public class WebSecurityConfig {
 		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
-	// @Bean
-	// public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	// 	http.csrf(csrf -> csrf.disable())
-	// 			.authorizeHttpRequests(
-	// 					requests -> requests
-	// 							.requestMatchers("/api/profesores/login").permitAll()
-	// 							.anyRequest().authenticated())
-	// 			.formLogin()
-	// 			.loginPage("/login")
-	// 			.defaultSuccessUrl("/cuadrante")
-	// 			.failureUrl("/login?error=true")
-	// 			.permitAll()
-	// 			.and()
-	// 			.logout()
-	// 			.permitAll()
-	// 			.logoutSuccessUrl("/login")
-	// 			.and()
-	// 			.exceptionHandling()
-	// 			.accessDeniedPage("/errors/403");
-	// 	return http.build();
-	// }
 
 	/*
 	 * @Bean
