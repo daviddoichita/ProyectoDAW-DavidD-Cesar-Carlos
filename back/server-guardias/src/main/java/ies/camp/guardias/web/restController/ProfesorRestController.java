@@ -1,26 +1,23 @@
 package ies.camp.guardias.web.restController;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
-import ies.camp.guardias.repository.entity.Profesor;
+import ies.camp.guardias.service.JwtService;
 import ies.camp.guardias.service.ProfesorService;
 
 @RestController
@@ -30,6 +27,22 @@ public class ProfesorRestController {
 
     @Autowired
     private ProfesorService profesorService;
+    @Autowired
+    private JwtService jwtService;
+
+    @GetMapping(path = "/api/me")
+    public ResponseEntity<Map<String, Object>> me() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails currentUser = (UserDetails) authentication.getPrincipal();
+
+        String token = this.jwtService.generateToken(currentUser);
+
+        Map<String, Object> response = Map.of("user", currentUser, "token", token);
+
+        log.info(this.getClass().getSimpleName() + " me: devolver usuario logeado");
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Devuelve todos los ProfesorDTO en formato JSON
@@ -37,9 +50,8 @@ public class ProfesorRestController {
      * @return lista de ProfesorDTO
      */
     @GetMapping(path = "/api/profesores")
-    public List<ProfesorDTO> findAll(@AuthenticationPrincipal User user) {
+    public List<ProfesorDTO> findAll() {
         log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
-        log.info(this.getClass().getSimpleName() + "Usuario logeado:" + user);
 
         return this.profesorService.findAll();
     }
