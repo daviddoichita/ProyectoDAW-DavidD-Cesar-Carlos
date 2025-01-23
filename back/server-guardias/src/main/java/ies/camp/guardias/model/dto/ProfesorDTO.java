@@ -1,6 +1,5 @@
 package ies.camp.guardias.model.dto;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 

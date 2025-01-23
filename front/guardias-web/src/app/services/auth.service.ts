@@ -6,15 +6,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'http://localhost:8000/api/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  login(credentials: { emailOrNif: string, password: string }): Observable<any> {
-    const params = new HttpParams()
-      .set('usuario', credentials.emailOrNif)
-      .set('contrasenya', credentials.password);
-    return this.http.get(`${this.apiUrl}/login`, { params });
+  login(credentials: { email: string, password: string }): Observable<any> {
+    const user = JSON.stringify(credentials);
+    return this.http.post(`${this.apiUrl}/login`, user, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   logout(): Observable<any> {
