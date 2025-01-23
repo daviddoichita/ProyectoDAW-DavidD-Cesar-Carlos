@@ -43,6 +43,8 @@ public class SecurityConfiguration {
         // Deshabilitar frameOptions
         http.headers(headers -> headers.frameOptions(f -> f.disable()));
 
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        
         return http.build();
     }
 

@@ -49,10 +49,13 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
-  
-    this.authService.login(this.loginForm.value).subscribe({
+
+    const user = { email: this.loginForm.value.emailOrNif, password: this.loginForm.value.password };
+    this.authService.login(user).subscribe({
       next: (response) => {
         console.log('Inicio de sesión exitoso');
+        console.log(response.token)
+        sessionStorage.setItem('token', response.token);
         this.router.navigate(['/cuadrante']);
       },
       error: (error) => {
@@ -97,4 +100,3 @@ export class LoginComponent {
   }
 }
 
- 
