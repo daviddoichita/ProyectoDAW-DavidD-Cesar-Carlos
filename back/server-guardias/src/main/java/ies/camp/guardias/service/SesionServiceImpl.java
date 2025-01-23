@@ -70,7 +70,7 @@ public class SesionServiceImpl implements SesionService {
     private CargoRepository cargoRepository;
 
     @Override
-    public boolean loadFromCSV(MultipartFile csv) {
+    public boolean loadFromCSV(MultipartFile csv, int year) {
         log.info(this.getClass().getSimpleName() + " loadFromCSV: empezar a cargar la base de datos desde un CSV");
 
         // Carga archivo a un ArrayList
@@ -117,15 +117,15 @@ public class SesionServiceImpl implements SesionService {
             this.sesionRepository.deleteAllInBatch();
 
             this.loadSesiones(lines.subList(1, lines.size()));
-            this.loadCuadrantes();
+            this.loadCuadrantes(year);
         } catch (Exception e) {
             log.error(this.getClass().getSimpleName() + " loadFromCSV: error al guardar datos: {}", e);
         }
         return true;
     }
 
-    private void loadCuadrantes() {
-        LocalDate start = LocalDate.of(LocalDate.now().getYear(), 9, 9);
+    private void loadCuadrantes(int year) {
+        LocalDate start = LocalDate.of(year, 9, 9);
         LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
 
         List<Sesion> sesiones = this.sesionRepository.findSesionesGuardia();

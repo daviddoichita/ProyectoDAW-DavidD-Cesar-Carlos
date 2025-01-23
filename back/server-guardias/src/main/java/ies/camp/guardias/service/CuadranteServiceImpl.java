@@ -1,5 +1,6 @@
 package ies.camp.guardias.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,10 +8,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ies.camp.guardias.model.dto.CuadranteDTO;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 
+@Service
 public class CuadranteServiceImpl implements CuadranteService {
 
     private static final Logger log = LoggerFactory.getLogger(CuadranteServiceImpl.class);
@@ -37,9 +40,19 @@ public class CuadranteServiceImpl implements CuadranteService {
         log.info(this.getClass().getSimpleName()
                 + " findByRange: devolver los cuadrantes dentro de las fechas [ {} : {} ]", start, end);
 
-        return this.cuadranteRepository.findAll().stream()
-                .filter(c -> !c.getFecha().isBefore(start) && !c.getFecha().isAfter(end))
-                .map(CuadranteDTO::convertToDTO).collect(Collectors.toList());
+        return this.cuadranteRepository.findByRange(start, end).stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<CuadranteDTO> findCurrentWeek() {
+        log.info(this.getClass().getSimpleName() + " findCurrentWeek: devolver la semana actual");
+
+        LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate end = LocalDate.now().with(DayOfWeek.FRIDAY);
+        log.info(this.getClass().getSimpleName() + " findCurrentWeek: [ {} : {} ]", start, end);
+
+        return this.cuadranteRepository.findByRange(start, end).stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
+    }
 }

@@ -30,4 +30,11 @@ public interface CuadranteService {
      * @return lista de CuadranteDTO dentro del rango introducido
      */
     public List<CuadranteDTO> findByRange(LocalDate start, LocalDate end);
+
+    /**
+     * Devuelve una lista de cuadrantes de la semana actual
+     *
+     * @return lista de CuadranteDTO de la semana actual
+     */
+    public List<CuadranteDTO> findCurrentWeek();
 }
