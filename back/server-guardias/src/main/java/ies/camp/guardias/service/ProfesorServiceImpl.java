@@ -39,8 +39,10 @@ public class ProfesorServiceImpl implements ProfesorService {
         List<Profesor> listaProfesor = profesorRepository.findAll();
         for (int i = 0; i < listaProfesor.size(); i++) {
             Profesor profesor = listaProfesor.get(i);
-            ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor);
-            listaProfesorDTO.add(profesorDTO);
+            if (profesor.getActivo()) {
+                ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor);
+                listaProfesorDTO.add(profesorDTO);
+            }
         }
         return listaProfesorDTO;
     }
@@ -72,7 +74,10 @@ public class ProfesorServiceImpl implements ProfesorService {
     public void delete(Long id) {
         log.info(this.getClass().getSimpleName() + " delete: borrar profesor con id: {}", id);
 
-        profesorRepository.deleteById(id);
+        Profesor p = profesorRepository.findById(id).get();
+        p.setActivo(false);
+
+        this.profesorRepository.save(p);
     }
 
     @Override

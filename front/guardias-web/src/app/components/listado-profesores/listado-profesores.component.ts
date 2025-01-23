@@ -62,6 +62,18 @@ export class ListadoProfesoresComponent implements OnInit {
   delete(profesor: any): void {
     this.ProfesorService.delete(profesor.id).subscribe(() => {
       this.profesores = this.profesores.filter((p: any) => p.id !== profesor.id);
+      this.filtrarProfesores = this.filtrarProfesores.filter((p: any) => p.id !== profesor.id);
     });
+    window.location.reload();
+  }
+
+  deleteSelected(): void {
+    for (let profesor of this.profesorSeleccionado) {
+      this.ProfesorService.delete(profesor.id).subscribe(() => {
+        this.profesores = this.profesores.filter((p: any) => p.id !== profesor.id);
+        this.filtrarProfesores = this.filtrarProfesores.filter((p: any) => p.id !== profesor.id);
+      });
+    }
+    window.location.reload();
   }
 }

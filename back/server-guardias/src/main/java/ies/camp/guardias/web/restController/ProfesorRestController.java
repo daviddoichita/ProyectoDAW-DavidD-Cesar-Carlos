@@ -5,8 +5,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,7 +55,7 @@ public class ProfesorRestController {
      *
      * @param id ID del Profesor a borrar
      */
-    @GetMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}/delete")
     public void delete(@PathVariable Long id) {
         log.info(this.getClass().getSimpleName() + " deleteById: borrar profesor con id: {}", id);
 
@@ -70,5 +72,17 @@ public class ProfesorRestController {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", id);
 
         this.profesorService.save(this.profesorService.findById(id));
+    }
+
+    /**
+     * Actualiza el ProfesorDTO introducido en la base de datos
+     *
+     * @param profesorDTO ProfesorDTO a actualizar
+     */
+    @PutMapping(path = "/{id}/update")
+    public void update(@PathVariable Long id) {
+        log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", id);
+
+        this.profesorService.update(this.profesorService.findById(id));
     }
 }

@@ -11,28 +11,31 @@
             </div>
             <div class="flex align-items-center gap-3">
                 <button pButton pRipple icon="pi pi-trash" class="p-button-danger p-button-lg text-xl"
-                    label="Eliminar seleccionados" [disabled]="profesorSeleccionado.length === 0"></button>
+                    label="Eliminar seleccionados" [disabled]="profesorSeleccionado.length === 0"
+                    (click)="deleteSelected()"></button>
                 <button pButton pRipple label="Nuevo" icon="pi pi-plus"
                     class="p-button-primary p-button-lg w-9rem text-xl" (click)="altaProfesor()"></button>
             </div>
         </div>
 
         <p-table #table [value]="filtrarProfesores" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
-        class="text-lg w-9" [(selection)]="profesorSeleccionado" [rowHover]="true" [styleClass]="'custom-table'">
-        <ng-template pTemplate="header">
-            <tr>
-                <th class="text-2xl bg-gray-300 text-center"></th>
-                <th class="text-2xl bg-gray-300 text-center">Id</th>
-                <th class="text-2xl bg-gray-300 text-center">Nombre</th>
-                <th class="text-2xl bg-gray-300 text-center">Apellidos</th>
-                <th class="text-2xl bg-gray-300 text-center">NIF</th>
-                <th class="text-2xl bg-gray-300 text-center">Email</th>
-                <th class="text-2xl bg-gray-300 text-center">Teléfono</th>
-                <th class="text-2xl bg-gray-300 text-center">Eliminar</th>
-                <th class="text-2xl bg-gray-300 text-center">Modificar</th>
-            </tr>
-        </ng-template>
-    
+            class="text-lg w-9" [(selection)]="profesorSeleccionado" [rowHover]="true" [styleClass]="'custom-table'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-2xl bg-gray-300 text-center">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th class="text-2xl bg-gray-300 text-center">Id</th>
+                    <th class="text-2xl bg-gray-300 text-center">Nombre</th>
+                    <th class="text-2xl bg-gray-300 text-center">Apellidos</th>
+                    <th class="text-2xl bg-gray-300 text-center">NIF</th>
+                    <th class="text-2xl bg-gray-300 text-center">Email</th>
+                    <th class="text-2xl bg-gray-300 text-center">Teléfono</th>
+                    <th class="text-2xl bg-gray-300 text-center">Eliminar</th>
+                    <th class="text-2xl bg-gray-300 text-center">Modificar</th>
+                </tr>
+            </ng-template>
+
             <ng-template pTemplate="body" let-profesor let-rowIndex="rowIndex">
                 <tr [pSelectableRow]="profesor">
                     <td class="text-center">
@@ -45,7 +48,9 @@
                     <td class="text-xl text-center">{{ profesor.email }}</td>
                     <td class="text-xl text-center">{{ profesor.telefono }}</td>
                     <td class="text-center">
-                        <button pButton pRipple icon="pi pi-trash" class="text-sm p-button-danger p-button-icon-only p-2" (click)="delete(profesor)" pTooltip="Eliminar"></button>
+                        <button pButton pRipple icon="pi pi-trash"
+                            class="text-sm p-button-danger p-button-icon-only p-2" (click)="delete(profesor)"
+                            pTooltip="Eliminar"></button>
                     </td>
                     <td class="text-center">
                         <button pButton pRipple icon="pi pi-pencil"
