@@ -25,6 +25,8 @@ export class ListadoProfesoresComponent implements OnInit {
 
   searchValue: string = '';
 
+  currentPage: any[] = [];
+
   constructor(private ProfesorService: ProfesorService, private router: Router) { }
 
   ngOnInit() {
@@ -41,24 +43,15 @@ export class ListadoProfesoresComponent implements OnInit {
 
   buscador(): void {
     const search = this.searchValue.toLowerCase().trim();
-    this.filtrarProfesores = [];
-    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
-      profesor.nombre.toLowerCase().includes(search)
-    ));
-    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
-      profesor.apellidos.toLowerCase().includes(search)
-    ));
-    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
-      profesor.nif.toLowerCase().includes(search)
-    ));
-    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
-      profesor.email.toLowerCase().includes(search)
-    ));
-    this.filtrarProfesores.push(...this.profesores.filter(profesor =>
+    this.filtrarProfesores = this.profesores.filter(profesor =>
+      profesor.nombre.toLowerCase().includes(search) ||
+      profesor.apellidos.toLowerCase().includes(search) ||
+      profesor.nif.toLowerCase().includes(search) ||
+      profesor.email.toLowerCase().includes(search) ||
       profesor.telefono.toString().includes(search)
-    ));
+    );
   }
-
+  
   delete(profesor: any): void {
     this.ProfesorService.delete(profesor.id).subscribe(() => {
       this.profesores = this.profesores.filter((p: any) => p.id !== profesor.id);
