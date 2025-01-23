@@ -1,33 +1,55 @@
 package ies.camp.guardias.web.restController;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.service.JwtService;
 import ies.camp.guardias.service.ProfesorService;
 
 @RestController
-@RequestMapping("/api/profesores")
 public class ProfesorRestController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfesorRestController.class);
 
     @Autowired
     private ProfesorService profesorService;
+    @Autowired
+    private JwtService jwtService;
+
+    @GetMapping(path = "/api/me")
+    public ResponseEntity<Map<String, Object>> me() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails currentUser = (UserDetails) authentication.getPrincipal();
+
+        String token = this.jwtService.generateToken(currentUser);
+
+        Map<String, Object> response = Map.of("user", currentUser, "token", token);
+
+        log.info(this.getClass().getSimpleName() + " me: devolver usuario logeado");
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Devuelve todos los ProfesorDTO en formato JSON
      *
      * @return lista de ProfesorDTO
      */
-    @GetMapping(path = "")
+    @GetMapping(path = "/api/profesores")
     public List<ProfesorDTO> findAll() {
         log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
 
@@ -41,7 +63,7 @@ public class ProfesorRestController {
      * @return ProfesorDTO en formato JSON o null si no se encuentra la id
      *         introducida
      */
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/api/profesores/{id}")
     public ProfesorDTO findById(@PathVariable Long id) {
         log.info(this.getClass().getSimpleName() + " findById: devolver profesor con id: {}", id);
 
@@ -53,7 +75,7 @@ public class ProfesorRestController {
      *
      * @param id ID del Profesor a borrar
      */
-    @GetMapping(path = "/{id}/delete")
+    @GetMapping(path = "/api/profesores/{id}/delete")
     public void delete(@PathVariable Long id) {
         log.info(this.getClass().getSimpleName() + " deleteById: borrar profesor con id: {}", id);
 
@@ -65,10 +87,9 @@ public class ProfesorRestController {
      *
      * @param profesorDTO ProfesorDTO a guardar
      */
-    @GetMapping(path = "/{id}/save")
-    public void save(@PathVariable Long id) {
-        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", id);
-
-        this.profesorService.save(this.profesorService.findById(id));
+    @PostMapping(path = "/api/profesores/save")
+    public void save(@RequestBody ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
+        this.profesorService.save(profesorDTO);
     }
 }

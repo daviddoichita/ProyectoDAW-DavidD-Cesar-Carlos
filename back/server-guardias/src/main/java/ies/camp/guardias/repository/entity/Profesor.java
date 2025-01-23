@@ -3,6 +3,7 @@ package ies.camp.guardias.repository.entity;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,11 +35,17 @@ public class Profesor {
     @EqualsAndHashCode.Include
     private String abreviacion;
     private String nif;
+
+    @Column(nullable = false)
     private String contrasenya;
-    private Boolean admin;
+
+    private boolean admin;
     private String direccion;
     private Long telefono;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private Boolean activo;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profesor")
