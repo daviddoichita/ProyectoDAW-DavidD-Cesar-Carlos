@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
-import { TableModule } from 'primeng/table';
+import { RowGroupHeader, RowToggler, SelectableRow, TableModule } from 'primeng/table';
 import { ProfesorService } from '../../services/profesor.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -51,7 +51,7 @@ export class ListadoProfesoresComponent implements OnInit {
       profesor.telefono.toString().includes(search)
     );
   }
-  
+
   delete(profesor: any): void {
     this.ProfesorService.delete(profesor.id).subscribe(() => {
       this.profesores = this.profesores.filter((p: any) => p.id !== profesor.id);
@@ -69,4 +69,10 @@ export class ListadoProfesoresComponent implements OnInit {
     }
     window.location.reload();
   }
+
+  /*seleccionarPagina(): void {
+    const start = first;
+    const end = first +;
+    this.currentPage = this.filtrarProfesores.slice(start, end);
+  }*/
 }

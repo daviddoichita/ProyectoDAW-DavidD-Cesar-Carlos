@@ -18,8 +18,9 @@
             </div>
         </div>
 
-        <p-table #table [value]="filtrarProfesores" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
-            class="text-lg w-9" [(selection)]="profesorSeleccionado" [rowHover]="true" [styleClass]="'custom-table'">
+        <p-table #table [value]="filtrarProfesores" id="seleccionarPagina" [rows]="10"
+            [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" class="text-lg w-9"
+            [(selection)]="profesorSeleccionado" [rowHover]="true" [styleClass]="'custom-table'">
             <ng-template pTemplate="header">
                 <tr>
                     <th class="text-2xl bg-gray-300 text-center">

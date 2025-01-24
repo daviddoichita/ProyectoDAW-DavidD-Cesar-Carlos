@@ -40,14 +40,6 @@ export class ProfesorService {
     return this.http.delete(`${this.apiUrl}/${id}/delete`, { headers });
   }
 
-  /*update(id: number): any {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:admin')
-    });
-
-    return this.http.put<any[]>(`${this.apiUrl}/${id}/update`, { activo: 0 }, { headers });
-  }*/
-
   update(id: number): any {
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa('admin:admin')
