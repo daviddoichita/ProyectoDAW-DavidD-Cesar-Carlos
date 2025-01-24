@@ -20,7 +20,7 @@ public interface ProfesorRepository extends JpaRepository<Profesor, Long> {
 
     @Query("SELECT p FROM Profesor p WHERE p.nif = ?1")
     Optional<Profesor> findByNif(String nif);
-  
-	  @Query(value = "SELECT * FROM profesor WHERE numero = ?1", nativeQuery = true)
-	  public Optional<Profesor> findByNumero(Long numero);
+
+    @Query(value = "SELECT * FROM profesor WHERE numero = ?1", nativeQuery = true)
+    public Optional<Profesor> findByNumero(Long numero);
 }

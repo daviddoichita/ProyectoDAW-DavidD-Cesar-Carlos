@@ -53,4 +53,5 @@ public class Cuadrante {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "sesionfalta", joinColumns = @JoinColumn(name = "idcuadrante"), inverseJoinColumns = @JoinColumn(name = "idsesion"))
     private Set<Sesion> faltas;
+
 }
