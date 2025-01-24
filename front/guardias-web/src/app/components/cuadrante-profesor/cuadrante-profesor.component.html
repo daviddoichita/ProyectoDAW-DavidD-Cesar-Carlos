@@ -1,23 +1,253 @@
 <div class="app-layout">
   <app-header></app-header>
   <div class="main-section">
-    <p-panel header="Primera hora" [toggleable]="true">
-      <p-table [value]="getCuadrantes('L', 1)" styleClass="p-datatable-gridlines" id="primera-hora">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Rol</th>
-            <th>Profesor</th>
-            <th>Guardias</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-cuadrante>
-          <tr>
-            <td>{{ cuadrante.cargo.nombre }}</td>
-            <td>{{ cuadrante.guardia.profesor.abreviacion }}</td>
-            <td>{{ cuadrante.faltas }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-panel>
+    <p-accordion [multiple]="true">
+        <p-accordionTab [header]="getNombreHora(1)">
+          <p-table [value]="getCuadrantes('L', 1)" styleClass="p-datatable-gridlines" id="primera-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="primera-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+        <p-accordionTab [header]="getNombreHora(2)">
+          <p-table [value]="getCuadrantes('L', 2)" styleClass="p-datatable-gridlines" id="segunda-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="segunda-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+        <p-accordionTab [header]="getNombreHora(3)">
+          <p-table [value]="getCuadrantes('L', 3)" styleClass="p-datatable-gridlines" id="tercera-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="tercera-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+        <p-accordionTab [header]="getNombreHora(5)">
+          <p-table [value]="getCuadrantes('L', 5)" styleClass="p-datatable-gridlines" id="cuarta-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="cuarta-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+        <p-accordionTab [header]="getNombreHora(6)">
+          <p-table [value]="getCuadrantes('L', 6)" styleClass="p-datatable-gridlines" id="quinta-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="quinta-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+        <p-accordionTab [header]="getNombreHora(7)">
+          <p-table [value]="getCuadrantes('L', 7)" styleClass="p-datatable-gridlines" id="sexta-hora">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="text-center">Rol</th>
+                <th class="text-center">Profesor</th>
+                <th class="text-center">Guardias</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cuadrante>
+              <tr>
+                <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
+                <td class="text-center">{{ cuadrante.guardia.profesor.abreviacion }}</td>
+                <td>
+                  <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="sexta-hora-faltas">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th class="text-center">Firma</th>
+                        <th class="text-center">Profesor ausente</th>
+                        <th class="text-center">Aula</th>
+                        <th class="text-center">Grupo</th>
+                        <th class="text-center">Deberes</th>
+                        <th class="text-center">Incidencias</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-falta>
+                      <tr>
+                        <td>{{ falta.firma }}</td>
+                        <td>{{ falta.profesor }}</td>
+                        <td>{{ falta.aula }}</td>
+                        <td>{{ falta.grupo }}</td>
+                        <td>{{ falta.deberes }}</td>
+                        <td>{{ falta.incidencias }}</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordionTab>
+    </p-accordion>
   </div>
 </div>

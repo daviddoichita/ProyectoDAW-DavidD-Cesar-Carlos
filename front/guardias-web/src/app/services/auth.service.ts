@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,5 +19,30 @@ export class AuthService {
 
   logout(): Observable<any> {
     return this.http.get(`${this.apiUrl}/logout`, {});
+  }
+
+  getToken(): string | null {
+    const local = localStorage.getItem('token')
+    if (local) {
+      return local
+    }
+    const session = sessionStorage.getItem('token')
+    return session
+  }
+
+  getAuthHeader() {
+    return new HttpHeaders({
+      'Authorization': 'Bearer ' + this.getToken()
+    });
+  }
+
+
+  isLogged(): boolean {
+    const local = localStorage.getItem('token')
+    const session = sessionStorage.getItem('token')
+    if (!local && !session) {
+      return false
+    }
+    return true
   }
 }

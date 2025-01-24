@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
@@ -44,6 +44,14 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    const session = sessionStorage.getItem('token')
+    const local = localStorage.getItem('token')
+    if (session || local) {
+      this.router.navigate(['cuadrante'])
+    }
+  }
+
   login(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -53,9 +61,11 @@ export class LoginComponent {
     const user = { email: this.loginForm.value.emailOrNif, password: this.loginForm.value.password };
     this.authService.login(user).subscribe({
       next: (response) => {
-        console.log('Inicio de sesión exitoso');
-        console.log(response.token)
-        sessionStorage.setItem('token', response.token);
+        if (this.loginForm.value.rememberMe) {
+          localStorage.setItem('token', response.token)
+        } else {
+          sessionStorage.setItem('token', response.token);
+        }
         this.router.navigate(['/cuadrante']);
       },
       error: (error) => {
@@ -99,4 +109,3 @@ export class LoginComponent {
     return letra === letraEsperada;
   }
 }
-
