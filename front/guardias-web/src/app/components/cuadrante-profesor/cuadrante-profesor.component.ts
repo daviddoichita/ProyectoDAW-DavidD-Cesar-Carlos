@@ -1,7 +1,9 @@
 import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { PanelModule } from 'primeng/panel';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
+import { CuadranteService } from '../../services/cuadrante.service';
+import { Cuadrante } from '../../interfaces/cuadrante';
 
 @Component({
   selector: 'app-cuadrante-profesor',
@@ -10,55 +12,25 @@ import { TableModule } from 'primeng/table';
   templateUrl: './cuadrante-profesor.component.html',
   styleUrl: './cuadrante-profesor.component.scss',
 })
-export class CuadranteProfesorComponent {
-  products = [
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-    {
-      id: '1000',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 65,
-      category: 'Accessories',
-      quantity: 24,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
-    },
-  ];
+export class CuadranteProfesorComponent implements OnInit {
+  cuadrantes!: Cuadrante[];
+
+  getCuadrantes(abrev: string, id: number) {
+    return this.cuadrantes.filter(c => c.guardia.dia.abreviacion == abrev && c.guardia.intervalo.id == id)
+  }
+
+  constructor(private cuadranteService: CuadranteService) { }
+
+  ngOnInit(): void {
+    this.cuadranteService.findCurrentWeek().subscribe(
+      {
+        next: (cuadrantes) => {
+          this.cuadrantes = cuadrantes
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      }
+    );
+  }
 }
