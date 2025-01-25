@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, Observer, map } from 'rxjs';
 import { Cuadrante } from '../interfaces/cuadrante';
 import { AuthService } from './auth.service';
+import { ApiResponse } from '../interfaces/api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +16,14 @@ export class CuadranteService {
 
 
   findAll(): Observable<Cuadrante[]> {
-    return this.http.get(this.url, { headers: this.auth.getAuthHeader() }).pipe(
-      map((response) => {
-        return JSON.parse(JSON.stringify(response)).data;
-      })
-    );
+    return this.http.get<ApiResponse<Cuadrante[]>>(this.url).pipe(
+      map((response) => response.data)
+    )
   }
 
   findCurrentWeek(): Observable<Cuadrante[]> {
-    return this.http.get(this.url + '/currentWeek', { headers: this.auth.getAuthHeader() }).pipe(
-      map((response) => {
-        return JSON.parse(JSON.stringify(response)).data;
-      })
-    );
+    return this.http.get<ApiResponse<Cuadrante[]>>(this.url + '/currentWeek').pipe(
+      map((response) => response.data)
+    )
   }
 }

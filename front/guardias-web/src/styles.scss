@@ -64,3 +64,21 @@ app-header {
 .p-panel-content {
   padding: 0;
 }
+
+.p-selectbutton {
+  padding: 0.30rem;
+  background-color: var(--surface-200);
+  border-radius: 6px;
+}
+
+.p-selectbutton .p-button {
+  background-color: var(--surface-200);
+  border: none;
+  color: var(--surface-600);
+}
+
+.p-selectbutton .p-highlight {
+  background-color: white;
+  border-radius: 6px;
+  color: black;
+}

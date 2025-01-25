@@ -1,6 +1,14 @@
 <div class="app-layout">
   <app-header></app-header>
   <div class="main-section">
+    <div class="card flex justify-content-center mb-3">
+        <p-selectButton
+            [options]="dias"
+            [(ngModel)]="dia"
+            optionLabel="name"
+            optionValue="value"
+        />
+    </div>
     <p-accordion [multiple]="true">
         <p-accordionTab [header]="getNombreHora(1)">
           <p-table [value]="getCuadrantes('L', 1)" styleClass="p-datatable-gridlines" id="primera-hora">

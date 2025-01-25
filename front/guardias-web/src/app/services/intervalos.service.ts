@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Intervalo } from '../interfaces/intervalo';
 import { AuthService } from './auth.service';
+import { ApiResponse } from '../interfaces/api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,8 @@ export class IntervalosService {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   findAll(): Observable<Intervalo[]> {
-    return this.http.get(this.url, { headers: this.auth.getAuthHeader() }).pipe(
-      map((response) => {
-        return JSON.parse(JSON.stringify(response)).data
-      })
+    return this.http.get<ApiResponse<Intervalo[]>>(this.url).pipe(
+      map((response) => response.data)
     )
   }
 }

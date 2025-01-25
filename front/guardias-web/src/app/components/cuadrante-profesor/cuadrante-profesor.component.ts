@@ -8,23 +8,31 @@ import { Intervalo } from '../../interfaces/intervalo';
 import { IntervalosService } from '../../services/intervalos.service';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cuadrante-profesor',
   standalone: true,
-  imports: [HeaderComponent, PanelModule, TableModule, CommonModule, AccordionModule],
+  imports: [HeaderComponent, PanelModule, TableModule, CommonModule, AccordionModule, SelectButtonModule, FormsModule],
   templateUrl: './cuadrante-profesor.component.html',
   styleUrl: './cuadrante-profesor.component.scss',
 })
 export class CuadranteProfesorComponent implements OnInit {
-  @ViewChild('i1') panel1: Panel | undefined
-
   cuadrantes: Cuadrante[] = [];
   intervalos: Intervalo[] = [];
+  dia: string = 'L';
+  dias: any[] = [
+    { name: 'Lunes', value: 'L' },
+    { name: 'Martes', value: 'M' },
+    { name: 'Miercoles', value: 'X' },
+    { name: 'Jueves', value: 'J' },
+    { name: 'Viernes', value: 'V' }
+  ];
 
   constructor(private cuadranteService: CuadranteService, private intervaloService: IntervalosService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     const cuadrantes = sessionStorage.getItem('cuadrantes')
     if (cuadrantes) {
       this.cuadrantes = JSON.parse(cuadrantes)
@@ -61,7 +69,7 @@ export class CuadranteProfesorComponent implements OnInit {
   }
 
   getCuadrantes(abrev: string, id: number) {
-    return this.cuadrantes.filter(c => c.guardia.dia.abreviacion == abrev && c.guardia.intervalo.id == id)
+    return this.cuadrantes.filter(c => c.guardia.dia.abreviacion == this.dia && c.guardia.intervalo.id == id)
   }
 
   getNombreHora(hora: number): string | undefined {
