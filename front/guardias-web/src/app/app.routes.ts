@@ -4,6 +4,7 @@ import { CuadranteProfesorComponent } from './components/cuadrante-profesor/cuad
 import { LoginComponent } from './components/login/login.component';
 import { ListadoProfesoresComponent } from './components/listado-profesores/listado-profesores.component';
 import { AltaProfesorComponent } from './components/alta-profesor/alta-profesor.component';
+import { EditarProfesorComponent } from './components/editar-profesor/editar-profesor.component';
 
 export const routes: Routes = [
   { path: 'cuadrante', component: CuadranteProfesorComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'nueva-falta', component: NuevaFaltaComponent },
   { path: 'listado-profesores', component: ListadoProfesoresComponent },
   { path: 'alta-profesor', component: AltaProfesorComponent },
+  { path: 'editar-profesor/:id', component: EditarProfesorComponent },
 ];

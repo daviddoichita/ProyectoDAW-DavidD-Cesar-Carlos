@@ -17,19 +17,20 @@ export class ProfesorService {
     return this.http.get<any[]>(this.apiUrl, { headers });
   }
 
-  findById(): any {
+  findById(id: number): any {
     const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:admin')
+      'Authorization': 'Basic ' + btoa('admin:admin'),
     });
-    return this.http.get<any[]>(this.apiUrl, { headers });
+  
+    return this.http.get<any>(`${this.apiUrl}/profesores/${id}`, { headers });
   }
-
+  
   save(profesor: any): any {
     const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:admin')
+        'Authorization': 'Basic ' + btoa('admin:admin')
     });
 
-    return this.http.post<any[]>(this.apiUrl, profesor, { headers });
+    return this.http.post(`${this.apiUrl}/save`, profesor, { headers });
   }
 
   delete(id: number): any {
@@ -46,5 +47,9 @@ export class ProfesorService {
     });
 
     return this.http.put<any[]>(`${this.apiUrl}/${id}/update`, { activo: 0 }, { headers });
+  }
+
+  update2(id: number, profesor: any): any {
+    return this.http.put<any>(`${this.apiUrl}/profesores/${id}`, profesor);
   }
 }
