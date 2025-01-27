@@ -42,7 +42,6 @@ export class CuadranteProfesorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cuadranteService.findAll()
     this.globalStateService.confirmDialog.subscribe({
       next: (dialog) => {
         if (dialog) {
