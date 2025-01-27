@@ -73,6 +73,15 @@ CREATE TABLE dia (
     abreviacion VARCHAR(1)
 );
 
+INSERT INTO dia (abreviacion, nombre)
+VALUES
+("L", "Lunes"),
+("M", "Martes"),
+("X", "Miercoles"),
+("J", "Jueves"),
+("V", "Viernes");
+
+
 DROP TABLE IF EXISTS grupo;
 CREATE TABLE grupo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
