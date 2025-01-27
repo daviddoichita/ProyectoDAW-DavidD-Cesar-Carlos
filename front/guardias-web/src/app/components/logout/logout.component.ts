@@ -14,6 +14,7 @@ export class LogoutComponent implements OnInit {
 
   ngOnInit(): void {
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('tokenDate');
     localStorage.removeItem('token');
     localStorage.removeItem('tokenDate');
     this.router.navigate(['login']);
