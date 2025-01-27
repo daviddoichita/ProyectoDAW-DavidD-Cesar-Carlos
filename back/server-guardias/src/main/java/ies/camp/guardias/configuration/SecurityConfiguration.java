@@ -34,7 +34,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/intervalos/**").permitAll()
-                        .requestMatchers("/api/cuadrantes/**").permitAll()
+                        .requestMatchers("/api/dias/**").permitAll()
+                        .requestMatchers("/api/cuadrantes/currentWeek").permitAll()
+                        .requestMatchers("/api/cuadrantes/today").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider);
@@ -54,7 +56,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of("https://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         // configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));

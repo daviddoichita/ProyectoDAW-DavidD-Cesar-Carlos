@@ -1,5 +1,6 @@
 package ies.camp.guardias.web.restController;
 
+import java.rmi.server.ObjID;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -59,6 +60,14 @@ public class CuadranteRestController {
 
         Map<String, Object> response = Map.of("data", this.cuadranteService.findCurrentWeek(), "status", "ok");
 
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping(path = "/today")
+    public ResponseEntity<Map<String, Object>> findToday() {
+        log.info(this.getClass().getSimpleName() + " findToday: devolver cuadrantes del dia actual");
+
+        Map<String, Object> response = Map.of("data", this.cuadranteService.findToday(), "status", "ok");
         return ResponseEntity.ok().body(response);
     }
 }

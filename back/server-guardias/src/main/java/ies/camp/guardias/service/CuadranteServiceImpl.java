@@ -50,9 +50,15 @@ public class CuadranteServiceImpl implements CuadranteService {
 
         LocalDate start = LocalDate.now().with(DayOfWeek.MONDAY);
         LocalDate end = LocalDate.now().with(DayOfWeek.FRIDAY);
-        log.info(this.getClass().getSimpleName() + " findCurrentWeek: [ {} : {} ]", start, end);
-
         return this.cuadranteRepository.findByRange(start, end).stream().map(CuadranteDTO::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CuadranteDTO> findToday() {
+        log.info(this.getClass().getSimpleName() + " findToday: devolver cuadrantes del dia actual");
+
+        return this.cuadranteRepository.findByRange(LocalDate.now(), LocalDate.now()).stream()
+                .map(CuadranteDTO::convertToDTO).collect(Collectors.toList());
     }
 }

@@ -90,7 +90,6 @@ public class SesionServiceImpl implements SesionService {
         Set<Grupo> grupos = this.grupoRepository.findAll().stream().collect(Collectors.toSet());
         Set<Aula> aulas = this.aulaRepository.findAll().stream().collect(Collectors.toSet());
         Set<Profesor> profesores = this.profesorRepository.findAll().stream().collect(Collectors.toSet());
-        Set<Dia> dias = this.diaRepository.findAll().stream().collect(Collectors.toSet());
 
         // Creacion de objetos a guardar
         for (int i = 1; i < lines.size(); i++) {
@@ -102,7 +101,6 @@ public class SesionServiceImpl implements SesionService {
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
             profesores.add(this.loadProfesor(fields.subList(13, 15)));
-            dias.add(this.loadDia(fields.get(16).trim()));
         }
 
         // Cargar las tablas
@@ -111,7 +109,6 @@ public class SesionServiceImpl implements SesionService {
             grupos.forEach(this.grupoRepository::save);
             aulas.forEach(this.aulaRepository::save);
             profesores.forEach(this.profesorRepository::save);
-            dias.forEach(this.diaRepository::save);
 
             this.cuadranteRepository.deleteAllInBatch();
             this.sesionRepository.deleteAllInBatch();
@@ -279,21 +276,6 @@ public class SesionServiceImpl implements SesionService {
         return Profesor.builder()
                 .numero(numero)
                 .abreviacion(abrev)
-                .build();
-    }
-
-    private Dia loadDia(String abrev) {
-        // Conversiones y seleccion atributos
-        Map<String, String> nombreDias = Map.of(
-                "L", "Lunes",
-                "M", "Martes",
-                "X", "Miercoles",
-                "J", "Jueves",
-                "V", "Viernes");
-
-        return Dia.builder()
-                .abreviacion(abrev)
-                .nombre(nombreDias.get(abrev))
                 .build();
     }
 }

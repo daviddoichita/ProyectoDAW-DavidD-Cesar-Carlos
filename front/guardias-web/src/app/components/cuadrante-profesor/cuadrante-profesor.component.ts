@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { DiaService } from '../../services/dia.service';
 
 @Component({
   selector: 'app-cuadrante-profesor',
@@ -21,16 +23,14 @@ import { FormsModule } from '@angular/forms';
 export class CuadranteProfesorComponent implements OnInit {
   cuadrantes: Cuadrante[] = [];
   intervalos: Intervalo[] = [];
-  dia: string = 'L';
-  dias: any[] = [
-    { name: 'Lunes', value: 'L' },
-    { name: 'Martes', value: 'M' },
-    { name: 'Miercoles', value: 'X' },
-    { name: 'Jueves', value: 'J' },
-    { name: 'Viernes', value: 'V' }
-  ];
+  dias: any[] = [];
+  dia!: string;
 
-  constructor(private cuadranteService: CuadranteService, private intervaloService: IntervalosService) { }
+  constructor(
+    private cuadranteService: CuadranteService,
+    private intervaloService: IntervalosService,
+    private diaService: DiaService
+  ) { }
 
   ngOnInit() {
     const cuadrantes = sessionStorage.getItem('cuadrantes')
@@ -48,6 +48,23 @@ export class CuadranteProfesorComponent implements OnInit {
           },
         }
       );
+    }
+
+    const dias = sessionStorage.getItem('dias')
+    if (dias) {
+      this.dias = JSON.parse(dias)
+    } else {
+      this.diaService.findCurrentWeek().subscribe({
+        next: (dias) => {
+          dias.forEach((dia) => {
+            this.dias.push({ name: dia.nombre, value: dia.abreviacion })
+            this.dia = this.dias[0].value
+          })
+        },
+        error: (error) => {
+          console.error(error)
+        }
+      })
     }
 
     const intervalos = sessionStorage.getItem('intervalos')

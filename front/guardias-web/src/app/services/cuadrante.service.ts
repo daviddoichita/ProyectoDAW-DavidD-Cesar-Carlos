@@ -10,19 +10,25 @@ import { ApiResponse } from '../interfaces/api-response';
 })
 export class CuadranteService {
 
-  url: string = 'http://localhost:8000/api/cuadrantes'
+  url: string = 'https://localhost:8000/api/cuadrantes'
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
 
   findAll(): Observable<Cuadrante[]> {
-    return this.http.get<ApiResponse<Cuadrante[]>>(this.url).pipe(
+    return this.http.get<ApiResponse<Cuadrante[]>>(this.url, { headers: this.auth.getAuthHeader() }).pipe(
       map((response) => response.data)
     )
   }
 
   findCurrentWeek(): Observable<Cuadrante[]> {
     return this.http.get<ApiResponse<Cuadrante[]>>(this.url + '/currentWeek').pipe(
+      map((response) => response.data)
+    )
+  }
+
+  findToday(): Observable<Cuadrante[]> {
+    return this.http.get<ApiResponse<Cuadrante[]>>(this.url + '/today').pipe(
       map((response) => response.data)
     )
   }

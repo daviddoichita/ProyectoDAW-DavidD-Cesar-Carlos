@@ -10,7 +10,7 @@ import { ApiResponse } from '../interfaces/api-response';
 })
 export class IntervalosService {
 
-  url: string = "http://localhost:8000/api/intervalos";
+  url: string = "https://localhost:8000/api/intervalos";
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
