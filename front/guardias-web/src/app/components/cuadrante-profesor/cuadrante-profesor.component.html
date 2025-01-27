@@ -1,12 +1,14 @@
 <div class="app-layout">
   <app-header></app-header>
   <div class="main-section">
+    <p-confirmDialog />
     <div class="card flex justify-content-center mb-3">
         <p-selectButton
             [options]="dias"
             [(ngModel)]="dia"
             optionLabel="name"
             optionValue="value"
+            allowEmpty="false"
         />
     </div>
     <p-accordion [multiple]="true">

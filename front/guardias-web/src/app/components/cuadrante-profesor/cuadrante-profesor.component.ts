@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
-import { Panel, PanelModule } from 'primeng/panel';
+import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { CuadranteService } from '../../services/cuadrante.service';
 import { Cuadrante } from '../../interfaces/cuadrante';
@@ -10,15 +10,20 @@ import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { DiaService } from '../../services/dia.service';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Router } from '@angular/router';
+import { ConfirmationDialogTemplatesService } from '../../services/confirmation-dialog-templates.service';
+import { GlobalStateService } from '../../services/global-state.service';
 
 @Component({
   selector: 'app-cuadrante-profesor',
   standalone: true,
-  imports: [HeaderComponent, PanelModule, TableModule, CommonModule, AccordionModule, SelectButtonModule, FormsModule],
+  imports: [HeaderComponent, PanelModule, TableModule, CommonModule, AccordionModule, SelectButtonModule, FormsModule, ConfirmDialogModule],
   templateUrl: './cuadrante-profesor.component.html',
   styleUrl: './cuadrante-profesor.component.scss',
+  providers: [ConfirmationService]
 })
 export class CuadranteProfesorComponent implements OnInit {
   cuadrantes: Cuadrante[] = [];
@@ -29,10 +34,24 @@ export class CuadranteProfesorComponent implements OnInit {
   constructor(
     private cuadranteService: CuadranteService,
     private intervaloService: IntervalosService,
-    private diaService: DiaService
+    private diaService: DiaService,
+    private confirmationService: ConfirmationService,
+    private confirmationDialogTemplatesService: ConfirmationDialogTemplatesService,
+    private globalStateService: GlobalStateService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.cuadranteService.findAll()
+    this.globalStateService.confirmDialog.subscribe({
+      next: (dialog) => {
+        if (dialog) {
+          this.globalStateService.clearConfirmDialog()
+          this.confirmationService.confirm(dialog)
+        }
+      }
+    })
+
     const cuadrantes = sessionStorage.getItem('cuadrantes')
     if (cuadrantes) {
       this.cuadrantes = JSON.parse(cuadrantes)

@@ -63,8 +63,10 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (this.loginForm.value.rememberMe) {
           localStorage.setItem('token', response.token)
+          localStorage.setItem('tokenDate', new Date().toISOString())
         } else {
           sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('tokenDate', new Date().toISOString())
         }
         this.router.navigate(['/cuadrante']);
       },
