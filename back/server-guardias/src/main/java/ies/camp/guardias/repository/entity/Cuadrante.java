@@ -10,9 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,9 +34,6 @@ public class Cuadrante {
     private Long id;
     @EqualsAndHashCode.Include
     private LocalDate fecha;
-    private String incidencias;
-    private String firma;
-    private Boolean deberes;
 
     @ManyToOne
     @JoinColumn(name = "idcargo")
@@ -50,7 +46,7 @@ public class Cuadrante {
     @EqualsAndHashCode.Include
     private Sesion guardia;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "sesionfalta", joinColumns = @JoinColumn(name = "idcuadrante"), inverseJoinColumns = @JoinColumn(name = "idsesion"))
-    private Set<Sesion> faltas;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cuadrante")
+    @ToString.Exclude
+    private Set<Falta> faltas;
 }

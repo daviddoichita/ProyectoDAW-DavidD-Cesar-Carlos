@@ -70,7 +70,7 @@ public class SesionServiceImpl implements SesionService {
     private CargoRepository cargoRepository;
 
     @Override
-    public boolean loadFromCSV(MultipartFile csv) {
+    public boolean loadFromCSV(MultipartFile csv, int year) {
         log.info(this.getClass().getSimpleName() + " loadFromCSV: empezar a cargar la base de datos desde un CSV");
 
         // Carga archivo a un ArrayList
@@ -90,7 +90,6 @@ public class SesionServiceImpl implements SesionService {
         Set<Grupo> grupos = this.grupoRepository.findAll().stream().collect(Collectors.toSet());
         Set<Aula> aulas = this.aulaRepository.findAll().stream().collect(Collectors.toSet());
         Set<Profesor> profesores = this.profesorRepository.findAll().stream().collect(Collectors.toSet());
-        Set<Dia> dias = this.diaRepository.findAll().stream().collect(Collectors.toSet());
 
         // Creacion de objetos a guardar
         for (int i = 1; i < lines.size(); i++) {
@@ -102,7 +101,6 @@ public class SesionServiceImpl implements SesionService {
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
             profesores.add(this.loadProfesor(fields.subList(13, 15)));
-            dias.add(this.loadDia(fields.get(16).trim()));
         }
 
         // Cargar las tablas
@@ -111,19 +109,20 @@ public class SesionServiceImpl implements SesionService {
             grupos.forEach(this.grupoRepository::save);
             aulas.forEach(this.aulaRepository::save);
             profesores.forEach(this.profesorRepository::save);
-            dias.forEach(this.diaRepository::save);
+
+            this.cuadranteRepository.deleteAllInBatch();
+            this.sesionRepository.deleteAllInBatch();
 
             this.loadSesiones(lines.subList(1, lines.size()));
-            this.loadCuadrantes();
+            this.loadCuadrantes(year);
         } catch (Exception e) {
             log.error(this.getClass().getSimpleName() + " loadFromCSV: error al guardar datos: {}", e);
         }
-
         return true;
     }
 
-    private void loadCuadrantes() {
-        LocalDate start = LocalDate.of(LocalDate.now().getYear(), 9, 9);
+    private void loadCuadrantes(int year) {
+        LocalDate start = LocalDate.of(year, 9, 9);
         LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
 
         List<Sesion> sesiones = this.sesionRepository.findSesionesGuardia();
@@ -156,7 +155,6 @@ public class SesionServiceImpl implements SesionService {
                                 .cargo(cargos.get(i))
                                 .guardia(sesionesIntervalo.get(i))
                                 .fecha(startFinal)
-                                .deberes(true)
                                 .build());
                     }
                 }
@@ -277,21 +275,6 @@ public class SesionServiceImpl implements SesionService {
         return Profesor.builder()
                 .numero(numero)
                 .abreviacion(abrev)
-                .build();
-    }
-
-    private Dia loadDia(String abrev) {
-        // Conversiones y seleccion atributos
-        Map<String, String> nombreDias = Map.of(
-                "L", "Lunes",
-                "M", "Martes",
-                "X", "Miercoles",
-                "J", "Jueves",
-                "V", "Viernes");
-
-        return Dia.builder()
-                .abreviacion(abrev)
-                .nombre(nombreDias.get(abrev))
                 .build();
     }
 }
