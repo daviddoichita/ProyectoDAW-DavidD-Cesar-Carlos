@@ -73,6 +73,15 @@ CREATE TABLE dia (
     abreviacion VARCHAR(1)
 );
 
+INSERT INTO dia (abreviacion, nombre)
+VALUES
+("L", "Lunes"),
+("M", "Martes"),
+("X", "Miercoles"),
+("J", "Jueves"),
+("V", "Viernes");
+
+
 DROP TABLE IF EXISTS grupo;
 CREATE TABLE grupo (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -90,7 +99,7 @@ CREATE TABLE curso (
 );
 
 INSERT INTO curso (nombre, abreviacion)
-VALUES 
+VALUES
 ("Curso 2024-2025", "24/25"),
 ("Curso 2025-2026", "25/26");
 
@@ -120,7 +129,7 @@ CREATE TABLE cargo (
     abreviacion VARCHAR(60)
 );
 
-INSERT INTO cargo (nombre, abreviacion)
+INSERT INTO cargo (abreviacion, nombre)
 VALUES
 ("COOR", "Coordinador"),
 ("IT1", "Itinerante 1"),
@@ -140,9 +149,6 @@ CREATE TABLE cuadrante (
     idcargo INT,
     idguardia INT,
     fecha DATE,
-    incidencias TEXT,
-    firma TEXT,
-    deberes BOOLEAN,
     FOREIGN KEY(idcargo) REFERENCES cargo(id),
     FOREIGN KEY(idguardia) REFERENCES sesion(id)
 );
@@ -152,6 +158,9 @@ CREATE TABLE sesionfalta (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     idsesion INT,
     idcuadrante INT,
+    incidencias TEXT,
+    firma TEXT,
+    deberes BOOLEAN,
     FOREIGN KEY(idsesion) REFERENCES sesion(id),
     FOREIGN KEY(idcuadrante) REFERENCES cuadrante(id)
 );

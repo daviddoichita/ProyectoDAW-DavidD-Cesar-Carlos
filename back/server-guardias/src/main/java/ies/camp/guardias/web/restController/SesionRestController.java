@@ -1,10 +1,12 @@
 package ies.camp.guardias.web.restController;
 
 import java.time.LocalTime;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,14 +32,15 @@ public class SesionRestController {
      * @return true si la carga fue exitosa false en caso contrario
      */
     @PostMapping(path = "/load")
-    public String loadFromCSV(@RequestParam MultipartFile file) {
+    public ResponseEntity<Map<String, String>> loadFromCSV(@RequestParam MultipartFile file, @RequestParam int year) {
         log.info(this.getClass().getSimpleName() + " loadFromCSV: mandar archivo CSV a SesionService");
 
         LocalTime start = LocalTime.now();
-        Boolean result = this.sesionService.loadFromCSV(file);
+        Boolean result = this.sesionService.loadFromCSV(file, year);
         LocalTime end = LocalTime.now();
 
-        return "{\"ok\": " + result + " , \"took\": "
-                + (end.toSecondOfDay() - start.toSecondOfDay()) + "s}";
+        return ResponseEntity.ok(
+                Map.of("ok", result.toString(), "took",
+                        String.valueOf(end.toSecondOfDay() - start.toSecondOfDay()) + "s"));
     }
 }

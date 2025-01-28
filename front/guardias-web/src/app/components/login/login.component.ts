@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -7,25 +7,35 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button'
-import { ButtonGroupModule } from 'primeng/buttongroup'
+import { ButtonModule } from 'primeng/button';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 import { MessagesModule } from 'primeng/messages';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MessageModule } from 'primeng/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { RippleModule } from 'primeng/ripple';
+import { AuthService } from '../../services/auth.service';
+import { HttpClientModule } from '@angular/common/http';
+import { GlobalStateService } from '../../services/global-state.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, ButtonGroupModule, MessagesModule, MessageModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, InputTextModule, PasswordModule, CheckboxModule, InputGroupModule, InputGroupAddonModule, DividerModule, ButtonModule, RippleModule, ButtonGroupModule, MessagesModule, MessageModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private globalStateService: GlobalStateService
+  ) {
     this.loginForm = this.fb.group({
       emailOrNif: ['', [Validators.required, this.emailOrNifValidator.bind(this)]],
       password: [
@@ -40,14 +50,49 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    const session = sessionStorage.getItem('token')
+    const local = localStorage.getItem('token')
+    if (session || local) {
+      this.router.navigate(['cuadrante'])
+    }
+  }
+
   login(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    console.log('Inicio de sesión exitoso');
-    // this.router.navigate(['/']);
+    const user = { email: this.loginForm.value.emailOrNif, password: this.loginForm.value.password };
+    this.authService.login(user).subscribe({
+      next: (response) => {
+        if (this.loginForm.value.rememberMe) {
+          localStorage.setItem('token', response.token)
+          localStorage.setItem('tokenDate', new Date().toISOString())
+        } else {
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('tokenDate', new Date().toISOString())
+        }
+        this.globalStateService.alertMessage.subscribe({
+          next: (route) => {
+            if (route) {
+              this.router.navigate([route])
+            } else {
+              this.router.navigate(['cuadrante'])
+            }
+          }
+        })
+      },
+      error: (error) => {
+        console.error('Error en el inicio de sesión:', error);
+        if (error.status === 401) {
+          console.error('Credenciales incorrectas');
+        } else {
+          console.error('Error');
+        }
+      }
+    });
   }
 
   emailOrNifValidator(control: any): { [key: string]: any } | null {
