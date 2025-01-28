@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
     CommonModule],
   templateUrl: './editar-profesor.component.html',
 })
-export class AltaProfesorComponent implements OnInit {
+export class EditarProfesorComponent implements OnInit {
   nombre: string = '';
   apellidos: string = '';
   contrasenya: string = '';
@@ -60,7 +60,7 @@ export class AltaProfesorComponent implements OnInit {
     });
   }
 
-  validarCampo(campo: keyof AltaProfesorComponent): void {
+  validarCampo(campo: keyof EditarProfesorComponent): void {
     const value = this[campo] as string;
 
     switch (campo) {
@@ -108,7 +108,7 @@ export class AltaProfesorComponent implements OnInit {
   }
 
   validarTodo(): boolean {
-    Object.keys(this.errores).forEach(field => this.validarCampo(field as keyof AltaProfesorComponent));
+    Object.keys(this.errores).forEach(field => this.validarCampo(field as keyof EditarProfesorComponent));
     return !Object.values(this.errores).some(error => error !== null);
   }
 
@@ -137,7 +137,7 @@ export class AltaProfesorComponent implements OnInit {
     this.router.navigate(['/listado-profesores']);
   }
 
-  private cargarDatosProfesor(): void {
+  /*private cargarDatosProfesor(): void {
     this.profesorService.findById(this.profesorId).subscribe({
       next: (profesor: { [key: string]: any; }) => {
         this.profesorForm.patchValue(profesor);
@@ -153,5 +153,5 @@ export class AltaProfesorComponent implements OnInit {
         }
       });
     }
-  }
+  }*/
 }

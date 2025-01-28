@@ -27,6 +27,8 @@ export class AltaProfesorComponent implements OnInit {
   telefono: string = '';
   sustituye: any = null;
 
+  mostrarErrores: boolean = false;
+
   errores: Record<string, string | null> = {
     nombre: null,
     apellidos: null,
@@ -47,7 +49,7 @@ export class AltaProfesorComponent implements OnInit {
   }
 
   getErrores(key: string): string | null {
-    return this.errores[key] || null;
+    return this.mostrarErrores ? this.errores[key] : null;
   }
 
   cargarProfesoresActivos(): void {
@@ -113,6 +115,7 @@ export class AltaProfesorComponent implements OnInit {
   }
 
   guardar(): void {
+    this.mostrarErrores = true;
     if (!this.validarTodo()) {
       return;
     }
@@ -131,6 +134,7 @@ export class AltaProfesorComponent implements OnInit {
     this.profesorService.save(nuevoProfesor).subscribe(() => {
       this.router.navigate(['/listado-profesores']);
     });
+    window.location.reload;
   }
 
   cancelar(): void {
