@@ -7,13 +7,13 @@ import { Cuadrante } from '../../interfaces/cuadrante';
 import { Intervalo } from '../../interfaces/intervalo';
 import { IntervalosService } from '../../services/intervalos.service';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'primeng/accordion';
+import { Accordion, AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { DiaService } from '../../services/dia.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { ConfirmationDialogTemplatesService } from '../../services/confirmation-dialog-templates.service';
 import { GlobalStateService } from '../../services/global-state.service';
 
@@ -27,9 +27,14 @@ import { GlobalStateService } from '../../services/global-state.service';
 })
 export class CuadranteProfesorComponent implements OnInit {
   cuadrantes: Cuadrante[] = [];
+  cuadrantesLoaded: boolean = false;
+
   intervalos: Intervalo[] = [];
+
   dias: any[] = [];
   dia!: string;
+
+  activeIndex: number[] = [0];
 
   constructor(
     private cuadranteService: CuadranteService,
@@ -51,22 +56,17 @@ export class CuadranteProfesorComponent implements OnInit {
       }
     })
 
-    const cuadrantes = sessionStorage.getItem('cuadrantes')
-    if (cuadrantes) {
-      this.cuadrantes = JSON.parse(cuadrantes)
-    } else {
-      this.cuadranteService.findCurrentWeek().subscribe(
-        {
-          next: (cuadrantes) => {
-            this.cuadrantes = cuadrantes
-            sessionStorage.setItem("cuadrantes", JSON.stringify(cuadrantes))
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        }
-      );
-    }
+    this.cuadranteService.findCurrentWeek().subscribe(
+      {
+        next: (cuadrantes) => {
+          this.cuadrantes = cuadrantes
+          this.cuadrantesLoaded = true
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      }
+    );
 
     const dias = sessionStorage.getItem('dias')
     if (dias) {
@@ -76,8 +76,9 @@ export class CuadranteProfesorComponent implements OnInit {
         next: (dias) => {
           dias.forEach((dia) => {
             this.dias.push({ name: dia.nombre, value: dia.abreviacion })
-            this.dia = this.dias[0].value
           })
+          this.dia = this.dias[0].value
+          this.openHora()
         },
         error: (error) => {
           console.error(error)
@@ -100,6 +101,25 @@ export class CuadranteProfesorComponent implements OnInit {
           }
         }
       )
+    }
+  }
+
+  openHora() {
+    const hour = new Date().getHours()
+    if (hour <= 9) {
+      this.activeIndex = [0]
+    } else if (hour <= 10) {
+      this.activeIndex = [1]
+    } else if (hour <= 11) {
+      this.activeIndex = [2]
+    } else if (hour <= 12) {
+      this.activeIndex = [3]
+    } else if (hour <= 13) {
+      this.activeIndex = [4]
+    } else if (hour <= 14) {
+      this.activeIndex = [5]
+    } else {
+      this.dia = this.dias[1].value
     }
   }
 

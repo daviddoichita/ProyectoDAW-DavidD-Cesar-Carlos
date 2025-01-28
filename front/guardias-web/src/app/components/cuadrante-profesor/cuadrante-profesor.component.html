@@ -11,9 +11,9 @@
             allowEmpty="false"
         />
     </div>
-    <p-accordion [multiple]="true">
+    <p-accordion [multiple]="true" id="accordion" [activeIndex]="activeIndex">
         <p-accordionTab [header]="getNombreHora(1)">
-          <p-table [value]="getCuadrantes('L', 1)" styleClass="p-datatable-gridlines" id="primera-hora">
+          <p-table [value]="getCuadrantes('L', 1)" styleClass="p-datatable-gridlines" id="primera-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>
@@ -39,12 +39,12 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-falta>
                       <tr>
-                        <td>{{ falta.firma }}</td>
-                        <td>{{ falta.profesor }}</td>
-                        <td>{{ falta.aula }}</td>
-                        <td>{{ falta.grupo }}</td>
-                        <td>{{ falta.deberes }}</td>
-                        <td>{{ falta.incidencias }}</td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{ falta.sesion.profesor.abreviacion }}</td>
+                        <td class="text-center">{{ falta.sesion.aula.nombre }}</td>
+                        <td class="text-center">{{ falta.sesion.grupo.nombre }}</td>
+                        <td class="text-center">{{ falta.deberes }}</td>
+                        <td class="text-center">{{ falta.incidencias }}</td>
                       </tr>
                     </ng-template>
                   </p-table>
@@ -54,7 +54,7 @@
           </p-table>
         </p-accordionTab>
         <p-accordionTab [header]="getNombreHora(2)">
-          <p-table [value]="getCuadrantes('L', 2)" styleClass="p-datatable-gridlines" id="segunda-hora">
+          <p-table [value]="getCuadrantes('L', 2)" styleClass="p-datatable-gridlines" id="segunda-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>
@@ -95,7 +95,7 @@
           </p-table>
         </p-accordionTab>
         <p-accordionTab [header]="getNombreHora(3)">
-          <p-table [value]="getCuadrantes('L', 3)" styleClass="p-datatable-gridlines" id="tercera-hora">
+          <p-table [value]="getCuadrantes('L', 3)" styleClass="p-datatable-gridlines" id="tercera-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>
@@ -136,7 +136,7 @@
           </p-table>
         </p-accordionTab>
         <p-accordionTab [header]="getNombreHora(5)">
-          <p-table [value]="getCuadrantes('L', 5)" styleClass="p-datatable-gridlines" id="cuarta-hora">
+          <p-table [value]="getCuadrantes('L', 5)" styleClass="p-datatable-gridlines" id="cuarta-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>
@@ -177,7 +177,7 @@
           </p-table>
         </p-accordionTab>
         <p-accordionTab [header]="getNombreHora(6)">
-          <p-table [value]="getCuadrantes('L', 6)" styleClass="p-datatable-gridlines" id="quinta-hora">
+          <p-table [value]="getCuadrantes('L', 6)" styleClass="p-datatable-gridlines" id="quinta-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>
@@ -218,7 +218,7 @@
           </p-table>
         </p-accordionTab>
         <p-accordionTab [header]="getNombreHora(7)">
-          <p-table [value]="getCuadrantes('L', 7)" styleClass="p-datatable-gridlines" id="sexta-hora">
+          <p-table [value]="getCuadrantes('L', 7)" styleClass="p-datatable-gridlines" id="sexta-hora" [loading]="!cuadrantesLoaded">
             <ng-template pTemplate="header">
               <tr>
                 <th class="text-center">Rol</th>

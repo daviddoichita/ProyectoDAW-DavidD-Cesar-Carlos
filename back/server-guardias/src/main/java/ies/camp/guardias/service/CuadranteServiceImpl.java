@@ -58,7 +58,8 @@ public class CuadranteServiceImpl implements CuadranteService {
     public List<CuadranteDTO> findToday() {
         log.info(this.getClass().getSimpleName() + " findToday: devolver cuadrantes del dia actual");
 
-        return this.cuadranteRepository.findByRange(LocalDate.now(), LocalDate.now()).stream()
+        LocalDate now = LocalDate.now();
+        return this.cuadranteRepository.findByRange(now, now).stream()
                 .map(CuadranteDTO::convertToDTO).collect(Collectors.toList());
     }
 }

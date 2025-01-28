@@ -129,7 +129,7 @@ CREATE TABLE cargo (
     abreviacion VARCHAR(60)
 );
 
-INSERT INTO cargo (nombre, abreviacion)
+INSERT INTO cargo (abreviacion, nombre)
 VALUES
 ("COOR", "Coordinador"),
 ("IT1", "Itinerante 1"),
@@ -149,9 +149,6 @@ CREATE TABLE cuadrante (
     idcargo INT,
     idguardia INT,
     fecha DATE,
-    incidencias TEXT,
-    firma TEXT,
-    deberes BOOLEAN,
     FOREIGN KEY(idcargo) REFERENCES cargo(id),
     FOREIGN KEY(idguardia) REFERENCES sesion(id)
 );
@@ -161,6 +158,9 @@ CREATE TABLE sesionfalta (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     idsesion INT,
     idcuadrante INT,
+    incidencias TEXT,
+    firma TEXT,
+    deberes BOOLEAN,
     FOREIGN KEY(idsesion) REFERENCES sesion(id),
     FOREIGN KEY(idcuadrante) REFERENCES cuadrante(id)
 );

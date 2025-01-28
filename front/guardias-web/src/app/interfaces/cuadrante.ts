@@ -1,13 +1,11 @@
 import { Cargo } from "./cargo";
+import { Falta } from "./falta";
 import { Sesion } from "./sesion";
 
 export interface Cuadrante {
   id: number,
   fecha: Date,
-  incidencias: string,
-  firma: string,
-  deberes: string,
   cargo: Cargo,
   guardia: Sesion,
-  faltas: Sesion[],
+  faltas: Falta[],
 }

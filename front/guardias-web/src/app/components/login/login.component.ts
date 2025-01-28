@@ -18,6 +18,7 @@ import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { AuthService } from '../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { GlobalStateService } from '../../services/global-state.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,12 @@ import { HttpClientModule } from '@angular/common/http';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private globalStateService: GlobalStateService
+  ) {
     this.loginForm = this.fb.group({
       emailOrNif: ['', [Validators.required, this.emailOrNifValidator.bind(this)]],
       password: [
@@ -68,7 +74,15 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('token', response.token);
           sessionStorage.setItem('tokenDate', new Date().toISOString())
         }
-        this.router.navigate(['/cuadrante']);
+        this.globalStateService.alertMessage.subscribe({
+          next: (route) => {
+            if (route) {
+              this.router.navigate([route])
+            } else {
+              this.router.navigate(['cuadrante'])
+            }
+          }
+        })
       },
       error: (error) => {
         console.error('Error en el inicio de sesión:', error);

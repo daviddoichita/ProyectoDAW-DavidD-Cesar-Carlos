@@ -155,7 +155,6 @@ public class SesionServiceImpl implements SesionService {
                                 .cargo(cargos.get(i))
                                 .guardia(sesionesIntervalo.get(i))
                                 .fecha(startFinal)
-                                .deberes(true)
                                 .build());
                     }
                 }

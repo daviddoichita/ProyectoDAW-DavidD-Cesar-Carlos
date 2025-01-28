@@ -14,6 +14,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
   if (token) {
     return true
   } else {
+    globalStateService.setAlertMessage(route.url[0].path)
     globalStateService.setConfirmDialog(confirmDialogTemplatesService.loginAlert(() => router.navigate(['login']), () => { }))
     return false
   }
