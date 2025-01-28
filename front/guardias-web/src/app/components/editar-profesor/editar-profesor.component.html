@@ -69,24 +69,13 @@
                             [text]="getErrores('telefono') ?? undefined"></p-message>
                     </div>
                 </div>
-                <div class="col-5">
-                    <p-dropdown id="sustituye" [options]="profesores" optionLabel="label"
-                        [placeholder]="profesores.length ? 'Sustituye a...' : 'No hay profesores disponibles'"
-                        [(ngModel)]="sustituye" class="w-full" required
-                        (ngModelChange)="validarCampo('sustituye')"></p-dropdown>
-
-                    <div class="contenedorError">
-                        <p-message *ngIf="getErrores('sustituye')" severity="error"
-                            [text]="getErrores('sustituye') ?? undefined"></p-message>
-                    </div>
-                </div>
             </div>
 
             <div class="col-10 flex justify-content-end gap-4">
                 <button pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
                     (click)="cancelar()"></button>
                 <button pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
-                    [disabled]="!validarTodo()" (click)="guardar()"></button>
+                    (click)="guardar()"></button>
             </div>
         </div>
     </div>

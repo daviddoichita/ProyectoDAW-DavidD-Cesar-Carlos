@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,10 +82,22 @@ public class ProfesorRestController {
      *
      * @param profesorDTO ProfesorDTO a actualizar
      */
-    @PutMapping(path = "/{id}/update")
-    public void update(@PathVariable Long id) {
+    @PutMapping(path = "/{id}")
+    public void update(@PathVariable Long id, @RequestBody ProfesorDTO profesorDTO) {
         log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", id);
 
-        this.profesorService.update(this.profesorService.findById(id));
+        ProfesorDTO existeProfesor = this.profesorService.findById(id);
+        if (existeProfesor == null) {
+            log.error("El profesor con id {} no existe.", id);
+        }
+        existeProfesor.setNombre(profesorDTO.getNombre());
+        existeProfesor.setApellidos(profesorDTO.getApellidos());
+        existeProfesor.setContrasenya(profesorDTO.getContrasenya());
+        existeProfesor.setNif(profesorDTO.getNif());
+        existeProfesor.setDireccion(profesorDTO.getDireccion());
+        existeProfesor.setEmail(profesorDTO.getEmail());
+        existeProfesor.setTelefono(profesorDTO.getTelefono());
+
+        this.profesorService.update(existeProfesor);
     }
 }

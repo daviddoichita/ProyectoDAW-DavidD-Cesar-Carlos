@@ -9,6 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProfesorService } from '../../services/profesor.service';
 import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-profesor',
@@ -18,6 +19,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './editar-profesor.component.html',
 })
 export class EditarProfesorComponent implements OnInit {
+
+  profesorId: number | null = null;
+
   nombre: string = '';
   apellidos: string = '';
   contrasenya: string = '';
@@ -26,6 +30,8 @@ export class EditarProfesorComponent implements OnInit {
   email: string = '';
   telefono: string = '';
   sustituye: any = null;
+
+  mostrarErrores: boolean = false;
 
   errores: Record<string, string | null> = {
     nombre: null,
@@ -43,11 +49,20 @@ export class EditarProfesorComponent implements OnInit {
   constructor(private profesorService: ProfesorService, private router: Router) { }
 
   ngOnInit() {
+    this.profesorId = this.getProfesorIdFromRoute();
+    if (this.profesorId) {
+      this.cargarDatosProfesor();
+    }
     this.cargarProfesoresActivos();
   }
 
+  private getProfesorIdFromRoute(): number | null {
+    const id = window.location.pathname.split('/').pop();
+    return id ? parseInt(id, 10) : null;
+  }
+
   getErrores(key: string): string | null {
-    return this.errores[key] || null;
+    return this.mostrarErrores ? this.errores[key] : null;
   }
 
   cargarProfesoresActivos(): void {
@@ -79,11 +94,11 @@ export class EditarProfesorComponent implements OnInit {
           ? null
           : 'La contraseña debe tener al menos 6 caracteres.';
         break;
-      case 'nif':
-        this.errores['nif'] = /^[0-9]{8}[A-Za-z]$/.test(value)
-          ? null
-          : 'El NIF debe tener 8 números seguidos de una letra.';
-        break;
+        case 'nif':
+          this.errores['nif'] = /^[A-Za-z][0-9]{8}$/.test(value)
+            ? null
+            : 'El NIF debe tener una letra seguida de 8 números.';
+          break;        
       case 'direccion':
         this.errores['direccion'] = value.length > 0
           ? null
@@ -99,11 +114,6 @@ export class EditarProfesorComponent implements OnInit {
           ? null
           : 'El teléfono debe tener 9 dígitos.';
         break;
-      case 'sustituye':
-        this.errores['sustituye'] = this.sustituye && this.sustituye.value
-          ? null
-          : 'Selecciona un profesor para sustituir.';
-        break;
     }
   }
 
@@ -113,7 +123,13 @@ export class EditarProfesorComponent implements OnInit {
   }
 
   guardar(): void {
+    this.mostrarErrores = true;
     if (!this.validarTodo()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Errores en el formulario',
+        text: 'Por favor, corrige los errores antes de guardar.',
+      });
       return;
     }
 
@@ -128,30 +144,59 @@ export class EditarProfesorComponent implements OnInit {
       sustituyeId: this.sustituye?.value
     };
 
-    this.profesorService.save(editarProfesor).subscribe(() => {
-      this.router.navigate(['/listado-profesores']);
-    });
+    if (this.profesorId) {
+      this.profesorService.update(this.profesorId, editarProfesor).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Actualizado!',
+            text: 'El profesor ha sido actualizado correctamente.',
+          }).then(() => {
+            this.router.navigate(['/listado-profesores']);
+          });
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al guardar los cambios.',
+          });
+        },
+      });
+    }
   }
 
   cancelar(): void {
-    this.router.navigate(['/listado-profesores']);
-  }
-
-  /*private cargarDatosProfesor(): void {
-    this.profesorService.findById(this.profesorId).subscribe({
-      next: (profesor: { [key: string]: any; }) => {
-        this.profesorForm.patchValue(profesor);
-      },
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Se perderán los cambios no guardados.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, continuar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/listado-profesores']);
+      }
     });
   }
 
-  onSubmit(): void {
-    if (this.profesorForm.valid) {
-      this.profesorService.update2(this.profesorId, this.profesorForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/listado-profesores']);
+  private cargarDatosProfesor(): void {
+    if (!this.profesorId) return;
+  
+    this.profesorService.findById(this.profesorId).subscribe({
+      next: (profesor: any) => {
+        if (profesor) {
+          this.nombre = profesor.nombre || '';
+          this.apellidos = profesor.apellidos || '';
+          this.contrasenya = profesor.contrasenya || '';
+          this.nif = profesor.nif || '';
+          this.direccion = profesor.direccion || '';
+          this.email = profesor.email || '';
+          this.telefono = profesor.telefono || '';
+          this.sustituye = profesor.sustituye || null;
         }
-      });
-    }
-  }*/
+      }
+    });
+  }  
 }
