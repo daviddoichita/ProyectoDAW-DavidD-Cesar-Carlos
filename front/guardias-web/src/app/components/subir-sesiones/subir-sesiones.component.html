@@ -2,34 +2,35 @@
   <app-header></app-header>
   <div class="main-section">
     <p-toast />
-    <div class="flex flex-column mt-8 align-items-center w-full h-full" id="main-div">
+    <div class="flex flex-column mt-8 align-items-center w-full" id="main-div">
       <h3>Subir CSV con los horarios de profesores</h3>
       <p-fileUpload
-          [multiple]="false"
-          accept=".csv"
-          chooseLabel="Seleccionar archivo"
-          uploadLabel="Subir"
-          cancelLabel="Cancelar"
-          cancelStyleClass="p-button-danger"
-          [customUpload]="true"
-          (uploadHandler)="upload($event)"
-          maxFileSize="1000000">
-              <ng-template pTemplate="content">
-                <div *ngIf="!uploading">
-                  <ul *ngIf="uploadedFiles.length">
-                      <li *ngFor="let file of uploadedFiles">
-                          {{ file.name }} - {{ file.size }} bytes
-                      </li>
-                  </ul>
-                </div>
-                  <div *ngIf="uploading" class="w-full flex justify-content-center">
-                    <p-progressSpinner
-                      styleClass="w-4rem h-4rem"
-                      strokeWidth="6"
-                      animationDuration=".5s"
-                    ></p-progressSpinner>
-                  </div>
-              </ng-template>
+        [multiple]="false"
+        accept=".csv"
+        chooseLabel="Seleccionar archivo"
+        uploadLabel="Subir"
+        cancelLabel="Cancelar"
+        cancelStyleClass="p-button-danger"
+        [customUpload]="true"
+        (uploadHandler)="upload($event)"
+        maxFileSize="1000000"
+      >
+        <ng-template pTemplate="content">
+          <div *ngIf="!uploading">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="uploading" class="w-full flex justify-content-center">
+            <p-progressSpinner
+              styleClass="w-4rem h-4rem"
+              strokeWidth="6"
+              animationDuration=".5s"
+            ></p-progressSpinner>
+          </div>
+        </ng-template>
       </p-fileUpload>
     </div>
   </div>
