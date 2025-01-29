@@ -30,4 +30,11 @@ public interface CuadranteService {
      * @return lista de CuadranteDTO dentro del rango introducido
      */
     public List<CuadranteDTO> findByRange(LocalDate start, LocalDate end);
+
+    public List<CuadranteDTO> findCuadranteConFalta();
+
+    public List<CuadranteDTO> findCuadranteSinFirmar();
+
+    public List<CuadranteDTO> findCuadranteConIncidencia();
+
 }
