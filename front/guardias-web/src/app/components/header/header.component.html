@@ -15,36 +15,14 @@
       </div>
       <div class="overflow-y-auto">
         <ul class="list-none p-0 m-2 mt-4 overflow-hidden">
-          <li>
+          <li *ngFor="let item of menuItems">
             <a
               pRipple
               class="flex align-items-center cursor-pointer p-3 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
-              routerLink="/cuadrante"
+              [routerLink]="item.routerLink"
             >
-              <i class="pi pi-home mr-3 text-lg"></i>
-              <span class="text-lg">Inicio</span>
-            </a>
-          </li>
-          <li>
-            <a
-              pRipple
-              class="flex align-items-center cursor-pointer p-3 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
-              routerLink="/nueva-falta"
-            >
-              <i class="pi pi-calendar-clock mr-3 text-lg"></i>
-              <span class="text-lg">Nueva falta</span>
-
-            </a>
-          </li>
-          <li>
-            <a
-              pRipple
-              class="flex align-items-center cursor-pointer p-3 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple no-underline"
-              routerLink="/subir-sesiones"
-            >
-              <i class="pi pi-file-import mr-3 text-lg"></i>
-              <span class="text-lg">Subir sesiones</span>
-
+              <i [class]="item.icon + ' mr-3 text-lg'"></i>
+              <span class="text-lg">{{ item.label }}</span>
             </a>
           </li>
         </ul>
@@ -67,16 +45,13 @@
   styleClass="bg-dark text-200 p-0 pl-2 pr-2 border-none border-noround"
 >
   <div class="p-toolbar-group-start">
-    <p-button (onClick)="sidebarVisible = true" styleClass="mr-2 p-1 bg-dark border-transparent hover-dark"
-      icon="pi pi-bars"></p-button>
+    <p-button
+      (onClick)="sidebarVisible = true"
+      styleClass="mr-2 p-1 bg-dark border-transparent hover-dark"
+      icon="pi pi-bars"
+    ></p-button>
     <h2>{{ titulo }}</h2>
   </div>
-  <!-- <div class="p-toolbar-group-center">
-    <span class="p-input-icon-left">
-      <i class="pi pi-search"></i>
-      <input pInputText placeholder="Search" />
-    </span>
-  </div> -->
   <div class="p-toolbar-group-end">
     <img src="/assets/imgs/logo_camp_light.png" alt="logo_camp" height="75px" />
   </div>
