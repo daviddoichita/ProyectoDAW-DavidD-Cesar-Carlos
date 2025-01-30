@@ -1,7 +1,7 @@
 package ies.camp.guardias.repository.dao;
 
 import java.util.List;
-import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +25,4 @@ public interface CuadranteRepository extends JpaRepository<Cuadrante, Long> {
     @Query(value = "SELECT * from cuadrante where incidencias is not null", nativeQuery = true)
     List<Cuadrante> findCuadrantesConIncidencia();
 
-    @Query(value = "SELECT * FROM cuadrante WHERE fecha >= ?1 AND fecha <= ?2", nativeQuery = true)
-    List<Cuadrante> findByRange(LocalDate fechaInicio, LocalDate fechaFin);
 }
