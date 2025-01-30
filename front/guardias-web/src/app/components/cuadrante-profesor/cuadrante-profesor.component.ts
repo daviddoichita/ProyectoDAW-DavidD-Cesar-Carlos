@@ -7,16 +7,15 @@ import { Cuadrante } from "../../interfaces/cuadrante";
 import { Intervalo } from "../../interfaces/intervalo";
 import { IntervalosService } from "../../services/intervalos.service";
 import { CommonModule } from "@angular/common";
-import { Accordion, AccordionModule } from "primeng/accordion";
+import { AccordionModule } from "primeng/accordion";
 import { SelectButtonModule } from "primeng/selectbutton";
 import { FormsModule } from "@angular/forms";
 import { DiaService } from "../../services/dia.service";
 import { ConfirmationService } from "primeng/api";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
-import { ActivationEnd, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ConfirmationDialogTemplatesService } from "../../services/confirmation-dialog-templates.service";
 import { GlobalStateService } from "../../services/global-state.service";
-import { Falta } from "../../interfaces/falta";
 
 @Component({
   selector: "app-cuadrante-profesor",
@@ -112,17 +111,17 @@ export class CuadranteProfesorComponent implements OnInit {
 
   openHora() {
     const hour = new Date().getHours();
-    if (hour <= 8) {
+    if (hour < 8) {
       this.activeIndex = [0];
-    } else if (hour <= 9) {
+    } else if (hour < 9) {
       this.activeIndex = [1];
-    } else if (hour <= 10) {
+    } else if (hour < 10) {
       this.activeIndex = [2];
-    } else if (hour <= 11) {
+    } else if (hour < 11) {
       this.activeIndex = [3];
-    } else if (hour <= 12) {
+    } else if (hour < 12) {
       this.activeIndex = [4];
-    } else if (hour <= 13) {
+    } else if (hour < 13) {
       this.activeIndex = [5];
     } else {
       this.dia = this.dias[1].value;
@@ -130,7 +129,7 @@ export class CuadranteProfesorComponent implements OnInit {
     }
   }
 
-  getCuadrantes(abrev: string, id: number) {
+  getCuadrantes(id: number) {
     return this.cuadrantes.filter(
       (c) =>
         c.guardia.dia.abreviacion == this.dia && c.guardia.intervalo.id == id,
