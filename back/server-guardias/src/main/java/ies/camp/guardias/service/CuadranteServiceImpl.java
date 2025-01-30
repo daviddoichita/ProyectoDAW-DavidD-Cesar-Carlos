@@ -1,5 +1,6 @@
 package ies.camp.guardias.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,9 +40,8 @@ public class CuadranteServiceImpl implements CuadranteService {
         log.info(this.getClass().getSimpleName()
                 + " findByRange: devolver los cuadrantes dentro de las fechas [ {} : {} ]", start, end);
 
-        return this.cuadranteRepository.findAll().stream()
-                .filter(c -> !c.getFecha().isBefore(start) && !c.getFecha().isAfter(end))
-                .map(CuadranteDTO::convertToDTO).collect(Collectors.toList());
+        return this.cuadranteRepository.findByRange(start, end).stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
