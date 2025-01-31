@@ -17,6 +17,6 @@ public interface DiaRepository extends JpaRepository<Dia, Long> {
     @Query(value = "SELECT * FROM dia WHERE abreviacion = ?1", nativeQuery = true)
     public Optional<Dia> findByAbreviacion(String abreviacion);
 
-    @Query(value = "SELECT * FROM dia WHERE abreviacion IN ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM dia WHERE abreviacion IN (:abreviaciones)", nativeQuery = true)
     public List<Dia> findByAbreviaciones(List<String> abreviaciones);
 }

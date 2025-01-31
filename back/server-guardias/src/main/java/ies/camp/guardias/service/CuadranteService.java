@@ -46,4 +46,11 @@ public interface CuadranteService {
      * @return lista de CuadranteDTO del dia actual
      */
     public List<CuadranteDTO> findToday();
+
+    public List<CuadranteDTO> findCuadranteConFalta();
+
+    public List<CuadranteDTO> findCuadranteSinFirmar();
+
+    public List<CuadranteDTO> findCuadranteConIncidencia();
+
 }

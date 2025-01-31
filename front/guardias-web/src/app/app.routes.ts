@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { authGuard } from './guards/auth.guard';
 import { SubirSesionesComponent } from './components/subir-sesiones/subir-sesiones.component';
+import { InformesFaltasComponent } from './components/informes-faltas/informes-faltas.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'nueva-falta', component: NuevaFaltaComponent, canActivate: [authGuard] },
   { path: 'subir-sesiones', component: SubirSesionesComponent, canActivate: [authGuard] },
+  { path: 'informes-faltas', component: InformesFaltasComponent, canActivate: [authGuard] },
   { path: 'logout', component: LogoutComponent }
 ];

@@ -20,8 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SesionRestController {
 
     private static final Logger log = LoggerFactory.getLogger(
-        SesionRestController.class
-    );
+            SesionRestController.class);
 
     @Autowired
     private SesionService sesionService;
@@ -35,26 +34,22 @@ public class SesionRestController {
      */
     @PostMapping(path = "/load")
     public ResponseEntity<Map<String, String>> loadFromCSV(
-        @RequestParam MultipartFile file,
-        @RequestParam int year
-    ) {
+            @RequestParam MultipartFile file,
+            @RequestParam int year) {
         log.info(
-            this.getClass().getSimpleName() +
-            " loadFromCSV: mandar archivo CSV a SesionService"
-        );
+                this.getClass().getSimpleName() +
+                        " loadFromCSV: mandar archivo CSV a SesionService");
 
         LocalTime start = LocalTime.now();
         Boolean result = this.sesionService.loadFromCSV(file, year);
         LocalTime end = LocalTime.now();
 
         return ResponseEntity.ok(
-            Map.of(
-                "ok",
-                result.toString(),
-                "took",
-                String.valueOf(end.toSecondOfDay() - start.toSecondOfDay()) +
-                "s"
-            )
-        );
+                Map.of(
+                        "ok",
+                        result.toString(),
+                        "took",
+                        String.valueOf(end.toSecondOfDay() - start.toSecondOfDay()) +
+                                "s"));
     }
 }

@@ -1,0 +1,72 @@
+<div class="app-layout">
+    <app-header></app-header>
+    <div class="main-section">
+        <div class="flex justify-content-between align-items-center mb-3">
+            <div class="flex align-items-center gap-2">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" [(ngModel)]="valorBusqueda" (input)="buscador()"
+                        placeholder="Nombre del profesor..." class="p-inputtext w-20rem" />
+                </span>
+            </div>
+            <p-dropdown [options]="filtros" [(ngModel)]="filtroSeleccionado" placeholder="Fecha / Mes"
+                class="w-15rem"></p-dropdown>
+            <div class="flex gap-2">
+                <button pButton pRipple icon="pi pi-chart-bar" class="p-button-outlined p-button-lg"></button>
+                <button pButton pRipple icon="pi pi-chart-line" class="p-button-outlined p-button-lg"></button>
+                <button pButton pRipple icon="pi pi-chart-pie" class="p-button-outlined p-button-lg"></button>
+                <button pButton pRipple icon="pi pi-table" class="p-button-outlined p-button-lg"></button>
+            </div>
+            <div class="card flex justify-content-center mb-3">
+                <p-selectButton [options]="tipos" [(ngModel)]="tipo" optionLabel="name" optionValue="value"
+                    allowEmpty="false" />
+            </div>
+            <div class="card flex justify-content-center mb-3">
+                <p-selectButton [options]="tipos" [(ngModel)]="tipo" optionLabel="icon" optionValue="value"
+                    allowEmpty="false">
+                    <ng-template let-item pTemplate="item">
+                        <i [class]="item.icon"></i>
+                    </ng-template>
+                </p-selectButton>
+            </div>
+        </div>
+
+        <p-table [value]="cuadrantes" [rows]="5" [paginator]="true" class="w-full" [rowHover]="true"
+            [styleClass]="'shadow-2 border-round-lg'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Fecha</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Hora</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Nombre</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Apellidos</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Grupo</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Aula</th>
+                    <th class="text-2xl bg-gray-200 text-center p-3">Información Faltas</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-cuadrante>
+                <tr class="hover:bg-gray-200 border-bottom-1 surface-border">
+                    <td class="text-xl text-center p-3">{{ cuadrante.fecha | date }}</td>
+                    <td class="text-xl text-center p-3">{{ cuadrante.guardia.intervalo.horaInicio }} - {{
+                        cuadrante.guardia.intervalo.horaFin }}</td>
+                    <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.nombre }}</td>
+                    <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.apellidos }}</td>
+                    <td class="text-xl text-center p-3">{{ cuadrante.guardia.grupo?.nombre || 'Sin grupo' }}</td>
+                    <td class="text-xl text-center p-3">{{ cuadrante.guardia.aula.nombre }}</td>
+                    <td class="text-xl text-center p-3">
+                        <a href="#" class="text-blue-500 underline text-xl">Ver más info...</a>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center text-sm p-3 text-gray-500">
+                        No hay ninguna falta registrada.
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
