@@ -84,7 +84,21 @@ export class CuadranteProfesorComponent implements OnInit {
           dias.forEach((dia) => {
             this.dias.push({ name: dia.nombre, value: dia.abreviacion });
           });
-          this.dia = this.dias[0].value;
+          if (this.dias.length < 1) {
+            this.diaService.findAll().subscribe({
+              next: (dias) => {
+                dias.forEach((dia) => {
+                  this.dias.push({name: dia.nombre, value: dia.abreviacion});
+                })
+                this.dia = this.dias[0].value
+              },
+              error: (error) => {
+                console.error(error);
+              }
+            });
+          } else {
+            this.dia = this.dias[0].value;
+          }
           this.openHora();
         },
         error: (error) => {
@@ -124,8 +138,10 @@ export class CuadranteProfesorComponent implements OnInit {
     } else if (hour < 13) {
       this.activeIndex = [5];
     } else {
-      this.dia = this.dias[1].value;
-      this.activeIndex = [0];
+      if (this.dias.length > 1) {
+        this.dia = this.dias[1].value;
+        this.activeIndex = [0];
+      }
     }
   }
 
