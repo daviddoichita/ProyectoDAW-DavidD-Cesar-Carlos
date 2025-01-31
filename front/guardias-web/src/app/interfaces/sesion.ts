@@ -7,12 +7,12 @@ import { Materia } from "./materia";
 import { Profesor } from "./profesor";
 
 export interface Sesion {
-  id: number,
-  profesor: Profesor,
-  materia: Materia
-  grupo: Grupo,
-  aula: Aula,
-  intervalo: Intervalo,
-  curso: Curso,
-  dia: Dia,
+  id: number;
+  profesor: Profesor;
+  materia: Materia;
+  grupo: Grupo | null;
+  aula: Aula;
+  intervalo: Intervalo;
+  curso: Curso;
+  dia: Dia;
 }
