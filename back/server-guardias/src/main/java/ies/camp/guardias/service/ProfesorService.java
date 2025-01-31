@@ -36,4 +36,11 @@ public interface ProfesorService {
      * @param profesorDTO ProfesorDTO a guardar
      */
     public void save(ProfesorDTO profesorDTO);
+
+    /**
+     * Actualiza el ProfesorDTO introducido en la base de datos
+     * 
+     * @param profesorDTO ProfesorDTO a actualizar
+     */
+    public void update(ProfesorDTO profesorDTO);
 }

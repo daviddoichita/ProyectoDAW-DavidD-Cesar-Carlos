@@ -13,10 +13,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -142,5 +146,29 @@ public class ProfesorRestController {
             profesorDTO.getId()
         );
         this.profesorService.save(profesorDTO);
+    }
+
+    /**
+     * Actualiza el ProfesorDTO introducido en la base de datos
+     *
+     * @param profesorDTO ProfesorDTO a actualizar
+     */
+    @PutMapping(path = "/{id}")
+    public void update(@PathVariable Long id, @RequestBody ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", id);
+
+        ProfesorDTO existeProfesor = this.profesorService.findById(id);
+        if (existeProfesor == null) {
+            log.error("El profesor con id {} no existe.", id);
+        }
+        existeProfesor.setNombre(profesorDTO.getNombre());
+        existeProfesor.setApellidos(profesorDTO.getApellidos());
+        existeProfesor.setContrasenya(profesorDTO.getContrasenya());
+        existeProfesor.setNif(profesorDTO.getNif());
+        existeProfesor.setDireccion(profesorDTO.getDireccion());
+        existeProfesor.setEmail(profesorDTO.getEmail());
+        existeProfesor.setTelefono(profesorDTO.getTelefono());
+
+        this.profesorService.update(existeProfesor);
     }
 }
