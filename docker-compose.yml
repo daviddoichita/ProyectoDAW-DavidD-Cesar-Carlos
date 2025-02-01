@@ -23,7 +23,7 @@ services:
       - api_network
     environment:
       - spring.datasource.url=jdbc:mysql://api_db:3306/guardiascamp
-      - spring.datasource.password:${SPRING_DATASOURCE_PASSWORD}
+      - spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
     volumes:
       - /home/david/.m2:/root/.m2
 
