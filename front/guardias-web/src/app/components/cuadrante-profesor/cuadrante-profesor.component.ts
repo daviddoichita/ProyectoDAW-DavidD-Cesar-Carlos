@@ -124,8 +124,10 @@ export class CuadranteProfesorComponent implements OnInit {
     } else if (hour < 13) {
       this.activeIndex = [5];
     } else {
-      this.dia = this.dias[1].value;
-      this.activeIndex = [0];
+      if (this.dias.length > 1) {
+        this.dia = this.dias[1].value;
+        this.activeIndex = [0];
+      }
     }
   }
 

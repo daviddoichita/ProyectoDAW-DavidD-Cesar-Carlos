@@ -1,10 +1,10 @@
 DROP DATABASE IF EXISTS guardiascamp;
 
 CREATE DATABASE guardiascamp;
-
--- CREATE USER 'guardias'@'localhost' identified with sha256_password by '';
--- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
 USE guardiascamp;
+
+CREATE USER 'guardias'@'localhost' identified with sha256_password by 'IesCampMorvedre01%';
+GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
 
 DROP TABLE IF EXISTS profesor;
 
@@ -201,3 +201,6 @@ CREATE TABLE sesionfalta (
     FOREIGN KEY (idsesion) REFERENCES sesion (id),
     FOREIGN KEY (idcuadrante) REFERENCES cuadrante (id)
 );
+
+INSERT INTO profesor (email, contrasenya, numero) values ("admin@gmail.com", "$2y$12$5K9vWyNbeCULvkASrnrMhOlN.Lzus5A6WoKJJY4iwq4Sx9k6S5frO", 999);
+INSERT INTO profesor_roles values (1,1,1);

@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.hibernate.sql.ast.tree.expression.Star;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,14 @@ public class CuadranteServiceImpl implements CuadranteService {
         );
 
         LocalDate start = LocalDate.now();
+        if (
+            start.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+            start.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+        ) {
+            start = start.with(DayOfWeek.MONDAY);
+        }
         LocalDate end = LocalDate.now().with(DayOfWeek.FRIDAY);
+
         return this.cuadranteRepository.findByRange(start, end)
             .stream()
             .map(CuadranteDTO::convertToDTO)
