@@ -3,8 +3,8 @@ DROP DATABASE IF EXISTS guardiascamp;
 CREATE DATABASE guardiascamp;
 USE guardiascamp;
 
-CREATE USER 'guardias'@'localhost' identified with sha256_password by 'IesCampMorvedre01%';
-GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
+-- CREATE USER 'guardias'@'localhost' identified by '';
+-- GRANT ALL ON guardiascamp.* TO 'guardias'@'localhost';
 
 DROP TABLE IF EXISTS profesor;
 
