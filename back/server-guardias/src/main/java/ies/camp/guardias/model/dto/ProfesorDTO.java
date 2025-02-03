@@ -1,19 +1,22 @@
 package ies.camp.guardias.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import ies.camp.guardias.repository.dao.RolRepository;
 import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.repository.entity.Rol;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +42,7 @@ public class ProfesorDTO implements UserDetails {
     @JsonIgnore
     private Boolean activo;
     @JsonIgnore
-    private Set<String> roles;
+    private Set<RolDTO> roles;
 
     // Campos de UserDetails
     @JsonIgnore
@@ -71,12 +74,7 @@ public class ProfesorDTO implements UserDetails {
                 .telefono(profesor.getTelefono())
                 .email(profesor.getEmail())
                 .activo(profesor.getActivo())
-                .roles(
-                        profesor
-                                .getRoles()
-                                .stream()
-                                .map(Rol::getNombre)
-                                .collect(Collectors.toSet()))
+                .roles(profesor.getRoles().stream().map(RolDTO::convertToDTO).collect(Collectors.toSet()))
                 .build();
     }
 
@@ -100,14 +98,7 @@ public class ProfesorDTO implements UserDetails {
                 .telefono(profesorDTO.getTelefono())
                 .email(profesorDTO.getEmail())
                 .activo(profesorDTO.getActivo())
-                .roles(
-                        profesorDTO
-                                .getRoles()
-                                .stream()
-                                .map(nombreRol -> {
-                                    return Rol.builder().nombre(nombreRol).build();
-                                })
-                                .collect(Collectors.toSet()))
+                .roles(profesorDTO.getRoles().stream().map(RolDTO::convertToEntity).collect(Collectors.toSet()))
                 .build();
     }
 
@@ -115,7 +106,7 @@ public class ProfesorDTO implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
-                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.toUpperCase()))
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre().toUpperCase()))
                 .collect(Collectors.toList());
     }
 

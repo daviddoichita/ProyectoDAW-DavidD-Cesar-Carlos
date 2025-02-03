@@ -7,15 +7,16 @@ import { Cuadrante } from "../../interfaces/cuadrante";
 import { Intervalo } from "../../interfaces/intervalo";
 import { IntervalosService } from "../../services/intervalos.service";
 import { CommonModule } from "@angular/common";
-import { AccordionModule } from "primeng/accordion";
+import { Accordion, AccordionModule } from "primeng/accordion";
 import { SelectButtonModule } from "primeng/selectbutton";
 import { FormsModule } from "@angular/forms";
 import { DiaService } from "../../services/dia.service";
 import { ConfirmationService } from "primeng/api";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
-import { Router } from "@angular/router";
+import { ActivationEnd, Router } from "@angular/router";
 import { ConfirmationDialogTemplatesService } from "../../services/confirmation-dialog-templates.service";
 import { GlobalStateService } from "../../services/global-state.service";
+import { Falta } from "../../interfaces/falta";
 
 @Component({
   selector: "app-cuadrante-profesor",
@@ -131,7 +132,7 @@ export class CuadranteProfesorComponent implements OnInit {
     }
   }
 
-  getCuadrantes(id: number) {
+  getCuadrantes(abrev: string, id: number) {
     return this.cuadrantes.filter(
       (c) =>
         c.guardia.dia.abreviacion == this.dia && c.guardia.intervalo.id == id,
