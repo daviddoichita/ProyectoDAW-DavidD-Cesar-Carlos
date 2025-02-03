@@ -6,6 +6,7 @@ import ies.camp.guardias.repository.dao.RolRepository;
 import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.repository.entity.Rol;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
