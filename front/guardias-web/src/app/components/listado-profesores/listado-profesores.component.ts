@@ -41,13 +41,12 @@ export class ListadoProfesoresComponent implements OnInit {
   constructor(
     private ProfesorService: ProfesorService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.ProfesorService.findAll().subscribe((profesores: any[]) => {
       this.profesores = profesores;
       this.filtrarProfesores = profesores;
-      this.sincronizar();
       console.log('Profesores cargados:', this.profesores);
     });
   }
@@ -58,17 +57,17 @@ export class ListadoProfesoresComponent implements OnInit {
 
   editarProfesor(profesor: any): void {
     this.router.navigate(['/editar-profesor', profesor.id]);
-  }  
+  }
 
   buscador(): void {
     const buscar = this.valorBusqueda.toLowerCase().trim();
     this.filtrarProfesores = this.profesores.filter(
       (profesor) =>
-        profesor.nombre.toLowerCase().includes(buscar) ||
-        profesor.apellidos.toLowerCase().includes(buscar) ||
-        profesor.nif.toLowerCase().includes(buscar) ||
-        profesor.email.toLowerCase().includes(buscar) ||
-        profesor.telefono.toString().includes(buscar)
+        profesor.nombre?.toLowerCase().includes(buscar) ||
+        profesor.apellidos?.toLowerCase().includes(buscar) ||
+        profesor.nif?.toLowerCase().includes(buscar) ||
+        profesor.email?.toLowerCase().includes(buscar) ||
+        profesor.telefono?.toString().includes(buscar)
     );
     this.sincronizar();
   }

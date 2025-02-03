@@ -23,7 +23,7 @@
             [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" class="text-lg w-9"
             [(selection)]="profesorSeleccionado" [rowHover]="true" [styleClass]="'custom-table'"
             (onRowSelect)="filaSeleccionada($event.data)" (onRowUnselect)="filaNoSeleccionada($event.data)"
-            (onHeaderCheckboxToggle)="headerCheckbox($event)">
+            (onHeaderCheckboxToggle)="headerCheckbox($event)" [loading]="!filtrarProfesores">
             <ng-template pTemplate="header">
                 <tr>
                     <th class="text-2xl bg-gray-300 text-center">
@@ -58,7 +58,8 @@
                     </td>
                     <td class="text-center">
                         <button pButton pRipple icon="pi pi-pencil"
-                            class="text-sm p-button-primary p-button-icon-only p-2" pTooltip="Modificar" (click)="editarProfesor(profesor)"></button>
+                            class="text-sm p-button-primary p-button-icon-only p-2" pTooltip="Modificar"
+                            (click)="editarProfesor(profesor)"></button>
                     </td>
                 </tr>
             </ng-template>
