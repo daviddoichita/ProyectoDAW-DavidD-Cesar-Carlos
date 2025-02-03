@@ -112,21 +112,23 @@ export class CuadranteProfesorComponent implements OnInit {
 
   openHora() {
     const hour = new Date().getHours();
-    if (hour <= 8) {
+    if (hour < 8) {
       this.activeIndex = [0];
-    } else if (hour <= 9) {
+    } else if (hour < 9) {
       this.activeIndex = [1];
-    } else if (hour <= 10) {
+    } else if (hour < 10) {
       this.activeIndex = [2];
-    } else if (hour <= 11) {
+    } else if (hour < 11) {
       this.activeIndex = [3];
-    } else if (hour <= 12) {
+    } else if (hour < 12) {
       this.activeIndex = [4];
-    } else if (hour <= 13) {
+    } else if (hour < 13) {
       this.activeIndex = [5];
     } else {
-      this.dia = this.dias[1].value;
-      this.activeIndex = [0];
+      if (this.dias.length > 1) {
+        this.dia = this.dias[1].value;
+        this.activeIndex = [0];
+      }
     }
   }
 

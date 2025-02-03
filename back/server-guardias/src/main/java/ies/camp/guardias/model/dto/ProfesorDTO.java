@@ -1,5 +1,7 @@
 package ies.camp.guardias.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ies.camp.guardias.repository.dao.RolRepository;
 import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.repository.entity.Rol;
@@ -10,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,13 +33,26 @@ public class ProfesorDTO implements UserDetails {
     private Long numero;
     private String abreviacion;
     private String nif;
+    @JsonIgnore
     private String contrasenya;
     private boolean admin;
     private String direccion;
     private Long telefono;
     private String email;
+    @JsonIgnore
     private Boolean activo;
+    @JsonIgnore
     private Set<RolDTO> roles;
+
+    // Campos de UserDetails
+    @JsonIgnore
+    private String password;
+    @JsonIgnore
+    private String username;
+    @JsonIgnore
+    private List<GrantedAuthority> authorities;
+    @JsonIgnore
+    private boolean enabled;
 
     /**
      * Convierte un Profesor a ProfesorDTO sin la relacion con sesion

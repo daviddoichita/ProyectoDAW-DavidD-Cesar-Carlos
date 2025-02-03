@@ -1,0 +1,6 @@
+FROM mysql:8.0
+
+ENV MYSQL_DATABASE=guardiascamp
+ENV MYSQL_USER=guardias
+
+EXPOSE 3307

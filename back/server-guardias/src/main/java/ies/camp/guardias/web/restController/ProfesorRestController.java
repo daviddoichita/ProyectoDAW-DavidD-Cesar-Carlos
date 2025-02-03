@@ -136,6 +136,7 @@ public class ProfesorRestController {
                 this.getClass().getSimpleName() +
                         " save: guardar profesor con id: {}",
                 profesorDTO.getId());
+      
         this.profesorService.save(profesorDTO);
     }
 

@@ -14,7 +14,7 @@
     <p-accordion [multiple]="true" id="accordion" [activeIndex]="activeIndex">
       <p-accordionTab [header]="getNombreHora(1)">
         <p-table
-          [value]="getCuadrantes('L', 1)"
+          [value]="getCuadrantes(1)"
           styleClass="p-datatable-gridlines"
           id="primera-hora"
           [loading]="!cuadrantesLoaded"
@@ -72,7 +72,7 @@
       </p-accordionTab>
       <p-accordionTab [header]="getNombreHora(2)">
         <p-table
-          [value]="getCuadrantes('L', 2)"
+          [value]="getCuadrantes(2)"
           styleClass="p-datatable-gridlines"
           id="segunda-hora"
           [loading]="!cuadrantesLoaded"
@@ -124,7 +124,7 @@
       </p-accordionTab>
       <p-accordionTab [header]="getNombreHora(3)">
         <p-table
-          [value]="getCuadrantes('L', 3)"
+          [value]="getCuadrantes(3)"
           styleClass="p-datatable-gridlines"
           id="tercera-hora"
           [loading]="!cuadrantesLoaded"
@@ -176,7 +176,7 @@
       </p-accordionTab>
       <p-accordionTab [header]="getNombreHora(5)">
         <p-table
-          [value]="getCuadrantes('L', 5)"
+          [value]="getCuadrantes(5)"
           styleClass="p-datatable-gridlines"
           id="cuarta-hora"
           [loading]="!cuadrantesLoaded"
@@ -228,7 +228,7 @@
       </p-accordionTab>
       <p-accordionTab [header]="getNombreHora(6)">
         <p-table
-          [value]="getCuadrantes('L', 6)"
+          [value]="getCuadrantes(6)"
           styleClass="p-datatable-gridlines"
           id="quinta-hora"
           [loading]="!cuadrantesLoaded"
@@ -280,7 +280,7 @@
       </p-accordionTab>
       <p-accordionTab [header]="getNombreHora(7)">
         <p-table
-          [value]="getCuadrantes('L', 7)"
+          [value]="getCuadrantes(7)"
           styleClass="p-datatable-gridlines"
           id="sexta-hora"
           [loading]="!cuadrantesLoaded"
