@@ -9,14 +9,16 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProfesorService } from '../../services/profesor.service';
 import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-profesor',
   standalone: true,
-  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule,
-    CommonModule],
+  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule, CommonModule, ToastModule],
   templateUrl: './editar-profesor.component.html',
+  providers: [MessageService]
 })
 export class EditarProfesorComponent implements OnInit {
 
@@ -46,7 +48,7 @@ export class EditarProfesorComponent implements OnInit {
 
   profesores: { label: string; value: any; }[] = [];
 
-  constructor(private profesorService: ProfesorService, private router: Router) { }
+  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
     this.profesorId = this.getProfesorIdFromRoute();
@@ -94,11 +96,11 @@ export class EditarProfesorComponent implements OnInit {
           ? null
           : 'La contraseña debe tener al menos 6 caracteres.';
         break;
-        case 'nif':
-          this.errores['nif'] = /^[A-Za-z][0-9]{8}$/.test(value)
-            ? null
-            : 'El NIF debe tener una letra seguida de 8 números.';
-          break;        
+      case 'nif':
+        this.errores['nif'] = /^[A-Za-z][0-9]{8}$/.test(value)
+          ? null
+          : 'El NIF debe tener una letra seguida de 8 números.';
+        break;
       case 'direccion':
         this.errores['direccion'] = value.length > 0
           ? null
@@ -147,6 +149,8 @@ export class EditarProfesorComponent implements OnInit {
     if (this.profesorId) {
       this.profesorService.update(this.profesorId, editarProfesor).subscribe({
         next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Prueba' });
+
           Swal.fire({
             icon: 'success',
             title: '¡Actualizado!',
@@ -183,7 +187,7 @@ export class EditarProfesorComponent implements OnInit {
 
   private cargarDatosProfesor(): void {
     if (!this.profesorId) return;
-  
+
     this.profesorService.findById(this.profesorId).subscribe({
       next: (profesor: any) => {
         if (profesor) {
@@ -198,5 +202,5 @@ export class EditarProfesorComponent implements OnInit {
         }
       }
     });
-  }  
+  }
 }

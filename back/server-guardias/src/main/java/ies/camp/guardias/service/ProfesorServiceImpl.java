@@ -75,10 +75,10 @@ public class ProfesorServiceImpl implements ProfesorService {
     public void delete(Long id) {
         log.info(this.getClass().getSimpleName() + " delete: borrar profesor con id: {}", id);
 
-        Profesor p = profesorRepository.findById(id).get();
-        p.setActivo(false);
+        Profesor profesor = profesorRepository.findById(id).get();
+        profesor.setActivo(false);
 
-        this.profesorRepository.save(p);
+        this.profesorRepository.save(profesor);
     }
 
     @Override

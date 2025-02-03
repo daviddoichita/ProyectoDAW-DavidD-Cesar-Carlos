@@ -39,7 +39,7 @@ export class ProfesorService {
       'Authorization': 'Basic ' + btoa('admin:admin')
     });
 
-    return this.http.delete(`${this.apiUrl}/${id}/delete`, { headers: this.auth.getAuthHeader() });
+    return this.http.get(`${this.apiUrl}/${id}/delete`, { headers: this.auth.getAuthHeader() });
   }
 
   update(id: number, profesor: any): any {
