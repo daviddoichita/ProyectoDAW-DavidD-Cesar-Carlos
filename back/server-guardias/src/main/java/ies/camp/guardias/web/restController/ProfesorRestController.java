@@ -27,8 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfesorRestController {
 
     private static final Logger log = LoggerFactory.getLogger(
-        ProfesorRestController.class
-    );
+            ProfesorRestController.class);
 
     @Autowired
     private ProfesorService profesorService;
@@ -39,43 +38,39 @@ public class ProfesorRestController {
     @GetMapping(path = "/api/me")
     public ResponseEntity<Map<String, Object>> me() {
         Authentication authentication = SecurityContextHolder.getContext()
-            .getAuthentication();
+                .getAuthentication();
 
         UserDetails currentUser = (UserDetails) authentication.getPrincipal();
 
         String token = this.jwtService.generateToken(currentUser);
 
         Map<String, Object> response = Map.of(
-            "user",
-            currentUser,
-            "token",
-            token
-        );
+                "user",
+                currentUser,
+                "token",
+                token);
 
         log.info(
-            this.getClass().getSimpleName() + " me: devolver usuario logeado"
-        );
+                this.getClass().getSimpleName() + " me: devolver usuario logeado");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "/api/authLevel")
     public ResponseEntity<Map<String, Object>> authLevel() {
         log.info(
-            this.getClass().getSimpleName() +
-            " authLevel: devolver nivel de autoridad profesor"
-        );
+                this.getClass().getSimpleName() +
+                        " authLevel: devolver nivel de autoridad profesor");
 
         Authentication authentication = SecurityContextHolder.getContext()
-            .getAuthentication();
+                .getAuthentication();
 
         UserDetails currentUser = (UserDetails) authentication.getPrincipal();
 
         Map<String, Object> response = Map.of(
-            "authLevel",
-            currentUser.getAuthorities().toArray()[0].toString(),
-            "status",
-            "success"
-        );
+                "authLevel",
+                currentUser.getAuthorities().toArray()[0].toString(),
+                "status",
+                "success");
 
         return ResponseEntity.ok(response);
     }
@@ -89,9 +84,8 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public List<ProfesorDTO> findAll() {
         log.info(
-            this.getClass().getSimpleName() +
-            " findAll: devolver todos los profesores"
-        );
+                this.getClass().getSimpleName() +
+                        " findAll: devolver todos los profesores");
 
         return this.profesorService.findAll();
     }
@@ -107,10 +101,9 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public ProfesorDTO findById(@PathVariable Long id) {
         log.info(
-            this.getClass().getSimpleName() +
-            " findById: devolver profesor con id: {}",
-            id
-        );
+                this.getClass().getSimpleName() +
+                        " findById: devolver profesor con id: {}",
+                id);
 
         return this.profesorService.findById(id);
     }
@@ -124,10 +117,9 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public void delete(@PathVariable Long id) {
         log.info(
-            this.getClass().getSimpleName() +
-            " deleteById: borrar profesor con id: {}",
-            id
-        );
+                this.getClass().getSimpleName() +
+                        " deleteById: borrar profesor con id: {}",
+                id);
 
         this.profesorService.delete(id);
     }
@@ -141,10 +133,9 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         log.info(
-            this.getClass().getSimpleName() +
-            " save: guardar profesor con id: {}",
-            profesorDTO.getId()
-        );
+                this.getClass().getSimpleName() +
+                        " save: guardar profesor con id: {}",
+                profesorDTO.getId());
         this.profesorService.save(profesorDTO);
     }
 
@@ -153,7 +144,8 @@ public class ProfesorRestController {
      *
      * @param profesorDTO ProfesorDTO a actualizar
      */
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/api/profesores/{id}")
+    @PreAuthorize("hasRole('DIRECCION')")
     public void update(@PathVariable Long id, @RequestBody ProfesorDTO profesorDTO) {
         log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", id);
 

@@ -31,19 +31,19 @@ public class SesionDTO implements Serializable {
      */
     public static SesionDTO convertToDTO(Sesion sesion) {
         GrupoDTO grupoDTO = sesion.getGrupo() == null
-            ? null
-            : GrupoDTO.convertToDTO(sesion.getGrupo());
+                ? null
+                : GrupoDTO.convertToDTO(sesion.getGrupo());
 
         return SesionDTO.builder()
-            .id(sesion.getId())
-            .profesor(ProfesorDTO.convertToDTO(sesion.getProfesor()))
-            .materia(MateriaDTO.convertToDTO(sesion.getMateria()))
-            .grupo(grupoDTO)
-            .aula(AulaDTO.convertToDTO(sesion.getAula()))
-            .intervalo(IntervaloDTO.convertToDTO(sesion.getIntervalo()))
-            .curso(CursoDTO.convertToDTO(sesion.getCurso()))
-            .dia(DiaDTO.convertToDTO(sesion.getDia()))
-            .build();
+                .id(sesion.getId())
+                .profesor(ProfesorDTO.convertToDTO(sesion.getProfesor()))
+                .materia(MateriaDTO.convertToDTO(sesion.getMateria()))
+                .grupo(grupoDTO)
+                .aula(AulaDTO.convertToDTO(sesion.getAula()))
+                .intervalo(IntervaloDTO.convertToDTO(sesion.getIntervalo()))
+                .curso(CursoDTO.convertToDTO(sesion.getCurso()))
+                .dia(DiaDTO.convertToDTO(sesion.getDia()))
+                .build();
     }
 
     /**
@@ -54,18 +54,18 @@ public class SesionDTO implements Serializable {
      */
     public static Sesion convertToEntity(SesionDTO sesionDTO) {
         Grupo grupo = sesionDTO.getGrupo() == null
-            ? null
-            : GrupoDTO.convertToEntity(sesionDTO.getGrupo());
+                ? null
+                : GrupoDTO.convertToEntity(sesionDTO.getGrupo());
 
         return Sesion.builder()
-            .id(sesionDTO.getId())
-            .profesor(ProfesorDTO.convertToEntity(sesionDTO.getProfesor()))
-            .materia(MateriaDTO.convertToEntity(sesionDTO.getMateria()))
-            .grupo(grupo)
-            .aula(AulaDTO.convertToEntity(sesionDTO.getAula()))
-            .intervalo(IntervaloDTO.convertToEntity(sesionDTO.getIntervalo()))
-            .curso(CursoDTO.convertToEntity(sesionDTO.getCurso()))
-            .dia(DiaDTO.convertToEntity(sesionDTO.getDia()))
-            .build();
+                .id(sesionDTO.getId())
+                .profesor(ProfesorDTO.convertToEntity(sesionDTO.getProfesor()))
+                .materia(MateriaDTO.convertToEntity(sesionDTO.getMateria()))
+                .grupo(grupo)
+                .aula(AulaDTO.convertToEntity(sesionDTO.getAula()))
+                .intervalo(IntervaloDTO.convertToEntity(sesionDTO.getIntervalo()))
+                .curso(CursoDTO.convertToEntity(sesionDTO.getCurso()))
+                .dia(DiaDTO.convertToEntity(sesionDTO.getDia()))
+                .build();
     }
 }
