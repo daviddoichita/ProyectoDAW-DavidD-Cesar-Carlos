@@ -132,7 +132,7 @@ export class CuadranteProfesorComponent implements OnInit {
     }
   }
 
-  getCuadrantes(abrev: string, id: number) {
+  getCuadrantes(id: number) {
     return this.cuadrantes.filter(
       (c) =>
         c.guardia.dia.abreviacion == this.dia && c.guardia.intervalo.id == id,

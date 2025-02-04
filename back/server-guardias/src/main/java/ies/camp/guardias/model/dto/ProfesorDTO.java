@@ -1,26 +1,20 @@
 package ies.camp.guardias.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import ies.camp.guardias.repository.dao.RolRepository;
-import ies.camp.guardias.repository.entity.Profesor;
-import ies.camp.guardias.repository.entity.Rol;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import ies.camp.guardias.repository.entity.Profesor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -44,16 +38,6 @@ public class ProfesorDTO implements UserDetails {
     private Boolean activo;
     @JsonIgnore
     private Set<RolDTO> roles;
-
-    // Campos de UserDetails
-    @JsonIgnore
-    private String password;
-    @JsonIgnore
-    private String username;
-    @JsonIgnore
-    private List<GrantedAuthority> authorities;
-    @JsonIgnore
-    private boolean enabled;
 
     /**
      * Convierte un Profesor a ProfesorDTO sin la relacion con sesion
