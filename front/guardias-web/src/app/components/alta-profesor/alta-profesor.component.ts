@@ -9,13 +9,17 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProfesorService } from '../../services/profesor.service';
 import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-alta-profesor',
   standalone: true,
-  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule,
-    CommonModule],
-  templateUrl: './alta-profesor.component.html'
+  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule, CommonModule, ToastModule,
+    ConfirmDialogModule],
+  templateUrl: './alta-profesor.component.html',
+  providers: [MessageService, ConfirmDialogModule, ConfirmationService]
 })
 export class AltaProfesorComponent implements OnInit {
   nombre: string = '';
@@ -42,7 +46,7 @@ export class AltaProfesorComponent implements OnInit {
 
   profesores: { label: string; value: any; }[] = [];
 
-  constructor(private profesorService: ProfesorService, private router: Router) { }
+  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.cargarProfesoresActivos();
@@ -117,6 +121,7 @@ export class AltaProfesorComponent implements OnInit {
   guardar(): void {
     this.mostrarErrores = true;
     if (!this.validarTodo()) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor, corrige los errores antes de guardar.' });
       return;
     }
 
@@ -131,13 +136,50 @@ export class AltaProfesorComponent implements OnInit {
       sustituyeId: this.sustituye?.value
     };
 
-    this.profesorService.save(nuevoProfesor).subscribe(() => {
-      this.router.navigate(['/listado-profesores']);
-    });
-    window.location.reload;
+    this.profesorService.save(nuevoProfesor).subscribe({
+      next: (_response: any) => {
+        this.confirmationService.confirm({
+          message: '¿Estas seguro que quieres guardarlo?',
+          header: 'Confirmacion',
+          icon: 'pi pi-exclamation-triangle',
+          acceptIcon: "none",
+          acceptLabel: "Aceptar",
+          rejectLabel: "Cancelar",
+          rejectIcon: "none",
+          rejectButtonStyleClass: "p-button-danger",
+          accept: () => {
+            this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' })
+            setTimeout(() => {
+              this.router.navigate(['/listado-profesores'])
+            }, 1000)
+          },
+          reject: () => {
+            this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
+          }
+        })
+      }
+    })
   }
 
   cancelar(): void {
-    this.router.navigate(['/listado-profesores']);
+    this.confirmationService.confirm({
+      message: '¿Estas seguro que quieres cancelarlo?',
+      header: 'Confirmacion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      acceptLabel: "Aceptar",
+      rejectLabel: "Cancelar",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-danger",
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han cancelado los cambios' })
+        setTimeout(() => {
+          this.router.navigate(['/listado-profesores'])
+        }, 1000)
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
+      }
+    })
   }
 }

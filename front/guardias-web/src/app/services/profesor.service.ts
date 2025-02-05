@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -42,11 +43,16 @@ export class ProfesorService {
     return this.http.get(`${this.apiUrl}/${id}/delete`, { headers: this.auth.getAuthHeader() });
   }
 
-  update(id: number, profesor: any): any {
+  update(id: number, profesor: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa('admin:admin')
     });
 
     return this.http.put<any>(`${this.apiUrl}/${id}`, profesor, { headers: this.auth.getAuthHeader() });
   }
+
+  /*add(profesor: any): any {
+
+    return this.http.get(`${this.apiUrl}`, profesor, { headers: this.auth.getAuthHeader() });
+  }*/
 }

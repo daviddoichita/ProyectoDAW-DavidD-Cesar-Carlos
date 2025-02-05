@@ -72,10 +72,11 @@
             </div>
 
             <div class="col-10 flex justify-content-end gap-4">
-                <button pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
-                    (click)="cancelar()"></button>
-                <p-button pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
-                    (click)="guardar()"></p-button>
+                <p-confirmDialog />
+                <p-toast pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
+                    (click)="cancelar()"></p-toast>
+                <p-toast pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
+                    (click)="guardar()"></p-toast>
             </div>
         </div>
     </div>

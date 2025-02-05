@@ -10,15 +10,17 @@ import { ProfesorService } from '../../services/profesor.service';
 import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
-import Swal from 'sweetalert2';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-editar-profesor',
   standalone: true,
-  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule, CommonModule, ToastModule],
+  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule, CommonModule, ToastModule,
+    ConfirmDialogModule
+  ],
   templateUrl: './editar-profesor.component.html',
-  providers: [MessageService]
+  providers: [MessageService, ConfirmDialogModule, ConfirmationService]
 })
 export class EditarProfesorComponent implements OnInit {
 
@@ -48,7 +50,8 @@ export class EditarProfesorComponent implements OnInit {
 
   profesores: { label: string; value: any; }[] = [];
 
-  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService) { }
+  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService, private confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit() {
     this.profesorId = this.getProfesorIdFromRoute();
@@ -127,11 +130,7 @@ export class EditarProfesorComponent implements OnInit {
   guardar(): void {
     this.mostrarErrores = true;
     if (!this.validarTodo()) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Errores en el formulario',
-        text: 'Por favor, corrige los errores antes de guardar.',
-      });
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor, corrige los errores antes de guardar.' });
       return;
     }
 
@@ -147,43 +146,55 @@ export class EditarProfesorComponent implements OnInit {
     };
 
     if (this.profesorId) {
-      this.profesorService.update(this.profesorId, editarProfesor).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Prueba' });
-
-          Swal.fire({
-            icon: 'success',
-            title: '¡Actualizado!',
-            text: 'El profesor ha sido actualizado correctamente.',
-          }).then(() => {
-            this.router.navigate(['/listado-profesores']);
-          });
-        },
-        error: () => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error al guardar los cambios.',
-          });
-        },
-      });
+      this.profesorService.update(this.profesorId, editarProfesor).
+        subscribe({
+          next: (_response) => {
+            this.confirmationService.confirm({
+              message: '¿Estas seguro que quieres guardarlo?',
+              header: 'Confirmacion',
+              icon: 'pi pi-exclamation-triangle',
+              acceptIcon: "none",
+              acceptLabel: "Aceptar",
+              rejectLabel: "Cancelar",
+              rejectIcon: "none",
+              rejectButtonStyleClass: "p-button-danger",
+              accept: () => {
+                this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' })
+                setTimeout(() => {
+                  this.router.navigate(['/listado-profesores'])
+                }, 1000)
+              },
+              reject: () => {
+                this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
+              }
+            })
+          }
+        })
     }
   }
 
   cancelar(): void {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Se perderán los cambios no guardados.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, cancelar',
-      cancelButtonText: 'No, continuar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.router.navigate(['/listado-profesores']);
+    this.confirmationService.confirm({
+      message: '¿Estas seguro que quieres cancelarlo?',
+      header: 'Confirmacion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      acceptLabel: "Aceptar",
+      rejectLabel: "Cancelar",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-danger",
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han cancelado los cambios' })
+        setTimeout(() => {
+          this.router.navigate(['/listado-profesores'])
+        }, 1000)
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
       }
-    });
+    })
   }
+
 
   private cargarDatosProfesor(): void {
     if (!this.profesorId) return;
