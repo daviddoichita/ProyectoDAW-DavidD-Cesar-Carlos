@@ -139,7 +139,17 @@ export class AltaProfesorComponent implements OnInit {
       sustituyeId: this.sustituye?.value
     };
 
-    this.sesionService.findSesionesPorProfesor(nuevoProfesor).subscribe({
+    /*if (nuevoProfesor.sustituyeId) {
+      this.sesionService.findSesionesPorProfesor(nuevoProfesor.sustituyeId).subscribe({
+        next: (_response: any) => {
+          this.confirmacionGuardado();
+        }
+      });
+    } else {
+      this.confirmacionGuardado();
+    }*/
+
+    this.sesionService.findSesionesPorProfesor(nuevoProfesor.sustituyeId).subscribe({
       next: (_response: any) => {
         this.confirmationService.confirm({
           message: '¿Estas seguro que quieres guardarlo?',
@@ -185,4 +195,26 @@ export class AltaProfesorComponent implements OnInit {
       }
     })
   }
+
+  /*confirmacionGuardado() {
+    this.confirmationService.confirm({
+      message: '¿Estas seguro que quieres guardarlo?',
+      header: 'Confirmacion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      acceptLabel: "Aceptar",
+      rejectLabel: "Cancelar",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-danger",
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' });
+        setTimeout(() => {
+          this.router.navigate(['/listado-profesores']);
+        }, 1000);
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' });
+      }
+    });
+  }*/
 }
