@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CuadranteServiceImpl implements CuadranteService {
 
-    private static final Logger log = LoggerFactory.getLogger(
             CuadranteServiceImpl.class);
 
     @Autowired
