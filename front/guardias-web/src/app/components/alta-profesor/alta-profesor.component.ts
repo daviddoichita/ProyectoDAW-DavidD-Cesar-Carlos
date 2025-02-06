@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SesionService } from '../../services/sesion.service';
 
 @Component({
   selector: 'app-alta-profesor',
@@ -46,7 +47,9 @@ export class AltaProfesorComponent implements OnInit {
 
   profesores: { label: string; value: any; }[] = [];
 
-  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+  constructor(private profesorService: ProfesorService, private router: Router, private messageService: MessageService, private confirmationService: ConfirmationService,
+    private sesionService: SesionService
+  ) { }
 
   ngOnInit() {
     this.cargarProfesoresActivos();
@@ -136,7 +139,7 @@ export class AltaProfesorComponent implements OnInit {
       sustituyeId: this.sustituye?.value
     };
 
-    this.profesorService.save(nuevoProfesor).subscribe({
+    this.sesionService.findSesionesPorProfesor(nuevoProfesor).subscribe({
       next: (_response: any) => {
         this.confirmationService.confirm({
           message: '¿Estas seguro que quieres guardarlo?',

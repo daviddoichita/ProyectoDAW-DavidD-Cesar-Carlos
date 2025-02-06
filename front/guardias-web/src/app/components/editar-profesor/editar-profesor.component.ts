@@ -142,7 +142,6 @@ export class EditarProfesorComponent implements OnInit {
       direccion: this.direccion,
       email: this.email,
       telefono: this.telefono,
-      sustituyeId: this.sustituye?.value
     };
 
     if (this.profesorId) {
