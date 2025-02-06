@@ -13,18 +13,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProfesorRestController {
 
     private static final Logger log = LoggerFactory.getLogger(
-        ProfesorRestController.class
-    );
+            ProfesorRestController.class);
 
     @Autowired
     private ProfesorService profesorService;
@@ -35,43 +38,39 @@ public class ProfesorRestController {
     @GetMapping(path = "/api/me")
     public ResponseEntity<Map<String, Object>> me() {
         Authentication authentication = SecurityContextHolder.getContext()
-            .getAuthentication();
+                .getAuthentication();
 
         UserDetails currentUser = (UserDetails) authentication.getPrincipal();
 
         String token = this.jwtService.generateToken(currentUser);
 
         Map<String, Object> response = Map.of(
-            "user",
-            currentUser,
-            "token",
-            token
-        );
+                "user",
+                currentUser,
+                "token",
+                token);
 
         log.info(
-            this.getClass().getSimpleName() + " me: devolver usuario logeado"
-        );
+                this.getClass().getSimpleName() + " me: devolver usuario logeado");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "/api/authLevel")
     public ResponseEntity<Map<String, Object>> authLevel() {
         log.info(
-            this.getClass().getSimpleName() +
-            " authLevel: devolver nivel de autoridad profesor"
-        );
+                this.getClass().getSimpleName() +
+                        " authLevel: devolver nivel de autoridad profesor");
 
         Authentication authentication = SecurityContextHolder.getContext()
-            .getAuthentication();
+                .getAuthentication();
 
         UserDetails currentUser = (UserDetails) authentication.getPrincipal();
 
         Map<String, Object> response = Map.of(
-            "authLevel",
-            currentUser.getAuthorities().toArray()[0].toString(),
-            "status",
-            "success"
-        );
+                "authLevel",
+                currentUser.getAuthorities().toArray()[0].toString(),
+                "status",
+                "success");
 
         return ResponseEntity.ok(response);
     }
@@ -85,9 +84,8 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public List<ProfesorDTO> findAll() {
         log.info(
-            this.getClass().getSimpleName() +
-            " findAll: devolver todos los profesores"
-        );
+                this.getClass().getSimpleName() +
+                        " findAll: devolver todos los profesores");
 
         return this.profesorService.findAll();
     }
@@ -103,10 +101,9 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public ProfesorDTO findById(@PathVariable Long id) {
         log.info(
-            this.getClass().getSimpleName() +
-            " findById: devolver profesor con id: {}",
-            id
-        );
+                this.getClass().getSimpleName() +
+                        " findById: devolver profesor con id: {}",
+                id);
 
         return this.profesorService.findById(id);
     }
@@ -120,10 +117,9 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public void delete(@PathVariable Long id) {
         log.info(
-            this.getClass().getSimpleName() +
-            " deleteById: borrar profesor con id: {}",
-            id
-        );
+                this.getClass().getSimpleName() +
+                        " deleteById: borrar profesor con id: {}",
+                id);
 
         this.profesorService.delete(id);
     }
@@ -137,10 +133,34 @@ public class ProfesorRestController {
     @PreAuthorize("hasRole('DIRECCION')")
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         log.info(
-            this.getClass().getSimpleName() +
-            " save: guardar profesor con id: {}",
-            profesorDTO.getId()
-        );
+                this.getClass().getSimpleName() +
+                        " save: guardar profesor con id: {}",
+                profesorDTO.getId());
         this.profesorService.save(profesorDTO);
+    }
+
+    /**
+     * Actualiza el ProfesorDTO introducido en la base de datos
+     *
+     * @param profesorDTO ProfesorDTO a actualizar
+     */
+    @PutMapping(path = "/api/profesores/{id}")
+    @PreAuthorize("hasRole('DIRECCION')")
+    public void update(@PathVariable Long id, @RequestBody ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", id);
+
+        ProfesorDTO existeProfesor = this.profesorService.findById(id);
+        if (existeProfesor == null) {
+            log.error("El profesor con id {} no existe.", id);
+        }
+        existeProfesor.setNombre(profesorDTO.getNombre());
+        existeProfesor.setApellidos(profesorDTO.getApellidos());
+        existeProfesor.setContrasenya(profesorDTO.getContrasenya());
+        existeProfesor.setNif(profesorDTO.getNif());
+        existeProfesor.setDireccion(profesorDTO.getDireccion());
+        existeProfesor.setEmail(profesorDTO.getEmail());
+        existeProfesor.setTelefono(profesorDTO.getTelefono());
+
+        this.profesorService.update(existeProfesor);
     }
 }

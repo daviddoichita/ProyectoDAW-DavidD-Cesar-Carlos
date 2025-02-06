@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CuadranteServiceImpl implements CuadranteService {
 
-    private static final Logger log = LoggerFactory.getLogger(
-        CuadranteServiceImpl.class
-    );
+            CuadranteServiceImpl.class);
 
     @Autowired
     private CuadranteRepository cuadranteRepository;
@@ -24,70 +22,70 @@ public class CuadranteServiceImpl implements CuadranteService {
     @Override
     public List<CuadranteDTO> findAll() {
         log.info(
-            this.getClass().getSimpleName() +
-            " findAll: devolver todos los cuadrantes"
-        );
+                this.getClass().getSimpleName() +
+                        " findAll: devolver todos los cuadrantes");
 
         return this.cuadranteRepository.findAll()
-            .stream()
-            .map(CuadranteDTO::convertToDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public CuadranteDTO findById(Long id) {
         log.info(
-            this.getClass().getSimpleName() +
-            " findById: devolver cuadrante con id: {}",
-            id
-        );
+                this.getClass().getSimpleName() +
+                        " findById: devolver cuadrante con id: {}",
+                id);
 
         return this.cuadranteRepository.findById(id)
-            .map(CuadranteDTO::convertToDTO)
-            .orElse(null);
+                .map(CuadranteDTO::convertToDTO)
+                .orElse(null);
     }
 
     @Override
     public List<CuadranteDTO> findByRange(LocalDate start, LocalDate end) {
         log.info(
-            this.getClass().getSimpleName() +
-            " findByRange: devolver los cuadrantes dentro de las fechas [ {} : {} ]",
-            start,
-            end
-        );
+                this.getClass().getSimpleName() +
+                        " findByRange: devolver los cuadrantes dentro de las fechas [ {} : {} ]",
+                start,
+                end);
 
         return this.cuadranteRepository.findByRange(start, end)
-            .stream()
-            .map(CuadranteDTO::convertToDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CuadranteDTO> findCurrentWeek() {
         log.info(
-            this.getClass().getSimpleName() +
-            " findCurrentWeek: devolver la semana actual"
-        );
+                this.getClass().getSimpleName() +
+                        " findCurrentWeek: devolver la semana actual");
 
         LocalDate start = LocalDate.now();
+        if (start.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+                start.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            start = start.with(DayOfWeek.MONDAY);
+        }
         LocalDate end = LocalDate.now().with(DayOfWeek.FRIDAY);
+
         return this.cuadranteRepository.findByRange(start, end)
-            .stream()
-            .map(CuadranteDTO::convertToDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CuadranteDTO> findToday() {
         log.info(
-            this.getClass().getSimpleName() +
-            " findToday: devolver cuadrantes del dia actual"
-        );
+                this.getClass().getSimpleName() +
+                        " findToday: devolver cuadrantes del dia actual");
 
         LocalDate now = LocalDate.now();
         return this.cuadranteRepository.findByRange(now, now)
-            .stream()
-            .map(CuadranteDTO::convertToDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 }
