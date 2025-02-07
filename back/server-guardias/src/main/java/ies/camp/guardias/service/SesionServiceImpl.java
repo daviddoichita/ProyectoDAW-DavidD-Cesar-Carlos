@@ -20,7 +20,7 @@ import ies.camp.guardias.repository.entity.Dia;
 import ies.camp.guardias.repository.entity.Grupo;
 import ies.camp.guardias.repository.entity.Intervalo;
 import ies.camp.guardias.repository.entity.Materia;
-import ies.camp.guardias.repository.entity.Profesor;
+import ies.camp.guardias.repository.entity.Profesor
 import ies.camp.guardias.repository.entity.Rol;
 import ies.camp.guardias.repository.entity.Sesion;
 import java.io.BufferedReader;
@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.github.javafaker.Faker;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class SesionServiceImpl implements SesionService {
 
-    private static final Logger log = LoggerFactory.getLogger(
             SesionServiceImpl.class);
 
     @Autowired
@@ -105,7 +103,6 @@ public class SesionServiceImpl implements SesionService {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
                             csv.getInputStream(),
-                            StandardCharsets.ISO_8859_1));
             bufferedReader.lines().forEachOrdered(lines::add);
             bufferedReader.close();
         } catch (IOException e) {
@@ -237,7 +234,6 @@ public class SesionServiceImpl implements SesionService {
                 .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
         Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
         this.intervaloRepository.findAll()
-                .forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
 
         List<Object> sesiones = new ArrayList<>();
 
@@ -288,12 +284,12 @@ public class SesionServiceImpl implements SesionService {
         Integer horas = Integer.parseInt(datos.get(5).trim());
 
         return Materia.builder()
-                .numero(numero)
-                .abreviacion(abrev)
-                .nombre(nombre)
-                .codigo(codigo)
-                .horas(horas)
-                .build();
+            .numero(numero)
+            .abreviacion(abrev)
+            .nombre(nombre)
+            .codigo(codigo)
+            .horas(horas)
+            .build();
     }
 
     private Grupo loadGrupo(List<String> datos) {
@@ -304,11 +300,11 @@ public class SesionServiceImpl implements SesionService {
         String curso = datos.get(3).trim();
 
         return Grupo.builder()
-                .numero(numero)
-                .abreviacion(abrev)
-                .nombre(nombre)
-                .curso(curso)
-                .build();
+            .numero(numero)
+            .abreviacion(abrev)
+            .nombre(nombre)
+            .curso(curso)
+            .build();
     }
 
     private Aula loadAula(List<String> datos) {
@@ -318,10 +314,10 @@ public class SesionServiceImpl implements SesionService {
         String nombre = datos.get(2).trim();
 
         return Aula.builder()
-                .numero(numero)
-                .abreviacion(abrev)
-                .nombre(nombre)
-                .build();
+            .numero(numero)
+            .abreviacion(abrev)
+            .nombre(nombre)
+            .build();
     }
 
     private Profesor loadProfesor(List<String> datos, Faker faker, Rol rol) {

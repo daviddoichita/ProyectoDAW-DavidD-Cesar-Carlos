@@ -97,7 +97,6 @@ export class LoginComponent implements OnInit {
         password: this.loginForm.value.password,
       }
     }
-
     this.authService.login(user).subscribe({
       next: (response) => {
         if (this.loginForm.value.rememberMe) {

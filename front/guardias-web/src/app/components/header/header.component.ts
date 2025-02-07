@@ -37,7 +37,6 @@ export class HeaderComponent implements OnInit {
   menuItems: any[] = [];
 
   titulo = "HEADER";
-
   sidebarVisible = false;
 
   constructor(
