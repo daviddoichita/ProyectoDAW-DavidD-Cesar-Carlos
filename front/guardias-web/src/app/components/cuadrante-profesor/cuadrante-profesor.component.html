@@ -7,7 +7,7 @@
     </div>
     <p-accordion [multiple]="true" id="accordion" [activeIndex]="activeIndex">
       <p-accordionTab *ngFor="let intervalo of intervalos" [header]="getNombreHora(intervalo.id)">
-        <p-table [value]="getCuadrantes(intervalo.id)" styleClass="p-datatable-gridlines" id="primera-hora"
+        <p-table [value]="getCuadrantes(intervalo.id)" styleClass="p-datatable-gridlines" [id]="'hora-' + intervalo.id"
           [loading]="!cuadrantesLoaded">
           <ng-template pTemplate="header">
             <tr>
@@ -23,7 +23,8 @@
                 {{ cuadrante.guardia.profesor.abreviacion }}
               </td>
               <td>
-                <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0" id="primera-hora-faltas">
+                <p-table [value]="cuadrante.faltas" styleClass="p-datatable-gridlines p-0"
+                  [id]="'faltas-hora-' + intervalo.id">
                   <ng-template pTemplate="header">
             <tr>
               <th class="text-center">Firma</th>
