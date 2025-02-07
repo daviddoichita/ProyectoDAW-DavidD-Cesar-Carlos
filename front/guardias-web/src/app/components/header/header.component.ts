@@ -10,6 +10,7 @@ import { StyleClassModule } from "primeng/styleclass";
 import { AvatarModule } from "primeng/avatar";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth.service";
+import { Profesor } from "../../interfaces/profesor";
 
 @Component({
   selector: "app-header",
@@ -30,6 +31,9 @@ import { AuthService } from "../../services/auth.service";
 })
 export class HeaderComponent implements OnInit {
   @ViewChild("sidebar") sidebar!: Sidebar;
+
+  user: Profesor | null = null;
+
   menuItems: any[] = [];
 
   titulo = "HEADER";
@@ -38,9 +42,17 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.auth.me().subscribe({
+      next: (prof) => {
+        this.user = prof
+      },
+      error: (error) => {
+        console.error(error)
+      }
+    })
     this.titulo = this.router.url.split("/")[1].toUpperCase().replace("-", " ");
     this.menuItems = [
       {
@@ -60,9 +72,15 @@ export class HeaderComponent implements OnInit {
         if (isAdmin) {
           this.menuItems.push({
             routerLink: "/subir-sesiones",
-            icon: "pi pi-file-import",
+            icon: "pi pi-cloud-upload",
             label: "Subir sesiones",
           });
+
+          this.menuItems.push({
+            routerLink: "/listado-profesores",
+            icon: "pi pi-list",
+            label: "Listado de profesores"
+          })
         }
       },
     });

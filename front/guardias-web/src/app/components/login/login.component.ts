@@ -84,10 +84,19 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const user = {
-      email: this.loginForm.value.emailOrNif,
-      password: this.loginForm.value.password,
-    };
+    let user: { email?: string, nif?: string, password: string } = { password: "" };
+
+    if (this.isEmail(this.loginForm.value.emailOrNif)) {
+      user = {
+        email: this.loginForm.value.emailOrNif,
+        password: this.loginForm.value.password,
+      }
+    } else {
+      user = {
+        nif: this.loginForm.value.emailOrNif,
+        password: this.loginForm.value.password,
+      }
+    }
     this.authService.login(user).subscribe({
       next: (response) => {
         if (this.loginForm.value.rememberMe) {
@@ -119,14 +128,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  isEmail(value: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  isNif(value: string) {
+    return /^[0-9]{8}[A-Za-z]$/.test(value) && this.validarNIF(value);
+  }
+
   emailOrNifValidator(control: any): { [key: string]: any } | null {
     const value = control.value;
     if (!value) {
       return null;
     }
 
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    const isNif = /^[0-9]{8}[A-Za-z]$/.test(value) && this.validarNIF(value);
+    const isEmail = this.isEmail(value)
+    const isNif = this.isNif(value)
 
     if (isEmail || isNif) {
       return null;

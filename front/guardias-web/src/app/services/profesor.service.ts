@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { map } from 'rxjs';
+import { Profesor } from '../interfaces/profesor';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +12,8 @@ export class ProfesorService {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-  findAll(): any {
-    const headers = new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('admin:admin')
-    });
 
+  findAll(): any {
     return this.http.get<any[]>(this.apiUrl, { headers: this.auth.getAuthHeader() });
   }
 
