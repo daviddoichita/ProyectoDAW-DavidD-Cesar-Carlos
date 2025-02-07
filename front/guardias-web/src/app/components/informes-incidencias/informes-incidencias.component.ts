@@ -6,22 +6,22 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Cuadrante } from '../../interfaces/cuadrante';
-import { InformesFaltasService } from '../../services/informes-faltas.service';
 import { SelectItem } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from "primeng/selectbutton";
 import { ChartModule } from 'primeng/chart';
+import { InformesIncidenciasService } from '../../services/informes-incidencias.service';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-informes-faltas',
+  selector: 'app-informes-incidencias',
   standalone: true,
   imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, CommonModule, DropdownModule, SelectButtonModule, ChartModule, CalendarModule, DialogModule],
-  templateUrl: './informes-faltas.component.html',
-  styleUrl: './informes-faltas.component.scss'
+  templateUrl: './informes-incidencias.component.html',
+  styleUrl: './informes-incidencias.component.scss'
 })
-export class InformesFaltasComponent implements OnInit {
+export class InformesIncidenciasComponent implements OnInit {
   tipo: string = 'table';
   tipos: any[] = [];
   date: Date[] | undefined;
@@ -47,10 +47,10 @@ export class InformesFaltasComponent implements OnInit {
   pieChartOptions: any;
   registros: boolean = false;
 
-  constructor(private informesFaltasService: InformesFaltasService) { }
+  constructor(private informesIncidenciasService: InformesIncidenciasService) { }
 
   ngOnInit(): void {
-    this.informesFaltasService.getCuadrantesConFaltas().subscribe(data => {
+    this.informesIncidenciasService.getCuadrantesConIncidencias().subscribe(data => {
       this.cuadrantes = data;
       this.initializeChartData();
     });

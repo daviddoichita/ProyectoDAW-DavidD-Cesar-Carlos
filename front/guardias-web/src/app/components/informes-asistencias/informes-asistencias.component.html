@@ -37,11 +37,11 @@
                     <colgroup>
                         <col class="w-10rem">
                         <col class="w-10rem">
-                        <col class="w-8rem">
                         <col class="w-10rem">
-                        <col class="w-5rem">
-                        <col class="w-5rem">
                         <col class="w-12rem">
+                        <col class="w-10rem">
+                        <col class="w-10rem">
+                        <col class="w-10rem">
                     </colgroup>
                 </ng-template>
 
@@ -51,21 +51,21 @@
                         <th class="text-2xl bg-gray-200 text-center p-3">Hora</th>
                         <th class="text-2xl bg-gray-200 text-center p-3">Nombre</th>
                         <th class="text-2xl bg-gray-200 text-center p-3">Apellidos</th>
-                        <th class="text-2xl bg-gray-200 text-center p-3">Grupo</th>
-                        <th class="text-2xl bg-gray-200 text-center p-3">Aula</th>
-                        <th class="text-2xl bg-gray-200 text-center p-3">Otra información</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">NIF</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Teléfono</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Información Falta</th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-cuadrante>
-                    <tr class="hover:bg-gray-100 border-bottom-1 surface-border text-center">
-                        <td class="text-xl text-center p-3">{{ cuadrante.fecha | date }}</td>
-                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.intervalo.horaInicio }} - {{
+                    <tr class="hover:bg-gray-100 border-bottom-1 surface-border">
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.fecha | date }}</td>
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.guardia.intervalo.horaInicio }} - {{
                             cuadrante.guardia.intervalo.horaFin }}</td>
-                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.nombre }}</td>
-                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.apellidos }}</td>
-                        <td class="text-xl text-center p-3">{{ cuadrante.faltas[0].sesion.grupo.abreviacion }}</td>
-                        <td class="text-xl text-center p-3">{{ cuadrante.faltas[0].sesion.aula.abreviacion }}</td>
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.guardia.profesor.nombre }}</td>
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.guardia.profesor.apellidos }}</td>
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.guardia.profesor.nif }}</td>
+                        <td class="text-xl text-center py-4 px-3">{{ cuadrante.guardia.profesor.telefono }}</td>
                         <td class="text-xl text-center p-3">
                             <p-button (onClick)="showDialog(cuadrante)" [styleClass]="'text-xl focus:shadow-none'"
                                 [link]="true">
@@ -78,7 +78,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td colspan="7" class="text-center text-sm p-3 text-gray-500">
-                            No hay ninguna falta registrada.
+                            No hay ningun registro.
                         </td>
                     </tr>
                 </ng-template>
@@ -89,13 +89,14 @@
                     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false" [resizable]="false"
                     [style]="{ width: '20vw' }">
                     <div class="p-3" *ngIf="faltaSeleccionada">
-                        <p><strong>Profesor:</strong> {{ faltaSeleccionada.guardia.profesor.nombre }}
-                            {{ faltaSeleccionada.guardia.profesor.apellidos }}</p>
-                        <p><strong>Fecha:</strong> {{ faltaSeleccionada.fecha | date }}</p>
-                        <p><strong>Hora:</strong> {{ faltaSeleccionada.guardia.intervalo.horaInicio }} -
-                            {{ faltaSeleccionada.guardia.intervalo.horaFin }}</p>
+                        <p><strong>Profesor:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.nombre
+                            }}
+                            {{ faltaSeleccionada.faltas[0].sesion.profesor.apellidos }}</p>
+                        <p><strong>Hora:</strong> {{
+                            faltaSeleccionada.faltas[0].sesion.intervalo.horaInicio }} -
+                            {{ faltaSeleccionada.faltas[0].sesion.intervalo.horaFin }}</p>
                         <h3 class="mt-6">Incidencia</h3>
-                        <p>{{ faltaSeleccionada.faltas[0]?.incidencias }}</p>
+                        <p>{{ faltaSeleccionada.faltas[0]?.incidencias || 'No hay incidencias.'}}</p>
                     </div>
                 </p-dialog>
             </div>

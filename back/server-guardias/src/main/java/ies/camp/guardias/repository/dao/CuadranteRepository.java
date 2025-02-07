@@ -20,11 +20,9 @@ public interface CuadranteRepository extends JpaRepository<Cuadrante, Long> {
     @Query(value = "SELECT * from cuadrante where id = any (select idcuadrante from sesionfalta)", nativeQuery = true)
     List<Cuadrante> findCuadrantesConFaltas();
 
-    // Solo hasta 2026 para no cargar todos los cuadrantes
-    // (todos tienen la firma nula)
-    @Query(value = "SELECT * from cuadrante where firma is null and fecha < '2026-01-01'", nativeQuery = true)
+    @Query(value = "SELECT c.* from cuadrante c where c.id = any (SELECT idcuadrante from sesionfalta f where f.firma is null)", nativeQuery = true)
     List<Cuadrante> findCuadrantesSinFirmar();
 
-    @Query(value = "SELECT * from cuadrante where incidencias is not null", nativeQuery = true)
-    List<Cuadrante> findCuadrantesConIncidencia();
+    @Query(value = "SELECT * from cuadrante where id = any (SELECT idcuadrante from sesionfalta where incidencias is not null)", nativeQuery = true)
+    List<Cuadrante> findCuadrantesConIncidencias();
 }

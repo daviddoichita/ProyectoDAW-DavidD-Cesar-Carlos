@@ -64,7 +64,7 @@ public class CuadranteServiceImpl implements CuadranteService {
     }
 
     @Override
-    public List<CuadranteDTO> findCuadranteConFalta() {
+    public List<CuadranteDTO> findCuadranteConFaltas() {
         log.info(this.getClass().getSimpleName() + " findCuadranteConFalta: devolver los cuadrantes con faltas");
 
         return this.cuadranteRepository.findCuadrantesConFaltas().stream().map(CuadranteDTO::convertToDTO)
@@ -80,11 +80,11 @@ public class CuadranteServiceImpl implements CuadranteService {
     }
 
     @Override
-    public List<CuadranteDTO> findCuadranteConIncidencia() {
+    public List<CuadranteDTO> findCuadranteConIncidencias() {
         log.info(this.getClass().getSimpleName()
                 + " findCuadranteConIncidencia: devolver los cuadrantes con incidencias");
 
-        return this.cuadranteRepository.findCuadrantesConIncidencia().stream().map(CuadranteDTO::convertToDTO)
+        return this.cuadranteRepository.findCuadrantesConIncidencias().stream().map(CuadranteDTO::convertToDTO)
                 .collect(Collectors.toList());
     }
 

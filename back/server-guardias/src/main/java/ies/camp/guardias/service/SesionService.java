@@ -1,5 +1,7 @@
 package ies.camp.guardias.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SesionService {
@@ -12,4 +14,5 @@ public interface SesionService {
      * @return true si la carga ha sido exitosa o false en caso contrario
      */
     public boolean loadFromCSV(MultipartFile csv, int year);
+
 }

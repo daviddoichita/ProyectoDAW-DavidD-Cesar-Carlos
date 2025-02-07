@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.titulo = this.router.url.split("/")[1].toUpperCase().replace("-", " ");
@@ -62,7 +62,22 @@ export class HeaderComponent implements OnInit {
             routerLink: "/subir-sesiones",
             icon: "pi pi-file-import",
             label: "Subir sesiones",
-          });
+          },
+            {
+              routerLink: "/informes-faltas",
+              icon: "pi pi-chart-bar",
+              label: "Informes faltas",
+            },
+            {
+              routerLink: "/informes-asistencias",
+              icon: "pi pi-chart-line",
+              label: "Informes asistencias",
+            },
+            {
+              routerLink: "/informes-incidencias",
+              icon: "pi pi-exclamation-triangle",
+              label: "Informes incidencias",
+            });
         }
       },
     });

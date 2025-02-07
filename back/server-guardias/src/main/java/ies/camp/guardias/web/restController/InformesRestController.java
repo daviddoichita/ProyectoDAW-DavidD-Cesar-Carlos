@@ -20,24 +20,24 @@ public class InformesRestController {
     private CuadranteService cuadranteService;
 
     @GetMapping("/faltas")
-    public List<CuadranteDTO> findCuadrantesConFalta() {
+    public List<CuadranteDTO> findCuadrantesConFaltas() {
         log.info(
                 this.getClass().getSimpleName()
-                        + " findCuadrantesConFaltas: Devolver cuadrantes que tienen faltas");
-        return cuadranteService.findCuadranteConFalta();
+                        + " findCuadrantesConFaltas: Devolver cuadrantes que tengan faltas");
+        return cuadranteService.findCuadranteConFaltas();
     }
 
     @GetMapping("/asistencias")
     public List<CuadranteDTO> findCuadrantesSinFirmar() {
         log.info(this.getClass().getSimpleName()
-                + " findCuadrantesSinAsistir: Devolver cuadrantes sin firmar");
+                + " findCuadrantesSinAsistir: Devolver cuadrantes que tengan sesiones sin firmar");
         return cuadranteService.findCuadranteSinFirmar();
     }
 
     @GetMapping("/incidencias")
-    public List<CuadranteDTO> findCuadrantesConIncidencia() {
+    public List<CuadranteDTO> findCuadrantesConIncidencias() {
         log.info(this.getClass().getSimpleName()
-                + " findCuadrantesConIncidencia: Devolver cuadrantes que tienen incidencias");
-        return cuadranteService.findCuadranteConIncidencia();
+                + " findCuadrantesConIncidencia: Devolver cuadrantes que tengan incidencias en sesiones");
+        return cuadranteService.findCuadranteConIncidencias();
     }
 }
