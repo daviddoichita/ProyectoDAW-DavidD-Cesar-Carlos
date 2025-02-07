@@ -4,6 +4,7 @@ import { Observable, map } from "rxjs";
 import { Router } from "@angular/router";
 import { GlobalStateService } from "./global-state.service";
 import { ConfirmationDialogTemplatesService } from "./confirmation-dialog-templates.service";
+import { Profesor } from "../interfaces/profesor";
 
 @Injectable({
   providedIn: "root",
@@ -16,9 +17,9 @@ export class AuthService {
     private router: Router,
     private globalStateService: GlobalStateService,
     private confirmationDialogTemplatesService: ConfirmationDialogTemplatesService,
-  ) {}
+  ) { }
 
-  login(credentials: { email: string; password: string }): Observable<any> {
+  login(credentials: { email?: string, nif?: string, password: string }): Observable<any> {
     const user = JSON.stringify(credentials);
     return this.http.post(`${this.apiUrl}/login`, user, {
       headers: { "Content-Type": "application/json" },
@@ -100,5 +101,13 @@ export class AuthService {
       return false;
     }
     return true;
+  }
+
+  me(): Observable<Profesor> {
+    return this.http.get<{ user: Profesor, token: string }>("https://localhost:8000/api/me", { headers: this.getAuthHeader() }).pipe(
+      map((response) => {
+        return response.user;
+      })
+    )
   }
 }
