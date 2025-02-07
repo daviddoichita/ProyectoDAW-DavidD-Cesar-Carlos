@@ -2,7 +2,8 @@
     <app-header></app-header>
     <div class="main-section">
         <div class="flex justify-content-center align-items-center gap-6 mb-5 mt-2">
-            <p-dropdown placeholder="Selecciona un profesor" class="w-20rem"></p-dropdown>
+            <p-dropdown class="w-20rem" [options]="profesores"
+                [placeholder]="profesores.length ? 'Selecciona un profesor' : 'No hay profesores'"></p-dropdown>
             <p-floatLabel class="w-20rem">
                 <p-calendar inputId="rango" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
                     class="w-full">
