@@ -95,14 +95,14 @@ export class EditarProfesorComponent implements OnInit {
           : 'Los apellidos deben contener solo letras y tener entre 1 y 50 caracteres.';
         break;
       case 'contrasenya':
-        this.errores['contrasenya'] = value.length >= 6
+        this.errores['contrasenya'] = /^(?=.*\d).{6,}$/.test(value)
           ? null
-          : 'La contraseña debe tener al menos 6 caracteres.';
+          : 'La contraseña debe tener al menos 6 caracteres y contener al menos un número.';
         break;
       case 'nif':
-        this.errores['nif'] = /^[A-Za-z][0-9]{8}$/.test(value)
+        this.errores['nif'] = /^[0-9]{8}[A-Za-z]$/.test(value)
           ? null
-          : 'El NIF debe tener una letra seguida de 8 números.';
+          : 'El NIF debe tener 8 números seguidos de una letra.';
         break;
       case 'direccion':
         this.errores['direccion'] = value.length > 0

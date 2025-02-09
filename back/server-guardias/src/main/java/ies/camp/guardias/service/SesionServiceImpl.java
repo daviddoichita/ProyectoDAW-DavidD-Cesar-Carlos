@@ -316,7 +316,7 @@ public class SesionServiceImpl implements SesionService {
         @Override
         public List<SesionDTO> findAllBySesiones(ProfesorDTO profesorDTO) {
                 log.info(this.getClass().getSimpleName()
-                                + " findAllBySesiones: Lista de todas las cuentas del cliente: {}",
+                                + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
                                 profesorDTO.getId());
 
                 List<Sesion> lista = (List<Sesion>) sesionRepository.findAllBySesiones(profesorDTO.getId());
