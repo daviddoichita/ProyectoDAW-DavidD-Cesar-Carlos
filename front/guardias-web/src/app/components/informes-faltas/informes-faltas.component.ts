@@ -57,7 +57,6 @@ export class InformesFaltasComponent implements OnInit {
     this.informesFaltasService.getCuadrantesConFaltas().subscribe(data => {
       this.cuadrantes = data;
       this.filtrarPorMes();
-
     });
 
     this.tipos = [
@@ -102,6 +101,7 @@ export class InformesFaltasComponent implements OnInit {
   cambiarAnyo(opcion: 'anterior' | 'siguiente'): void {
     this.anyoSeleccionado += opcion === 'anterior' ? -1 : 1;
     this.borrarFiltro();
+    this.valorBusqueda = '';
   }
 
   filtrarPorMes(): void {

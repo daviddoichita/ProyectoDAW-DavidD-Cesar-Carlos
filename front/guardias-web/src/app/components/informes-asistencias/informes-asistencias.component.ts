@@ -6,7 +6,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Cuadrante } from '../../interfaces/cuadrante';
-import { SelectItem } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from "primeng/selectbutton";
 import { ChartModule } from 'primeng/chart';
@@ -24,7 +23,11 @@ import { DialogModule } from 'primeng/dialog';
 export class InformesAsistenciasComponent implements OnInit {
   tipo: string = 'table';
   tipos: any[] = [];
-  date: Date[] | undefined;
+
+  date: Date | undefined;
+
+  anyoSeleccionado: number = new Date().getFullYear();
+  mostrarAnyo: boolean = true;
 
   visible: boolean = false;
   faltaSeleccionada: any = null;
@@ -35,9 +38,10 @@ export class InformesAsistenciasComponent implements OnInit {
   }
 
   cuadrantes: Cuadrante[] = [];
+  cuadrantesFiltrados: Cuadrante[] = [];
+  busquedaProfesor: Cuadrante[] = [];
+
   valorBusqueda: string = '';
-  filtros: SelectItem[] = [];
-  filtroSeleccionado: any;
 
   barChartData: any;
   lineChartData: any;
@@ -45,20 +49,15 @@ export class InformesAsistenciasComponent implements OnInit {
   barChartOptions: any;
   lineChartOptions: any;
   pieChartOptions: any;
-  registros: boolean = false;
+  hayDatos: boolean = false;
 
   constructor(private informesAsistenciasService: InformesAsistenciasService) { }
 
   ngOnInit(): void {
     this.informesAsistenciasService.getCuadrantesSinFirmar().subscribe(data => {
       this.cuadrantes = data;
-      this.initializeChartData();
+      this.filtrarPorMes();
     });
-
-    this.filtros = [
-      { label: 'Fecha', value: 'fecha' },
-      { label: 'Mes', value: 'mes' }
-    ];
 
     this.tipos = [
       { name: '', icon: 'pi pi-chart-bar', value: 'bar' },
@@ -68,66 +67,103 @@ export class InformesAsistenciasComponent implements OnInit {
     ];
   }
 
-  buscador() {
-  }
+  buscador(): void {
+    const buscar = this.valorBusqueda.toLowerCase().trim();
 
-  verFaltas(): void {
+    if (buscar === '') {
+      this.borrarFiltro();
+      return;
+    }
+
+    this.cuadrantesFiltrados = this.cuadrantes.filter(cuadrante => {
+      const nombre = cuadrante.guardia.profesor.nombre?.toLowerCase().includes(buscar) || false;
+      const apellidos = cuadrante.guardia.profesor.apellidos?.toLowerCase().includes(buscar) || false;
+      const nif = cuadrante.guardia.profesor.nif?.toLowerCase().includes(buscar) || false;
+      const email = cuadrante.guardia.profesor.email?.toLowerCase().includes(buscar) || false;
+      const telefono = cuadrante.guardia.profesor.telefono?.toString().includes(buscar) || false;
+
+      return nombre || apellidos || nif || email || telefono;
+    });
   }
 
   initializeChartData() {
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
     const faltasPorMes = new Array(12).fill(0);
 
-    this.cuadrantes.forEach(cuadrante => {
+    this.cuadrantesFiltrados.forEach(cuadrante => {
       const fecha = new Date(cuadrante.fecha);
       const mes = fecha.getMonth();
       faltasPorMes[mes]++;
     });
 
-    this.registros = faltasPorMes.some(valor => valor > 0);
+    this.updateChartData(faltasPorMes, 'meses');
+  }
+
+  cambiarAnyo(opcion: 'anterior' | 'siguiente'): void {
+    this.anyoSeleccionado += opcion === 'anterior' ? -1 : 1;
+    this.borrarFiltro();
+    this.valorBusqueda = '';
+  }
+
+  filtrarPorMes(): void {
+    if (this.date) {
+      this.valorBusqueda = '';
+      this.mostrarAnyo = false;
+      const mesSeleccionado = this.date.getMonth();
+      const anyoSeleccionado = this.date.getFullYear();
+
+      this.cuadrantesFiltrados = this.cuadrantes.filter(cuadrante => {
+        const fecha = new Date(cuadrante.fecha);
+
+        return fecha.getMonth() === mesSeleccionado && fecha.getFullYear() === anyoSeleccionado;
+      });
+
+      // Calcular faltas de cada semana del mes para mostrar en los gráficos
+      const faltasPorSemana = new Array(4).fill(0);
+
+      this.cuadrantesFiltrados.forEach(cuadrante => {
+        const fecha = new Date(cuadrante.fecha);
+        const semana = Math.floor((fecha.getDate() - 1) / 7);
+        faltasPorSemana[semana]++;
+      });
+      this.updateChartData(faltasPorSemana, 'semanas');
+
+    } else {
+      this.mostrarAnyo = true;
+      this.cuadrantesFiltrados = this.cuadrantes.filter(cuadrante => {
+        const fecha = new Date(cuadrante.fecha);
+
+        return fecha.getFullYear() === this.anyoSeleccionado;
+      });
+      this.initializeChartData();
+    }
+  }
+
+  borrarFiltro(): void {
+    this.date = undefined;
+    this.mostrarAnyo = true;
+
+    this.cuadrantesFiltrados = this.cuadrantes.filter(cuadrante => {
+      const fecha = new Date(cuadrante.fecha);
+
+      return fecha.getFullYear() === this.anyoSeleccionado;
+    });
+    this.initializeChartData();
+  }
+
+  updateChartData(data: number[], tipo: 'meses' | 'semanas') {
+    const labels = tipo === 'meses' ?
+      ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'] : ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+
+    this.hayDatos = data.some(valor => valor > 0);
 
     this.barChartData = {
-      labels: meses,
+      labels: labels,
       datasets: [{
-        label: 'Faltas por mes',
-        data: faltasPorMes,
+        label: tipo === 'meses' ? 'Faltas por mes' : 'Faltas por semana',
+        data: data,
         backgroundColor: '#42A5F5'
       }]
     };
-
-    this.lineChartData = {
-      labels: meses,
-      datasets: [{
-        label: 'Faltas por mes',
-        data: faltasPorMes,
-        fill: false,
-        borderColor: '#42A5F5',
-        tension: 0.4
-      }]
-    };
-
-    this.pieChartData = {
-      labels: meses,
-      datasets: [{
-        data: faltasPorMes,
-        backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
-          '#7FE5F0',
-          '#B4F8C8',
-          '#FFB7B2',
-          '#A0522D',
-          '#7B68EE',
-          '#20B2AA'
-        ]
-      }]
-    };
-
 
     this.barChartOptions = {
       responsive: true,
@@ -160,6 +196,17 @@ export class InformesAsistenciasComponent implements OnInit {
       }
     };
 
+    this.lineChartData = {
+      labels: labels,
+      datasets: [{
+        label: tipo === 'meses' ? 'Faltas por mes' : 'Faltas por semana',
+        data: data,
+        fill: false,
+        borderColor: '#42A5F5',
+        tension: 0.4
+      }]
+    };
+
     this.lineChartOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -189,6 +236,27 @@ export class InformesAsistenciasComponent implements OnInit {
           }
         }
       }
+    };
+
+    this.pieChartData = {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#4BC0C0',
+          '#9966FF',
+          '#FF9F40',
+          '#7FE5F0',
+          '#B4F8C8',
+          '#FFB7B2',
+          '#A0522D',
+          '#7B68EE',
+          '#20B2AA'
+        ]
+      }]
     };
 
     this.pieChartOptions = {

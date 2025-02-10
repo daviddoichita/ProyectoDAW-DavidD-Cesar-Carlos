@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'nueva-falta', component: NuevaFaltaComponent, canActivate: [authGuard] },
   { path: 'subir-sesiones', component: SubirSesionesComponent, canActivate: [authGuard] },
   { path: 'informes-faltas', component: InformesFaltasComponent, canActivate: [authGuard] },
-  { path: 'informes-asistencias', component: InformesAsistenciasComponent, canActivate: [authGuard] },
+  { path: 'informes-guardias', component: InformesAsistenciasComponent, canActivate: [authGuard] },
   { path: 'informes-incidencias', component: InformesIncidenciasComponent, canActivate: [authGuard] },
   { path: 'logout', component: LogoutComponent }
 ];

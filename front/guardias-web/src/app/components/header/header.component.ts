@@ -69,9 +69,9 @@ export class HeaderComponent implements OnInit {
               label: "Informes faltas",
             },
             {
-              routerLink: "/informes-asistencias",
+              routerLink: "/informes-guardias",
               icon: "pi pi-chart-line",
-              label: "Informes asistencias",
+              label: "Informes guardias",
             },
             {
               routerLink: "/informes-incidencias",

@@ -11,10 +11,10 @@
                 </span>
             </div>
 
-            <div class="w-11rem">
+            <div class="w-10rem">
                 <p-calendar #calendar [(ngModel)]="date" (ngModelChange)="filtrarPorMes()" view="month"
                     dateFormat="mm/yy" [readonlyInput]="true" placeholder="Filtrar por mes" [showIcon]="true"
-                    inputId="buttondisplay" [showOnFocus]="true" class="ml-2 " readonly>
+                    [iconDisplay]="'input'" inputId="buttondisplay" [showOnFocus]="true" class="ml-2" readonly>
                     <ng-template pTemplate="footer">
                         <button type="button" pButton label="Borrar filtro"
                             (click)="borrarFiltro(); calendar.hideOverlay()" class="p-button-text w-full"></button>
@@ -22,14 +22,14 @@
                 </p-calendar>
             </div>
 
-            <div class="ml-4 flex align-items-center text-center bg-primary border-round-2xl" *ngIf="mostrarAnyo">
+            <div class="ml-4 flex align-items-center text-center surface-300 border-round-2xl" *ngIf="mostrarAnyo">
                 <button type="button" pButton icon="pi pi-chevron-left" (click)="cambiarAnyo('anterior')"
-                    class=" p-button-primary focus:shadow-none"></button>
+                    class="p-button-secondary surface-300 text-700 hover:surface-200 focus:shadow-none border-none"></button>
 
-                <span class="text-2xl font-medium text-white mx-3">{{ anyoSeleccionado }}</span>
+                <span class="text-2xl font-medium text-700 mx-3">{{ anyoSeleccionado }}</span>
 
-                <button type=" button" pButton icon="pi pi-chevron-right" (click)="cambiarAnyo('siguiente')"
-                    class="p-button-primary focus:shadow-none"></button>
+                <button type="button" pButton icon="pi pi-chevron-right" (click)="cambiarAnyo('siguiente')"
+                    class="p-button-secondary surface-300 text-700 hover:surface-200 focus:shadow-none border-none"></button>
             </div>
 
             <div class="ml-auto">
@@ -69,7 +69,7 @@
                         <th class="text-2xl bg-gray-200 text-center p-3">Apellidos</th>
                         <th class="text-2xl bg-gray-200 text-center p-3">Grupo</th>
                         <th class="text-2xl bg-gray-200 text-center p-3">Aula</th>
-                        <th class="text-2xl bg-gray-200 text-center p-3">Otra información</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Información sustituto</th>
                     </tr>
                 </ng-template>
 
@@ -101,13 +101,15 @@
             </p-table>
 
             <div class="card flex justify-content-center">
-                <p-dialog header="Información de la falta" [(visible)]="visible" [modal]="true"
+                <p-dialog header="Información del sustituto a la guardia" [(visible)]="visible" [modal]="true"
                     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false" [resizable]="false"
                     [style]="{ width: '20vw' }">
                     <div class="p-3" *ngIf="faltaSeleccionada">
                         <p><strong>Profesor:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.nombre
                             }}
                             {{ faltaSeleccionada.faltas[0].sesion.profesor.apellidos }}</p>
+                        <p><strong>NIF:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.nif }}</p>
+                        <p><strong>Teléfono:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.telefono }}</p>
                         <p><strong>Hora:</strong> {{
                             faltaSeleccionada.faltas[0].sesion.intervalo.horaInicio }} -
                             {{ faltaSeleccionada.faltas[0].sesion.intervalo.horaFin }}</p>
