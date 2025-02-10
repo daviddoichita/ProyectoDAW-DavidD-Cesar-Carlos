@@ -90,7 +90,6 @@ export class HeaderComponent implements OnInit {
               icon: "pi pi-exclamation-triangle",
               label: "Informes incidencias",
             });
-          });
 
           this.menuItems.push({
             routerLink: "/listado-profesores",
