@@ -133,7 +133,7 @@ public class SesionServiceImpl implements SesionService {
             }
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
-
+          
             Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
             log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
             profesores.add(profesor);
