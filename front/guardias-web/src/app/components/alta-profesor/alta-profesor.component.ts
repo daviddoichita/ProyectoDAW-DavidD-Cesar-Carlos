@@ -161,10 +161,14 @@ export class AltaProfesorComponent implements OnInit {
           rejectIcon: "none",
           rejectButtonStyleClass: "p-button-danger",
           accept: () => {
-            this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' })
-            setTimeout(() => {
-              this.router.navigate(['/listado-profesores'])
-            }, 1000)
+            this.profesorService.save(nuevoProfesor).subscribe({
+              next: (_response: any) => {
+                this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' })
+                setTimeout(() => {
+                  this.router.navigate(['/listado-profesores'])
+                }, 1000)
+              }
+            });
           },
           reject: () => {
             this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })

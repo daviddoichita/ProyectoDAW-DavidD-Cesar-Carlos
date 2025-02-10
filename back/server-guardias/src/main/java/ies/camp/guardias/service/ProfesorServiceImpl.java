@@ -3,6 +3,7 @@ package ies.camp.guardias.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,22 @@ public class ProfesorServiceImpl implements ProfesorService {
     public void save(ProfesorDTO profesorDTO) {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
 
-        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        String abreviacion = profesorDTO.getNombre();
+        if (abreviacion != null && abreviacion.length() >= 3) {
+            abreviacion.substring(0, 3);
+        }
+
+        Long nuevoNumero = profesorRepository.findProfesorConNumeroMayor().get() + 1;
+
+        Profesor profesor = new Profesor();
+
+        profesorDTO.setNumero(nuevoNumero);
+        profesorDTO.setAbreviacion(abreviacion);
+        profesorDTO.setAdmin(false);
+        profesorDTO.setActivo(true);
+        profesorDTO.setRoles(null);
+        profesor = ProfesorDTO.convertToEntity(profesorDTO);
+
         profesorRepository.save(profesor);
     }
 

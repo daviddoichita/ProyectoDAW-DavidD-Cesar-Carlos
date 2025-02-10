@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,6 +42,7 @@ import ies.camp.guardias.repository.entity.Aula;
 import ies.camp.guardias.repository.entity.Cargo;
 import ies.camp.guardias.repository.entity.Cuadrante;
 import ies.camp.guardias.repository.entity.Curso;
+import ies.camp.guardias.repository.entity.Dia;
 import ies.camp.guardias.repository.entity.Grupo;
 import ies.camp.guardias.repository.entity.Intervalo;
 import ies.camp.guardias.repository.entity.Materia;
@@ -50,7 +53,7 @@ import ies.camp.guardias.repository.entity.Sesion;
 @Service
 public class SesionServiceImpl implements SesionService {
 
-        SesionServiceImpl.class);
+        private static final Logger log = LoggerFactory.getLogger(SesionService.class);
 
         @Autowired
         private MateriaRepository materiaRepository;
@@ -124,6 +127,8 @@ public class SesionServiceImpl implements SesionService {
                                 .collect(Collectors.toSet());
 
                 // Creacion de objetos a guardar
+                Faker faker = new Faker();
+                Rol rol = this.rolRepository.findByNombre("profesor").get();
                 for (int i = 1; i < lines.size(); i++) {
                         List<String> fields = Arrays.asList(lines.get(i).split(";"));
 
@@ -133,8 +138,6 @@ public class SesionServiceImpl implements SesionService {
                         materias.add(this.loadMateria(fields.subList(0, 6)));
                         aulas.add(this.loadAula(fields.subList(10, 13)));
 
-                        Faker faker = new Faker();
-                        Rol rol = this.rolRepository.findByNombre("profesor").get();
                         Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
                         log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
                         profesores.add(profesor);
@@ -213,60 +216,60 @@ public class SesionServiceImpl implements SesionService {
                 this.saveWithLimit(cuadrantes, 1000, this.cuadranteRepository);
         }
 
-    private void loadSesiones(List<String> lines) {
-        Curso curso = this.cursoRepository.getCurrent().orElse(null);
+        private void loadSesiones(List<String> lines) {
+                Curso curso = this.cursoRepository.getCurrent().orElse(null);
 
-        // Cargar las tablas a HashTables para menor numero de peticiones a base de
-        // datos
-        Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
-        this.profesorRepository.findAll()
-                .forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
-        Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
-        this.materiaRepository.findAll()
-                .forEach(materia -> materias.put(materia.getNumero(), materia));
-        Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
-        this.grupoRepository.findAll()
-                .forEach(grupo -> grupos.put(grupo.getNumero(), grupo));
-        Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
-        this.aulaRepository.findAll()
-                .forEach(aula -> aulas.put(aula.getNumero(), aula));
-        Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
-        this.diaRepository.findAll()
-                .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
-        Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
-        this.intervaloRepository.findAll()
+                // Cargar las tablas a HashTables para menor numero de peticiones a base de
+                // datos
+                Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
+                this.profesorRepository.findAll()
+                                .forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
+                Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
+                this.materiaRepository.findAll()
+                                .forEach(materia -> materias.put(materia.getNumero(), materia));
+                Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
+                this.grupoRepository.findAll()
+                                .forEach(grupo -> grupos.put(grupo.getNumero(), grupo));
+                Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
+                this.aulaRepository.findAll()
+                                .forEach(aula -> aulas.put(aula.getNumero(), aula));
+                Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
+                this.diaRepository.findAll()
+                                .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
+                Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
+                this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
 
-        List<Object> sesiones = new ArrayList<>();
+                List<Object> sesiones = new ArrayList<>();
 
-        for (String line : lines) {
-            String[] fields = line.split(";");
-            Long idIntervalo = Long.valueOf(fields[17]);
-            Long idGrupo = fields[6].trim() == ""
-                    ? null
-                    : Long.parseLong(fields[6].trim());
+                for (String line : lines) {
+                        String[] fields = line.split(";");
+                        Long idIntervalo = Long.valueOf(fields[17]);
+                        Long idGrupo = fields[6].trim() == ""
+                                        ? null
+                                        : Long.parseLong(fields[6].trim());
 
-            Profesor profesor = profesores.get(
-                    Long.parseLong(fields[13].trim()));
-            Materia materia = materias.get(Long.parseLong(fields[0].trim()));
-            Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
-            Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
-            Dia dia = dias.get(fields[16].trim());
-            Intervalo intervalo = intervalos.get(idIntervalo);
+                        Profesor profesor = profesores.get(
+                                        Long.parseLong(fields[13].trim()));
+                        Materia materia = materias.get(Long.parseLong(fields[0].trim()));
+                        Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
+                        Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
+                        Dia dia = dias.get(fields[16].trim());
+                        Intervalo intervalo = intervalos.get(idIntervalo);
 
-            sesiones.add(
-                    Sesion.builder()
-                            .profesor(profesor)
-                            .materia(materia)
-                            .grupo(grupo)
-                            .aula(aula)
-                            .intervalo(intervalo)
-                            .curso(curso)
-                            .dia(dia)
-                            .build());
+                        sesiones.add(
+                                        Sesion.builder()
+                                                        .profesor(profesor)
+                                                        .materia(materia)
+                                                        .grupo(grupo)
+                                                        .aula(aula)
+                                                        .intervalo(intervalo)
+                                                        .curso(curso)
+                                                        .dia(dia)
+                                                        .build());
+                }
+
+                this.saveWithLimit(sesiones, 1000, this.sesionRepository);
         }
-
-        this.saveWithLimit(sesiones, 1000, this.sesionRepository);
-    }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         private void saveWithLimit(List<Object> list, int limit, Object repo) {

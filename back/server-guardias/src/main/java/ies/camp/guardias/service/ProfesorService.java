@@ -43,11 +43,4 @@ public interface ProfesorService {
      * @param profesorDTO ProfesorDTO a actualizar
      */
     public void update(ProfesorDTO profesorDTO);
-
-    /**
-     * Anyade el ProfesorDTO introducido en la base de datos
-     * 
-     * @param profesorDTO ProfesorDTO a actualizar
-     */
-    public void add(ProfesorDTO profesorDTO);
 }

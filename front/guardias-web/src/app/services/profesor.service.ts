@@ -17,19 +17,20 @@ export class ProfesorService {
     return this.http.get<any[]>(this.apiUrl, { headers: this.auth.getAuthHeader() });
   }
 
-  findById(id: number): any {
+  findById(id: number): Observable<any> {
 
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.auth.getAuthHeader() });
   }
 
-  save(profesor: any): any {
-
-    return this.http.post(`${this.apiUrl}/save`, profesor, { headers: this.auth.getAuthHeader() });
+  save(profesor: any): Observable<any> {
+    const data = new FormData();
+    data.append('profesorDTO', JSON.stringify(profesor));
+    return this.http.post<any>(`${this.apiUrl}/save`, profesor, { headers: this.auth.getAuthHeader() });
   }
 
-  delete(id: number): any {
+  delete(id: number): Observable<any> {
 
-    return this.http.get(`${this.apiUrl}/${id}/delete`, { headers: this.auth.getAuthHeader() });
+    return this.http.get<any>(`${this.apiUrl}/${id}/delete`, { headers: this.auth.getAuthHeader() });
   }
 
   update(id: number, profesor: any): Observable<any> {
