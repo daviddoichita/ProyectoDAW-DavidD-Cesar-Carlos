@@ -18,5 +18,6 @@ import lombok.ToString;
 public class LoginUsuarioDTO implements Serializable {
 
     private String email;
+    private String nif;
     private String password;
 }

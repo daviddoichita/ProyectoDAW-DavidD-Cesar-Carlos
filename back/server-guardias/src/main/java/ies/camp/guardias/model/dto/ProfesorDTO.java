@@ -1,20 +1,20 @@
 package ies.camp.guardias.model.dto;
 
-import ies.camp.guardias.repository.dao.RolRepository;
-import ies.camp.guardias.repository.entity.Profesor;
-import ies.camp.guardias.repository.entity.Rol;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import ies.camp.guardias.repository.entity.Profesor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @AllArgsConstructor
@@ -28,12 +28,15 @@ public class ProfesorDTO implements UserDetails {
     private Long numero;
     private String abreviacion;
     private String nif;
+    @JsonIgnore
     private String contrasenya;
     private boolean admin;
     private String direccion;
     private Long telefono;
     private String email;
+    @JsonIgnore
     private Boolean activo;
+    @JsonIgnore
     private Set<RolDTO> roles;
 
     /**

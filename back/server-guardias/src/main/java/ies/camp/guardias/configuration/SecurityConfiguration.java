@@ -41,13 +41,10 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider);
 
-        // Filtro JWT
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Deshabilitar frameOptions
         http.headers(headers -> headers.frameOptions(f -> f.disable()));
 
-        // Configuración CORS
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return http.build();
@@ -59,7 +56,6 @@ public class SecurityConfiguration {
         configuration.setAllowedOrigins(List.of("https://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        // configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -1,27 +1,5 @@
 package ies.camp.guardias.service;
 
-import ies.camp.guardias.model.dto.ProfesorDTO;
-import ies.camp.guardias.model.dto.SesionDTO;
-import ies.camp.guardias.repository.dao.AulaRepository;
-import ies.camp.guardias.repository.dao.CargoRepository;
-import ies.camp.guardias.repository.dao.CuadranteRepository;
-import ies.camp.guardias.repository.dao.CursoRepository;
-import ies.camp.guardias.repository.dao.DiaRepository;
-import ies.camp.guardias.repository.dao.GrupoRepository;
-import ies.camp.guardias.repository.dao.IntervaloRepository;
-import ies.camp.guardias.repository.dao.MateriaRepository;
-import ies.camp.guardias.repository.dao.ProfesorRepository;
-import ies.camp.guardias.repository.dao.SesionRepository;
-import ies.camp.guardias.repository.entity.Aula;
-import ies.camp.guardias.repository.entity.Cargo;
-import ies.camp.guardias.repository.entity.Cuadrante;
-import ies.camp.guardias.repository.entity.Curso;
-import ies.camp.guardias.repository.entity.Dia;
-import ies.camp.guardias.repository.entity.Grupo;
-import ies.camp.guardias.repository.entity.Intervalo;
-import ies.camp.guardias.repository.entity.Materia;
-import ies.camp.guardias.repository.entity.Profesor;
-import ies.camp.guardias.repository.entity.Sesion;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,21 +11,46 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.github.javafaker.Faker;
+
+import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.model.dto.SesionDTO;
+import ies.camp.guardias.repository.dao.AulaRepository;
+import ies.camp.guardias.repository.dao.CargoRepository;
+import ies.camp.guardias.repository.dao.CuadranteRepository;
+import ies.camp.guardias.repository.dao.CursoRepository;
+import ies.camp.guardias.repository.dao.DiaRepository;
+import ies.camp.guardias.repository.dao.FaltaRepository;
+import ies.camp.guardias.repository.dao.GrupoRepository;
+import ies.camp.guardias.repository.dao.IntervaloRepository;
+import ies.camp.guardias.repository.dao.MateriaRepository;
+import ies.camp.guardias.repository.dao.ProfesorRepository;
+import ies.camp.guardias.repository.dao.RolRepository;
+import ies.camp.guardias.repository.dao.SesionRepository;
+import ies.camp.guardias.repository.entity.Aula;
+import ies.camp.guardias.repository.entity.Cargo;
+import ies.camp.guardias.repository.entity.Cuadrante;
+import ies.camp.guardias.repository.entity.Curso;
+import ies.camp.guardias.repository.entity.Grupo;
+import ies.camp.guardias.repository.entity.Intervalo;
+import ies.camp.guardias.repository.entity.Materia;
+import ies.camp.guardias.repository.entity.Profesor;
+import ies.camp.guardias.repository.entity.Rol;
+import ies.camp.guardias.repository.entity.Sesion;
 
 @Service
 public class SesionServiceImpl implements SesionService {
 
-        private static final Logger log = LoggerFactory.getLogger(
-                        SesionServiceImpl.class);
+        SesionServiceImpl.class);
 
         @Autowired
         private MateriaRepository materiaRepository;
@@ -79,6 +82,15 @@ public class SesionServiceImpl implements SesionService {
         @Autowired
         private CargoRepository cargoRepository;
 
+        @Autowired
+        private FaltaRepository faltaRepository;
+
+        @Autowired
+        private PasswordEncoder passwordEncoder;
+
+        @Autowired
+        private RolRepository rolRepository;
+
         @Override
         public boolean loadFromCSV(MultipartFile csv, int year) {
                 log.info(
@@ -90,8 +102,7 @@ public class SesionServiceImpl implements SesionService {
                 try {
                         BufferedReader bufferedReader = new BufferedReader(
                                         new InputStreamReader(
-                                                        csv.getInputStream(),
-                                                        StandardCharsets.ISO_8859_1));
+                                                        csv.getInputStream(), StandardCharsets.ISO_8859_1));
                         bufferedReader.lines().forEachOrdered(lines::add);
                         bufferedReader.close();
                 } catch (IOException e) {
@@ -121,7 +132,12 @@ public class SesionServiceImpl implements SesionService {
                         }
                         materias.add(this.loadMateria(fields.subList(0, 6)));
                         aulas.add(this.loadAula(fields.subList(10, 13)));
-                        profesores.add(this.loadProfesor(fields.subList(13, 15)));
+
+                        Faker faker = new Faker();
+                        Rol rol = this.rolRepository.findByNombre("profesor").get();
+                        Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
+                        log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
+                        profesores.add(profesor);
                 }
 
                 // Cargar las tablas
@@ -131,6 +147,7 @@ public class SesionServiceImpl implements SesionService {
                         aulas.forEach(this.aulaRepository::save);
                         profesores.forEach(this.profesorRepository::save);
 
+                        this.faltaRepository.deleteAllInBatch();
                         this.cuadranteRepository.deleteAllInBatch();
                         this.sesionRepository.deleteAllInBatch();
 
@@ -196,61 +213,60 @@ public class SesionServiceImpl implements SesionService {
                 this.saveWithLimit(cuadrantes, 1000, this.cuadranteRepository);
         }
 
-        private void loadSesiones(List<String> lines) {
-                Curso curso = this.cursoRepository.getCurrent().orElse(null);
+    private void loadSesiones(List<String> lines) {
+        Curso curso = this.cursoRepository.getCurrent().orElse(null);
 
-                // Cargar las tablas a HashTables para menor numero de peticiones a base de
-                // datos
-                Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
-                this.profesorRepository.findAll()
-                                .forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
-                Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
-                this.materiaRepository.findAll()
-                                .forEach(materia -> materias.put(materia.getNumero(), materia));
-                Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
-                this.grupoRepository.findAll()
-                                .forEach(grupo -> grupos.put(grupo.getNumero(), grupo));
-                Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
-                this.aulaRepository.findAll()
-                                .forEach(aula -> aulas.put(aula.getNumero(), aula));
-                Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
-                this.diaRepository.findAll()
-                                .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
-                Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
-                this.intervaloRepository.findAll()
-                                .forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
+        // Cargar las tablas a HashTables para menor numero de peticiones a base de
+        // datos
+        Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
+        this.profesorRepository.findAll()
+                .forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
+        Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
+        this.materiaRepository.findAll()
+                .forEach(materia -> materias.put(materia.getNumero(), materia));
+        Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
+        this.grupoRepository.findAll()
+                .forEach(grupo -> grupos.put(grupo.getNumero(), grupo));
+        Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
+        this.aulaRepository.findAll()
+                .forEach(aula -> aulas.put(aula.getNumero(), aula));
+        Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
+        this.diaRepository.findAll()
+                .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
+        Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
+        this.intervaloRepository.findAll()
 
-                List<Object> sesiones = new ArrayList<>();
+        List<Object> sesiones = new ArrayList<>();
 
-                for (String line : lines) {
-                        String[] fields = line.split(";");
-                        Long idIntervalo = Long.valueOf(fields[17]);
-                        Long idGrupo = fields[6].trim() == ""
-                                        ? null
-                                        : Long.parseLong(fields[6].trim());
+        for (String line : lines) {
+            String[] fields = line.split(";");
+            Long idIntervalo = Long.valueOf(fields[17]);
+            Long idGrupo = fields[6].trim() == ""
+                    ? null
+                    : Long.parseLong(fields[6].trim());
 
-                        Profesor profesor = profesores.get(
-                                        Long.parseLong(fields[13].trim()));
-                        Materia materia = materias.get(Long.parseLong(fields[0].trim()));
-                        Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
-                        Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
-                        Dia dia = dias.get(fields[16].trim());
-                        Intervalo intervalo = intervalos.get(idIntervalo);
+            Profesor profesor = profesores.get(
+                    Long.parseLong(fields[13].trim()));
+            Materia materia = materias.get(Long.parseLong(fields[0].trim()));
+            Grupo grupo = idGrupo == null ? null : grupos.get(idGrupo);
+            Aula aula = aulas.get(Long.parseLong(fields[10].trim()));
+            Dia dia = dias.get(fields[16].trim());
+            Intervalo intervalo = intervalos.get(idIntervalo);
 
-                        sesiones.add(
-                                        Sesion.builder()
-                                                        .profesor(profesor)
-                                                        .materia(materia)
-                                                        .grupo(grupo)
-                                                        .aula(aula)
-                                                        .intervalo(intervalo)
-                                                        .curso(curso)
-                                                        .dia(dia)
-                                                        .build());
-                }
-
-                this.saveWithLimit(sesiones, 1000, this.sesionRepository);
+            sesiones.add(
+                    Sesion.builder()
+                            .profesor(profesor)
+                            .materia(materia)
+                            .grupo(grupo)
+                            .aula(aula)
+                            .intervalo(intervalo)
+                            .curso(curso)
+                            .dia(dia)
+                            .build());
         }
+
+        this.saveWithLimit(sesiones, 1000, this.sesionRepository);
+    }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         private void saveWithLimit(List<Object> list, int limit, Object repo) {
@@ -305,12 +321,32 @@ public class SesionServiceImpl implements SesionService {
                                 .build();
         }
 
-        private Profesor loadProfesor(List<String> datos) {
+        private Profesor loadProfesor(List<String> datos, Faker faker, Rol rol) {
                 // Conversiones y seleccion atributos
                 Long numero = Long.parseLong(datos.get(0).trim());
                 String abrev = datos.get(1).trim();
 
-                return Profesor.builder().numero(numero).abreviacion(abrev).build();
+                return Profesor.builder()
+                                .nombre(faker.name().firstName())
+                                .apellidos(faker.name().lastName())
+                                .direccion(faker.address().streetAddress())
+                                .telefono(faker.number().randomNumber(9, true))
+                                .email(faker.internet().emailAddress())
+                                .contrasenya(this.passwordEncoder.encode("cambiar1"))
+                                .nif(genNif(faker))
+                                .numero(numero)
+                                .activo(true)
+                                .roles(Set.of(rol))
+                                .abreviacion(abrev)
+                                .build();
+        }
+
+        private String genNif(Faker faker) {
+                Long numeros = faker.number().randomNumber(8, true);
+                String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+                char letra = letras.charAt(numeros.intValue() % letras.length());
+
+                return numeros.toString() + letra;
         }
 
         @Override
