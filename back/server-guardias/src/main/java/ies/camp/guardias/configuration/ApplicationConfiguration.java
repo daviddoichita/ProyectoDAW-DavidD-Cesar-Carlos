@@ -1,5 +1,7 @@
 package ies.camp.guardias.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +18,24 @@ import ies.camp.guardias.repository.dao.ProfesorRepository;
 @Configuration
 public class ApplicationConfiguration {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
+
     @Autowired
     private ProfesorRepository profesorRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> profesorRepository.findByEmail(username).map(ProfesorDTO::convertToDTO)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
+        return username -> {
+            log.info(this.getClass().getSimpleName()
+                    + " userDetailsService: construct userDetailsService username with: {}", username);
+            if (username.contains("@")) {
+                return profesorRepository.findByEmail(username).map(ProfesorDTO::convertToDTO)
+                        .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
+            } else {
+                return profesorRepository.findByNif(username).map(ProfesorDTO::convertToDTO)
+                        .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
+            }
+        };
     }
 
     @Bean

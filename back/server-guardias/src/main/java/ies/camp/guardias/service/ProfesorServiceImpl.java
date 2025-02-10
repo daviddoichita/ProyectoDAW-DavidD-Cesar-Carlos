@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
@@ -16,73 +15,84 @@ import ies.camp.guardias.repository.entity.Profesor;
 @Service
 public class ProfesorServiceImpl implements ProfesorService {
 
-	private static final Logger log = LoggerFactory.getLogger(ProfesorServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ProfesorServiceImpl.class);
 
-	@Autowired
-	private ProfesorRepository profesorRepository;
+    @Autowired
+    private ProfesorRepository profesorRepository;
 
-	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    /*
+     * @Override
+     * public List<ProfesorDTO> findAll() {
+     * log.info(this.getClass().getSimpleName() +
+     * " findAll: devolver todos los profesores");
+     * return this.profesorRepository.findAll().stream().map(p ->
+     * ProfesorDTO.convertToDTO(p))
+     * .collect(Collectors.toList());
+     * }
+     */
 
-	/*
-	 * @Override public List<ProfesorDTO> findAll() {
-	 * log.info(this.getClass().getSimpleName() +
-	 * " findAll: devolver todos los profesores");
-	 * 
-	 * return this.profesorRepository.findAll().stream().map(p ->
-	 * ProfesorDTO.convertToDTO(p)) .collect(Collectors.toList()); }
-	 */
+    @Override
+    public List<ProfesorDTO> findAll() {
+        log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
 
-	@Override
-	public List<ProfesorDTO> findAll() {
-		log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
+        List<ProfesorDTO> listaProfesorDTO = new ArrayList<ProfesorDTO>();
+        List<Profesor> listaProfesor = profesorRepository.findAll();
+        for (int i = 0; i < listaProfesor.size(); i++) {
+            Profesor profesor = listaProfesor.get(i);
+            if (profesor.getActivo()) {
+                ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor);
+                listaProfesorDTO.add(profesorDTO);
+            }
+        }
+        return listaProfesorDTO;
+    }
 
-		List<ProfesorDTO> listaProfesorDTO = new ArrayList<ProfesorDTO>();
-		List<Profesor> listaProfesor = profesorRepository.findAll();
-		for (int i = 0; i < listaProfesor.size(); i++) {
-			Profesor profesor = listaProfesor.get(i);
-			ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor);
-			listaProfesorDTO.add(profesorDTO);
-		}
-		return listaProfesorDTO;
-	}
+    /*
+     * @Override
+     * public ProfesorDTO findById(Long id) {
+     * log.info(this.getClass().getSimpleName() +
+     * " findById: devolver profesor con id: {}", id);
+     * return
+     * this.profesorRepository.findById(id).map(ProfesorDTO::convertToDTO).orElse(
+     * null);
+     * }
+     */
+    @Override
+    public ProfesorDTO findById(Long id) {
+        log.info(this.getClass().getSimpleName() + " findById: devolver profesor con id: {}", id);
 
-	/*
-	 * @Override public ProfesorDTO findById(Long id) {
-	 * log.info(this.getClass().getSimpleName() +
-	 * " findById: devolver profesor con id: {}", id);
-	 * 
-	 * return
-	 * this.profesorRepository.findById(id).map(ProfesorDTO::convertToDTO).orElse(
-	 * null); }
-	 */
+        Optional<Profesor> profesor = profesorRepository.findById(id);
+        if (profesor.isPresent()) {
+            ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor.get());
+            return profesorDTO;
+        } else {
+            return null;
+        }
+    }
 
-	@Override
-	public ProfesorDTO findById(Long id) {
-		log.info(this.getClass().getSimpleName() + " findById: devolver todos los profesores");
+    @Override
+    public void delete(Long id) {
+        log.info(this.getClass().getSimpleName() + " delete: borrar profesor con id: {}", id);
 
-		Optional<Profesor> profesor = profesorRepository.findById(id);
-		if (profesor.isPresent()) {
-			ProfesorDTO profesorDTO = ProfesorDTO.convertToDTO(profesor.get());
-			return profesorDTO;
-		} else {
-			return null;
-		}
-	}
+        Profesor p = profesorRepository.findById(id).get();
+        p.setActivo(false);
 
-	@Override
-	public void delete(Long id) {
-		log.info(this.getClass().getSimpleName() + " delete: borrar profesor con id: {}", id);
+        this.profesorRepository.save(p);
+    }
 
-		profesorRepository.deleteById(id);
-	}
+    @Override
+    public void save(ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
 
-	@Override
-	public void save(ProfesorDTO profesorDTO) {
-		log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
-		// Cifrar la contraseña antes de guardar
-		profesorDTO.setContrasenya(passwordEncoder.encode(profesorDTO.getContrasenya()));
-		Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
-		profesorRepository.save(profesor);
-	}
+        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        profesorRepository.save(profesor);
+    }
 
+    @Override
+    public void update(ProfesorDTO profesorDTO) {
+        log.info(this.getClass().getSimpleName() + " update: actualizar profesor con id: {}", profesorDTO.getId());
+
+        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        profesorRepository.save(profesor);
+    }
 }

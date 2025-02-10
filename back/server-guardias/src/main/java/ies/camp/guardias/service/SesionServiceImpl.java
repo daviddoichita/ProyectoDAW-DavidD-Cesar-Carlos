@@ -6,10 +6,12 @@ import ies.camp.guardias.repository.dao.CargoRepository;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
+import ies.camp.guardias.repository.dao.FaltaRepository;
 import ies.camp.guardias.repository.dao.GrupoRepository;
 import ies.camp.guardias.repository.dao.IntervaloRepository;
 import ies.camp.guardias.repository.dao.MateriaRepository;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
+import ies.camp.guardias.repository.dao.RolRepository;
 import ies.camp.guardias.repository.dao.SesionRepository;
 import ies.camp.guardias.repository.entity.Aula;
 import ies.camp.guardias.repository.entity.Cargo;
@@ -20,6 +22,7 @@ import ies.camp.guardias.repository.entity.Grupo;
 import ies.camp.guardias.repository.entity.Intervalo;
 import ies.camp.guardias.repository.entity.Materia;
 import ies.camp.guardias.repository.entity.Profesor;
+import ies.camp.guardias.repository.entity.Rol;
 import ies.camp.guardias.repository.entity.Sesion;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,21 +35,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class SesionServiceImpl implements SesionService {
-
-    private static final Logger log = LoggerFactory.getLogger(
-            SesionServiceImpl.class);
+  
+    private static final Logger log = LoggerFactory.getLogger(SesionService.class);
 
     @Autowired
     private MateriaRepository materiaRepository;
@@ -78,6 +82,15 @@ public class SesionServiceImpl implements SesionService {
     @Autowired
     private CargoRepository cargoRepository;
 
+    @Autowired
+    private FaltaRepository faltaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RolRepository rolRepository;
+
     @Override
     public boolean loadFromCSV(MultipartFile csv, int year) {
         log.info(
@@ -89,8 +102,7 @@ public class SesionServiceImpl implements SesionService {
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
-                            csv.getInputStream(),
-                            StandardCharsets.ISO_8859_1));
+                            csv.getInputStream(), StandardCharsets.ISO_8859_1));
             bufferedReader.lines().forEachOrdered(lines::add);
             bufferedReader.close();
         } catch (IOException e) {
@@ -112,6 +124,8 @@ public class SesionServiceImpl implements SesionService {
                 .collect(Collectors.toSet());
 
         // Creacion de objetos a guardar
+        Faker faker = new Faker();
+        Rol rol = this.rolRepository.findByNombre("profesor").get();
         for (int i = 1; i < lines.size(); i++) {
             List<String> fields = Arrays.asList(lines.get(i).split(";"));
 
@@ -120,7 +134,10 @@ public class SesionServiceImpl implements SesionService {
             }
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
-            profesores.add(this.loadProfesor(fields.subList(13, 15)));
+          
+            Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
+            log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
+            profesores.add(profesor);
         }
 
         // Cargar las tablas
@@ -130,6 +147,7 @@ public class SesionServiceImpl implements SesionService {
             aulas.forEach(this.aulaRepository::save);
             profesores.forEach(this.profesorRepository::save);
 
+            this.faltaRepository.deleteAllInBatch();
             this.cuadranteRepository.deleteAllInBatch();
             this.sesionRepository.deleteAllInBatch();
 
@@ -215,8 +233,7 @@ public class SesionServiceImpl implements SesionService {
         this.diaRepository.findAll()
                 .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
         Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
-        this.intervaloRepository.findAll()
-                .forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
+        this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
 
         List<Object> sesiones = new ArrayList<>();
 
@@ -303,12 +320,32 @@ public class SesionServiceImpl implements SesionService {
                 .build();
     }
 
-    private Profesor loadProfesor(List<String> datos) {
+    private Profesor loadProfesor(List<String> datos, Faker faker, Rol rol) {
         // Conversiones y seleccion atributos
         Long numero = Long.parseLong(datos.get(0).trim());
         String abrev = datos.get(1).trim();
 
-        return Profesor.builder().numero(numero).abreviacion(abrev).build();
+        return Profesor.builder()
+                .nombre(faker.name().firstName())
+                .apellidos(faker.name().lastName())
+                .direccion(faker.address().streetAddress())
+                .telefono(faker.number().randomNumber(9, true))
+                .email(faker.internet().emailAddress())
+                .contrasenya(this.passwordEncoder.encode("cambiar1"))
+                .nif(genNif(faker))
+                .numero(numero)
+                .activo(true)
+                .roles(Set.of(rol))
+                .abreviacion(abrev)
+                .build();
+    }
+
+    private String genNif(Faker faker) {
+        Long numeros = faker.number().randomNumber(8, true);
+        String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+        char letra = letras.charAt(numeros.intValue() % letras.length());
+
+        return numeros.toString() + letra;
     }
 
 }
