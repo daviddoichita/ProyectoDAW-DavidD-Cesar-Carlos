@@ -123,6 +123,8 @@ public class SesionServiceImpl implements SesionService {
                 .collect(Collectors.toSet());
 
         // Creacion de objetos a guardar
+        Faker faker = new Faker();
+        Rol rol = this.rolRepository.findByNombre("profesor").get();
         for (int i = 1; i < lines.size(); i++) {
             List<String> fields = Arrays.asList(lines.get(i).split(";"));
 
@@ -132,8 +134,6 @@ public class SesionServiceImpl implements SesionService {
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
 
-            Faker faker = new Faker();
-            Rol rol = this.rolRepository.findByNombre("profesor").get();
             Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
             log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
             profesores.add(profesor);
