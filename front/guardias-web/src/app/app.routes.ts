@@ -8,15 +8,30 @@ import { EditarProfesorComponent } from './components/editar-profesor/editar-pro
 import { LogoutComponent } from './components/logout/logout.component';
 import { authGuard } from './guards/auth.guard';
 import { SubirSesionesComponent } from './components/subir-sesiones/subir-sesiones.component';
+import { CuadranteDireccionComponent } from './components/cuadrante-direccion/cuadrante-direccion.component';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'cuadrante', component: CuadranteProfesorComponent },
+  {
+    path: 'cuadrante-direccion',
+    component: CuadranteDireccionComponent,
+    canActivate: [adminGuard],
+  },
   { path: 'login', component: LoginComponent },
   { path: 'listado-profesores', component: ListadoProfesoresComponent },
   { path: 'alta-profesor', component: AltaProfesorComponent },
   { path: 'editar-profesor/:id', component: EditarProfesorComponent },
-  { path: 'nueva-falta', component: NuevaFaltaComponent, canActivate: [authGuard] },
-  { path: 'subir-sesiones', component: SubirSesionesComponent, canActivate: [authGuard] },
-  { path: 'logout', component: LogoutComponent }
+  {
+    path: 'nueva-falta',
+    component: NuevaFaltaComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'subir-sesiones',
+    component: SubirSesionesComponent,
+    canActivate: [authGuard],
+  },
+  { path: 'logout', component: LogoutComponent },
 ];

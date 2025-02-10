@@ -20,7 +20,7 @@ import ies.camp.guardias.repository.entity.Dia;
 import ies.camp.guardias.repository.entity.Grupo;
 import ies.camp.guardias.repository.entity.Intervalo;
 import ies.camp.guardias.repository.entity.Materia;
-import ies.camp.guardias.repository.entity.Profesor
+import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.repository.entity.Rol;
 import ies.camp.guardias.repository.entity.Sesion;
 import java.io.BufferedReader;
@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class SesionServiceImpl implements SesionService {
 
-            SesionServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SesionService.class);
 
     @Autowired
     private MateriaRepository materiaRepository;
@@ -102,7 +101,7 @@ public class SesionServiceImpl implements SesionService {
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
-                            csv.getInputStream(),
+                            csv.getInputStream(), StandardCharsets.ISO_8859_1));
             bufferedReader.lines().forEachOrdered(lines::add);
             bufferedReader.close();
         } catch (IOException e) {
@@ -124,6 +123,8 @@ public class SesionServiceImpl implements SesionService {
                 .collect(Collectors.toSet());
 
         // Creacion de objetos a guardar
+        Faker faker = new Faker();
+        Rol rol = this.rolRepository.findByNombre("profesor").get();
         for (int i = 1; i < lines.size(); i++) {
             List<String> fields = Arrays.asList(lines.get(i).split(";"));
 
@@ -132,9 +133,7 @@ public class SesionServiceImpl implements SesionService {
             }
             materias.add(this.loadMateria(fields.subList(0, 6)));
             aulas.add(this.loadAula(fields.subList(10, 13)));
-
-            Faker faker = new Faker();
-            Rol rol = this.rolRepository.findByNombre("profesor").get();
+          
             Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
             log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
             profesores.add(profesor);
@@ -233,7 +232,7 @@ public class SesionServiceImpl implements SesionService {
         this.diaRepository.findAll()
                 .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
         Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
-        this.intervaloRepository.findAll()
+        this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
 
         List<Object> sesiones = new ArrayList<>();
 
@@ -284,12 +283,12 @@ public class SesionServiceImpl implements SesionService {
         Integer horas = Integer.parseInt(datos.get(5).trim());
 
         return Materia.builder()
-            .numero(numero)
-            .abreviacion(abrev)
-            .nombre(nombre)
-            .codigo(codigo)
-            .horas(horas)
-            .build();
+                .numero(numero)
+                .abreviacion(abrev)
+                .nombre(nombre)
+                .codigo(codigo)
+                .horas(horas)
+                .build();
     }
 
     private Grupo loadGrupo(List<String> datos) {
@@ -300,11 +299,11 @@ public class SesionServiceImpl implements SesionService {
         String curso = datos.get(3).trim();
 
         return Grupo.builder()
-            .numero(numero)
-            .abreviacion(abrev)
-            .nombre(nombre)
-            .curso(curso)
-            .build();
+                .numero(numero)
+                .abreviacion(abrev)
+                .nombre(nombre)
+                .curso(curso)
+                .build();
     }
 
     private Aula loadAula(List<String> datos) {
@@ -314,10 +313,10 @@ public class SesionServiceImpl implements SesionService {
         String nombre = datos.get(2).trim();
 
         return Aula.builder()
-            .numero(numero)
-            .abreviacion(abrev)
-            .nombre(nombre)
-            .build();
+                .numero(numero)
+                .abreviacion(abrev)
+                .nombre(nombre)
+                .build();
     }
 
     private Profesor loadProfesor(List<String> datos, Faker faker, Rol rol) {

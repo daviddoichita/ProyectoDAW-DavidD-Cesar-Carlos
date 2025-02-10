@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-cuadrante-profesor',
+  selector: 'app-cuadrante-direccion',
   standalone: true,
   imports: [
     HeaderComponent,
@@ -32,11 +32,11 @@ import { ButtonModule } from 'primeng/button';
     ConfirmDialogModule,
     ButtonModule,
   ],
-  templateUrl: './cuadrante-profesor.component.html',
-  styleUrl: './cuadrante-profesor.component.scss',
+  templateUrl: './cuadrante-direccion.component.html',
+  styleUrl: './cuadrante-direccion.component.scss',
   providers: [ConfirmationService],
 })
-export class CuadranteProfesorComponent implements OnInit {
+export class CuadranteDireccionComponent {
   cuadrantes: Cuadrante[] = [];
   cuadrantesLoaded: boolean = false;
   isAdmin: boolean = false;
