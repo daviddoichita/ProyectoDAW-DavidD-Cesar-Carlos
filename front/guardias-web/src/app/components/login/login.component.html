@@ -10,7 +10,7 @@
 
             <div class="inputUsuario">
               <p-inputGroup>
-                <p-inputGroupAddon >
+                <p-inputGroupAddon>
                   <i class="pi pi-user"></i>
                 </p-inputGroupAddon>
                 <input pInputText placeholder="Introduce tu Email o NIF" formControlName="emailOrNif" />
@@ -47,6 +47,10 @@
               </div>
             </div>
 
+            <div class="contenedorError" *ngIf="credentialsError">
+              <p-message severity="error" text="Usuario o contraseña incorrectos"></p-message>
+            </div>
+
             <div id="checkboxRecordar">
               <p-checkbox formControlName="rememberMe" id="rememberme" [binary]="true"></p-checkbox>
               <label class="recuerdame ml-1">Recuérdame</label>
@@ -55,6 +59,7 @@
             <button pButton pRipple type="submit" class="colorBtn p-element p-ripple w-full p-3 p-button p-component">
               <span class="p-button-label">Entrar</span>
             </button>
+
           </form>
 
           <div class="olvidadoContra">

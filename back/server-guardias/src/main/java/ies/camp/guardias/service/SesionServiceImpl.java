@@ -1,5 +1,6 @@
 package ies.camp.guardias.service;
 
+import ies.camp.guardias.model.dto.CuadranteDTO;
 import ies.camp.guardias.repository.dao.AulaRepository;
 import ies.camp.guardias.repository.dao.CargoRepository;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
@@ -48,7 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class SesionServiceImpl implements SesionService {
-
+  
     private static final Logger log = LoggerFactory.getLogger(SesionService.class);
 
     @Autowired
@@ -346,4 +347,5 @@ public class SesionServiceImpl implements SesionService {
 
         return numeros.toString() + letra;
     }
+
 }
