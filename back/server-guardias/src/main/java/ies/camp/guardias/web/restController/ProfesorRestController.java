@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfesorRestController {
 
         private static final Logger log = LoggerFactory.getLogger(ProfesorRestController.class);
+
+        @Autowired
+        private BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @Autowired
         private ProfesorService profesorService;
@@ -142,10 +146,14 @@ public class ProfesorRestController {
                 ProfesorDTO existeProfesor = this.profesorService.findById(id);
                 if (existeProfesor == null) {
                         log.error("El profesor con id {} no existe.", id);
+                        return;
                 }
+
                 existeProfesor.setNombre(profesorDTO.getNombre());
                 existeProfesor.setApellidos(profesorDTO.getApellidos());
-                existeProfesor.setContrasenya(profesorDTO.getContrasenya());
+                if (profesorDTO.getContrasenya() != null && !profesorDTO.getContrasenya().isEmpty()) {
+                        existeProfesor.setContrasenya(bCryptPasswordEncoder.encode(profesorDTO.getContrasenya()));
+                }
                 existeProfesor.setNif(profesorDTO.getNif());
                 existeProfesor.setDireccion(profesorDTO.getDireccion());
                 existeProfesor.setEmail(profesorDTO.getEmail());

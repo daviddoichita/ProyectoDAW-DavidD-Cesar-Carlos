@@ -86,20 +86,25 @@ public class ProfesorServiceImpl implements ProfesorService {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
 
         String abreviacion = profesorDTO.getNombre();
+
         if (abreviacion != null && abreviacion.length() >= 3) {
-            abreviacion.substring(0, 3);
+            abreviacion = abreviacion.substring(0, 3);
         }
 
-        Long nuevoNumero = profesorRepository.findProfesorConNumeroMayor().get() + 1;
+        Long nuevoNumero = profesorRepository.findProfesorConNumeroMayor().orElse(0L) + 1;
 
-        Profesor profesor = new Profesor();
+        Profesor profesorAntiguo = profesorRepository.findById(profesorDTO.getId()).orElse(null);
+        if (profesorAntiguo != null) {
+            profesorAntiguo.setActivo(false);
+            profesorRepository.save(profesorAntiguo);
+        }
 
-        profesorDTO.setNumero(nuevoNumero);
-        profesorDTO.setAbreviacion(abreviacion);
-        profesorDTO.setAdmin(false);
-        profesorDTO.setActivo(true);
-        profesorDTO.setRoles(null);
-        profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        profesor.setNumero(nuevoNumero);
+        profesor.setAbreviacion(abreviacion);
+        profesor.setAdmin(false);
+        profesor.setActivo(true);
+        profesor.setRoles(null);
 
         profesorRepository.save(profesor);
     }

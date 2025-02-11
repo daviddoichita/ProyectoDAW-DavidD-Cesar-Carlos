@@ -40,7 +40,6 @@ export class EditarProfesorComponent implements OnInit {
   errores: Record<string, string | null> = {
     nombre: null,
     apellidos: null,
-    contrasenya: null,
     nif: null,
     direccion: null,
     email: null,
@@ -144,10 +143,13 @@ export class EditarProfesorComponent implements OnInit {
       telefono: this.telefono,
     };
 
+    console.log('Datos a guardar:', editarProfesor);
+
     if (this.profesorId) {
       this.profesorService.update(this.profesorId, editarProfesor).
         subscribe({
           next: (_response) => {
+            console.log('Actualización exitosa');
             this.confirmationService.confirm({
               message: '¿Estas seguro que quieres guardarlo?',
               header: 'Confirmacion',
@@ -167,6 +169,9 @@ export class EditarProfesorComponent implements OnInit {
                 this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
               }
             })
+          },
+          error: (err) => {
+            console.error('Error al actualizar:', err);
           }
         })
     }
@@ -193,7 +198,6 @@ export class EditarProfesorComponent implements OnInit {
       }
     })
   }
-
 
   private cargarDatosProfesor(): void {
     if (!this.profesorId) return;

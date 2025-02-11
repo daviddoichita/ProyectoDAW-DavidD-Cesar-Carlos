@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -358,24 +359,36 @@ public class SesionServiceImpl implements SesionService {
                                 + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
                                 profesorDTO.getId());
 
-                List<Sesion> lista = (List<Sesion>) sesionRepository.findAllBySesiones(profesorDTO.getId());
+                List<Sesion> listaSesiones = sesionRepository.findAllBySesiones(profesorDTO.getId());
 
                 List<SesionDTO> listaResultadoDTO = new ArrayList<>();
 
-                for (int i = 0; i < lista.size(); i++) {
-                        Profesor profesorSesion = lista.get(i).getProfesor();
-                        if (profesorSesion != null && profesorSesion.getActivo()) {
-                                profesorSesion.setActivo(false);
-                                profesorRepository.save(profesorSesion);
+                Optional<Profesor> profesorAntiguoOpt = profesorRepository.findById(profesorDTO.getId());
+                if (profesorAntiguoOpt.isPresent()) {
+                        Profesor profesorAntiguo = profesorAntiguoOpt.get();
 
-                                Profesor nuevoProfesor = new Profesor();
-                                nuevoProfesor.setActivo(true);
-                                profesorRepository.save(nuevoProfesor);
-                                lista.get(i).setProfesor(nuevoProfesor);
+                        Profesor nuevoProfesor = new Profesor();
+                        nuevoProfesor.setNombre(profesorDTO.getNombre());
+                        nuevoProfesor.setApellidos(profesorDTO.getApellidos());
+                        nuevoProfesor.setNif(profesorDTO.getNif());
+                        nuevoProfesor.setDireccion(profesorDTO.getDireccion());
+                        nuevoProfesor.setEmail(profesorDTO.getEmail());
+                        nuevoProfesor.setTelefono(profesorDTO.getTelefono());
+                        nuevoProfesor.setActivo(true);
+
+                        profesorRepository.save(nuevoProfesor);
+
+                        for (Sesion sesion : listaSesiones) {
+                                sesion.setProfesor(nuevoProfesor);
+                                sesionRepository.save(sesion);
+                                listaResultadoDTO.add(SesionDTO.convertToDTO(sesion));
                         }
-                        listaResultadoDTO.add(SesionDTO.convertToDTO(lista.get(i)));
+
+                        profesorAntiguo.setActivo(false);
+                        profesorRepository.save(profesorAntiguo);
                 }
 
                 return listaResultadoDTO;
         }
+
 }

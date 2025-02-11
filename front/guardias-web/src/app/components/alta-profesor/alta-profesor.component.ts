@@ -123,6 +123,7 @@ export class AltaProfesorComponent implements OnInit {
 
   guardar(): void {
     this.mostrarErrores = true;
+
     if (!this.validarTodo()) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor, corrige los errores antes de guardar.' });
       return;
@@ -139,43 +140,39 @@ export class AltaProfesorComponent implements OnInit {
       sustituyeId: this.sustituye?.value
     };
 
-    /*if (nuevoProfesor.sustituyeId) {
-      this.sesionService.findSesionesPorProfesor(nuevoProfesor.sustituyeId).subscribe({
-        next: (_response: any) => {
-          this.confirmacionGuardado();
-        }
-      });
-    } else {
-      this.confirmacionGuardado();
-    }*/
 
     this.sesionService.findSesionesPorProfesor(nuevoProfesor.sustituyeId).subscribe({
-      next: (_response: any) => {
+      next: (sesiones: any[]) => {
         this.confirmationService.confirm({
-          message: '¿Estas seguro que quieres guardarlo?',
-          header: 'Confirmacion',
+          message: '¿Estás seguro de sustituir este profesor?',
+          header: 'Confirmación',
           icon: 'pi pi-exclamation-triangle',
-          acceptIcon: "none",
-          acceptLabel: "Aceptar",
-          rejectLabel: "Cancelar",
-          rejectIcon: "none",
-          rejectButtonStyleClass: "p-button-danger",
+          acceptLabel: 'Aceptar',
+          rejectLabel: 'Cancelar',
           accept: () => {
             this.profesorService.save(nuevoProfesor).subscribe({
               next: (_response: any) => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' })
+                this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Profesor guardado y sesiones reasignadas.' });
                 setTimeout(() => {
-                  this.router.navigate(['/listado-profesores'])
-                }, 1000)
+                  this.router.navigate(['/listado-profesores']);
+                }, 1000);
+              },
+              error: (error) => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el profesor.' });
+                console.error(error);
               }
             });
           },
           reject: () => {
-            this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
+            this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'No se realizaron cambios.' });
           }
-        })
+        });
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron obtener las sesiones del profesor sustituido.' });
+        console.error(error);
       }
-    })
+    });
   }
 
   cancelar(): void {
@@ -200,25 +197,4 @@ export class AltaProfesorComponent implements OnInit {
     })
   }
 
-  /*confirmacionGuardado() {
-    this.confirmationService.confirm({
-      message: '¿Estas seguro que quieres guardarlo?',
-      header: 'Confirmacion',
-      icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      acceptLabel: "Aceptar",
-      rejectLabel: "Cancelar",
-      rejectIcon: "none",
-      rejectButtonStyleClass: "p-button-danger",
-      accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han guardado los cambios' });
-        setTimeout(() => {
-          this.router.navigate(['/listado-profesores']);
-        }, 1000);
-      },
-      reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' });
-      }
-    });
-  }*/
 }

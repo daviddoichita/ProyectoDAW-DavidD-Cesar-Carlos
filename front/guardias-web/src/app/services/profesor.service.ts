@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { map } from 'rxjs';
 import { Profesor } from '../interfaces/profesor';
 
@@ -34,7 +34,14 @@ export class ProfesorService {
   }
 
   update(id: number, profesor: any): Observable<any> {
+    console.log('Enviando solicitud PUT a:', `${this.apiUrl}/${id}`);
+    console.log('Datos del profesor:', profesor);
 
-    return this.http.put<any>(`${this.apiUrl}/${id}`, profesor, { headers: this.auth.getAuthHeader() });
+    return this.http.put<any>(`${this.apiUrl}/${id}`, profesor, { headers: this.auth.getAuthHeader() }).pipe(
+      map(response => {
+        return response;
+      })
+    );
   }
+
 }
