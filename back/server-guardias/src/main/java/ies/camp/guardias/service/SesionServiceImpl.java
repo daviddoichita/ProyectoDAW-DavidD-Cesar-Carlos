@@ -1,5 +1,6 @@
 package ies.camp.guardias.service;
 
+import ies.camp.guardias.model.dto.CuadranteDTO;
 import ies.camp.guardias.repository.dao.AulaRepository;
 import ies.camp.guardias.repository.dao.CargoRepository;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
@@ -348,4 +349,5 @@ public class SesionServiceImpl implements SesionService {
 
         return numeros.toString() + letra;
     }
+
 }

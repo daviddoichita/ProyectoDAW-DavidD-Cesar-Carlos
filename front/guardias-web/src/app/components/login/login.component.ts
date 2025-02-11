@@ -46,6 +46,7 @@ import { GlobalStateService } from "../../services/global-state.service";
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  credentialsError: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +77,14 @@ export class LoginComponent implements OnInit {
     if (session || local) {
       this.router.navigate(["cuadrante"]);
     }
+
+    this.loginForm.get('emailOrNif')?.valueChanges.subscribe(() => {
+      this.credentialsError = false;
+    });
+
+    this.loginForm.get('password')?.valueChanges.subscribe(() => {
+      this.credentialsError = false;
+    });
   }
 
   login(): void {
@@ -84,6 +93,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.credentialsError = false;
     let user: { email?: string, nif?: string, password: string } = { password: "" };
 
     if (this.isEmail(this.loginForm.value.emailOrNif)) {
@@ -118,9 +128,11 @@ export class LoginComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error("Error en el inicio de sesión:", error);
-        if (error.status === 401) {
-          console.error("Credenciales incorrectas");
+        console.error('Error en el inicio de sesión:', error);
+
+        if (error.status === 403 || error.status === 401) {
+          this.credentialsError = true;
+          console.error('Credenciales incorrectas');
         } else {
           console.error("Error");
         }

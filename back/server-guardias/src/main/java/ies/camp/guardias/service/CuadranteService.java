@@ -3,8 +3,6 @@ package ies.camp.guardias.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
-
 import ies.camp.guardias.model.dto.CuadranteDTO;
 
 public interface CuadranteService {
@@ -46,4 +44,30 @@ public interface CuadranteService {
      * @return lista de CuadranteDTO del dia actual
      */
     public List<CuadranteDTO> findToday();
+
+    /**
+     * Devuelve una lista con todos los cuadrantes que tengan faltas
+     *
+     * @return lista de Cuadrantes con faltas
+     */
+    public List<CuadranteDTO> findCuadranteConFaltas();
+
+    /**
+     * Devuelve una lista con todos los cuadrantes que tengan sesiones/guardias sin
+     * firmar
+     * (Solo hasta 2026 para no cargar todos los cuadrantes, ya que todos tienen la
+     * firma nula)
+     * 
+     * @return lista de Cuadrantes con sesiones sin firmar
+     */
+    public List<CuadranteDTO> findCuadranteSinFirmar();
+
+    /**
+     * Devuelve una lista con todos los cuadrantes que tengan sesiones con alguna
+     * incidencia
+     *
+     * @return lista de Cuadrantes que tengan incidencias en sesiones
+     */
+    public List<CuadranteDTO> findCuadranteConIncidencias();
+
 }

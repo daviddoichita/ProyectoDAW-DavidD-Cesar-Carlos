@@ -8,6 +8,9 @@ import { EditarProfesorComponent } from './components/editar-profesor/editar-pro
 import { LogoutComponent } from './components/logout/logout.component';
 import { authGuard } from './guards/auth.guard';
 import { SubirSesionesComponent } from './components/subir-sesiones/subir-sesiones.component';
+import { InformesFaltasComponent } from './components/informes-faltas/informes-faltas.component';
+import { InformesAsistenciasComponent } from './components/informes-asistencias/informes-asistencias.component';
+import { InformesIncidenciasComponent } from './components/informes-incidencias/informes-incidencias.component';
 import { CuadranteDireccionComponent } from './components/cuadrante-direccion/cuadrante-direccion.component';
 import { adminGuard } from './guards/admin.guard';
 
@@ -23,6 +26,21 @@ export const routes: Routes = [
   { path: 'listado-profesores', component: ListadoProfesoresComponent },
   { path: 'alta-profesor', component: AltaProfesorComponent },
   { path: 'editar-profesor/:id', component: EditarProfesorComponent },
+  {
+    path: 'informes-faltas',
+    component: InformesFaltasComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'informes-guardias',
+    component: InformesAsistenciasComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'informes-incidencias',
+    component: InformesIncidenciasComponent,
+    canActivate: [authGuard],
+  },
   {
     path: 'nueva-falta',
     component: NuevaFaltaComponent,
