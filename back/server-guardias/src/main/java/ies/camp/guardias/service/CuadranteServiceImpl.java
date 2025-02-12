@@ -89,4 +89,30 @@ public class CuadranteServiceImpl implements CuadranteService {
                 .map(CuadranteDTO::convertToDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CuadranteDTO> findCuadranteConFaltas() {
+        log.info(this.getClass().getSimpleName() + " findCuadranteConFalta: devolver los cuadrantes con faltas");
+
+        return this.cuadranteRepository.findCuadrantesConFaltas().stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CuadranteDTO> findCuadranteSinFirmar() {
+        log.info(this.getClass().getSimpleName() + " findCuadranteSinFirmar: devolver los cuadrantes sin firmar");
+
+        return this.cuadranteRepository.findCuadrantesSinFirmar().stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CuadranteDTO> findCuadranteConIncidencias() {
+        log.info(this.getClass().getSimpleName()
+                + " findCuadranteConIncidencia: devolver los cuadrantes con incidencias");
+
+        return this.cuadranteRepository.findCuadrantesConIncidencias().stream().map(CuadranteDTO::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,0 +1,163 @@
+<div class="app-layout">
+    <app-header></app-header>
+    <div class="main-section">
+        <div class="flex align-items-center mb-3">
+
+            <div class="flex align-items-center gap-2">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" [(ngModel)]="valorBusqueda" (input)="buscador()"
+                        placeholder="Nombre del profesor..." class="p-inputtext w-17rem" />
+                </span>
+            </div>
+
+            <div class="w-10rem">
+                <p-calendar #calendar [(ngModel)]="date" (ngModelChange)="filtrarPorMes()" view="month"
+                    dateFormat="mm/yy" [readonlyInput]="true" placeholder="Filtrar por mes" [showIcon]="true"
+                    [iconDisplay]="'input'" inputId="buttondisplay" [showOnFocus]="true" class="ml-2" readonly>
+                    <ng-template pTemplate="footer">
+                        <button type="button" pButton label="Borrar filtro"
+                            (click)="borrarFiltro(); calendar.hideOverlay()" class="p-button-text w-full"></button>
+                    </ng-template>
+                </p-calendar>
+            </div>
+
+            <div class="ml-4 flex align-items-center text-center surface-300 border-round-2xl" *ngIf="mostrarAnyo">
+                <button type="button" pButton icon="pi pi-chevron-left" (click)="cambiarAnyo('anterior')"
+                    class="p-button-secondary surface-300 text-700 hover:surface-200 focus:shadow-none border-none"></button>
+
+                <span class="text-2xl font-medium text-700 mx-3">{{ anyoSeleccionado }}</span>
+
+                <button type="button" pButton icon="pi pi-chevron-right" (click)="cambiarAnyo('siguiente')"
+                    class="p-button-secondary surface-300 text-700 hover:surface-200 focus:shadow-none border-none"></button>
+            </div>
+
+            <div class="ml-auto">
+                <p-selectButton [options]="tipos" [(ngModel)]="tipo" optionLabel="name" optionValue="value"
+                    allowEmpty="false">
+                    <ng-template let-item pTemplate="item">
+                        <div class="flex align-items-center">
+                            <i [class]="item.icon" class="text-xl"></i>
+                            <span>{{ item.name }}</span>
+                        </div>
+                    </ng-template>
+                </p-selectButton>
+            </div>
+        </div>
+
+        <div class="w-full mx-auto">
+            <p-table *ngIf="tipo === 'table'" [value]="cuadrantesFiltrados" [rows]="8" [paginator]="true"
+                class="w-full h-full" [rowHover]="true" [styleClass]="'shadow-2 border-round-lg'">
+
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col class="w-10rem">
+                        <col class="w-10rem">
+                        <col class="w-8rem">
+                        <col class="w-10rem">
+                        <col class="w-5rem">
+                        <col class="w-5rem">
+                        <col class="w-12rem">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Fecha</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Hora</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Nombre</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Apellidos</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Grupo</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Aula</th>
+                        <th class="text-2xl bg-gray-200 text-center p-3">Información sustituto</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-cuadrante>
+                    <tr class="hover:bg-gray-100 border-bottom-1 surface-border text-center">
+                        <td class="text-xl text-center p-3">{{ cuadrante.fecha | date }}</td>
+                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.intervalo.horaInicio }} - {{
+                            cuadrante.guardia.intervalo.horaFin }}</td>
+                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.nombre }}</td>
+                        <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.apellidos }}</td>
+                        <td class="text-xl text-center p-3">{{ cuadrante.faltas[0].sesion.grupo.abreviacion }}</td>
+                        <td class="text-xl text-center p-3">{{ cuadrante.faltas[0].sesion.aula.abreviacion }}</td>
+                        <td class="text-xl text-center p-3">
+                            <p-button (onClick)="showDialog(cuadrante)" [styleClass]="'text-xl focus:shadow-none'"
+                                [link]="true">
+                                Ver mas info...
+                            </p-button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7" class="text-center text-sm p-3 text-gray-500">
+                            No hay ninguna falta registrada.
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <div class="card flex justify-content-center">
+                <p-dialog header="Información del sustituto a la guardia" [(visible)]="visible" [modal]="true"
+                    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [draggable]="false" [resizable]="false"
+                    [style]="{ width: '20vw' }">
+                    <div class="p-3" *ngIf="faltaSeleccionada">
+                        <p><strong>Profesor:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.nombre
+                            }}
+                            {{ faltaSeleccionada.faltas[0].sesion.profesor.apellidos }}</p>
+                        <p><strong>NIF:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.nif }}</p>
+                        <p><strong>Teléfono:</strong> {{ faltaSeleccionada.faltas[0].sesion.profesor.telefono }}</p>
+                        <p><strong>Hora:</strong> {{
+                            faltaSeleccionada.faltas[0].sesion.intervalo.horaInicio }} -
+                            {{ faltaSeleccionada.faltas[0].sesion.intervalo.horaFin }}</p>
+                        <h3 class="mt-6">Incidencia</h3>
+                        <p>{{ faltaSeleccionada.faltas[0]?.incidencias || 'No hay incidencias.'}}</p>
+                    </div>
+                </p-dialog>
+            </div>
+
+            <div *ngIf="tipo === 'bar'" class="shadow-2 w-full mx-auto">
+                <div class="bg-gray-200 text-2xl text-center p-3 font-medium border-bottom-3 surface-border">
+                    Gráfico de Barras
+                </div>
+                <div class="pt-4 px-8 pb-4">
+                    <p-chart *ngIf="hayDatos" type="bar" [data]="barChartData" [options]="barChartOptions"
+                        class="mx-auto h-full"></p-chart>
+                    <div *ngIf="!hayDatos" class="text-center text-xl p-8 text-gray-500">
+                        No hay ningun registro.
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="tipo === 'line'" class="shadow-2 w-full mx-auto">
+                <div class="bg-gray-200 text-2xl text-center p-3 font-medium border-bottom-3 surface-border">
+                    Gráfico de Líneas
+                </div>
+                <div class="pt-4 px-8 pb-4">
+                    <p-chart *ngIf="hayDatos" type="line" [data]="lineChartData" [options]="lineChartOptions"
+                        class="mx-auto h-full"></p-chart>
+                    <div *ngIf="!hayDatos" class="text-center text-xl p-8 text-gray-500">
+                        No hay ningun registro.
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="tipo === 'pie'" class="shadow-2 w-full mx-auto">
+                <div class="bg-gray-200 text-2xl text-center p-3 font-medium border-bottom-3 surface-border">
+                    Gráfico Circular
+                </div>
+                <div class="pt-4 px-8 pb-4">
+                    <p-chart *ngIf="hayDatos" type="pie" [data]="pieChartData" [options]="pieChartOptions"
+                        class="mx-auto h-full"></p-chart>
+                    <div *ngIf="!hayDatos" class="text-center text-xl p-8 text-gray-500">
+                        No hay ningun registro.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

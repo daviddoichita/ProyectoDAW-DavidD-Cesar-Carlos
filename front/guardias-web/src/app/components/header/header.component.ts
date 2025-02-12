@@ -74,7 +74,22 @@ export class HeaderComponent implements OnInit {
             routerLink: "/subir-sesiones",
             icon: "pi pi-cloud-upload",
             label: "Subir sesiones",
-          });
+          },
+            {
+              routerLink: "/informes-faltas",
+              icon: "pi pi-chart-bar",
+              label: "Informes faltas",
+            },
+            {
+              routerLink: "/informes-guardias",
+              icon: "pi pi-chart-line",
+              label: "Informes guardias",
+            },
+            {
+              routerLink: "/informes-incidencias",
+              icon: "pi pi-exclamation-triangle",
+              label: "Informes incidencias",
+            });
 
           this.menuItems.push({
             routerLink: "/listado-profesores",
