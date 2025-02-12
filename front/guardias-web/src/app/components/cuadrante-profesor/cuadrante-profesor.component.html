@@ -45,7 +45,11 @@
             <tr>
               <td class="text-center">{{ cuadrante.cargo.nombre }}</td>
               <td class="text-center">
-                {{ cuadrante.guardia.profesor.nombre }}
+                <p-button
+                  [label]="cuadrante.guardia.profesor.nombre"
+                  [link]="true"
+                  (onClick)="mostrarInfoProf(cuadrante.guardia.profesor)"
+                ></p-button>
               </td>
               <td>
                 <p-table
@@ -55,7 +59,7 @@
                 >
                   <ng-template pTemplate="header">
                     <tr>
-                      <th class="text-center">Firma</th>
+                      <th class="text-center">Firmar</th>
                       <th class="text-center">Profesor ausente</th>
                       <th class="text-center">Aula</th>
                       <th class="text-center">Grupo</th>
@@ -65,7 +69,27 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-falta>
                     <tr>
-                      <td class="text-center"></td>
+                      <td class="text-center">
+                        <div
+                          *ngIf="
+                            user?.email === cuadrante.guardia.profesor.email
+                          "
+                        >
+                          <p-button
+                            *ngIf="!falta.firma"
+                            label="Firmar"
+                            severity="info"
+                            (onClick)="firmarCuadrante(cuadrante.id, falta.id)"
+                            [loading]="firmando"
+                          ></p-button>
+                          <p-button
+                            *ngIf="falta.firma"
+                            label="Firmado"
+                            severity="info"
+                            disabled="true"
+                          ></p-button>
+                        </div>
+                      </td>
                       <td class="text-center">
                         {{ falta.sesion.profesor.abreviacion }}
                       </td>
@@ -75,8 +99,19 @@
                       <td class="text-center">
                         {{ falta.sesion.grupo?.nombre || "Sin grupo" }}
                       </td>
-                      <td class="text-center">{{ falta.deberes }}</td>
-                      <td class="text-center">{{ falta.incidencias }}</td>
+                      <td class="text-center">
+                        <span
+                          *ngIf="falta.deberes"
+                          class="pi pi-check-circle text-green-500"
+                        ></span>
+                        <span
+                          *ngIf="!falta.deberes"
+                          class="pi pi-times-circle text-red-500"
+                        ></span>
+                      </td>
+                      <td class="text-center">
+                        {{ falta?.incidencias || "Sin incidencias" }}
+                      </td>
                     </tr>
                   </ng-template>
                 </p-table>

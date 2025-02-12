@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { GlobalStateService } from '../../services/global-state.service';
 import { AuthService } from '../../services/auth.service';
 import { ButtonModule } from 'primeng/button';
+import { Profesor } from '../../interfaces/profesor';
 
 @Component({
   selector: 'app-cuadrante-profesor',
@@ -40,6 +41,8 @@ export class CuadranteProfesorComponent implements OnInit {
   cuadrantes: Cuadrante[] = [];
   cuadrantesLoaded: boolean = false;
   isAdmin: boolean = false;
+  user!: Profesor;
+  firmando: boolean = false;
 
   intervalos: Intervalo[] = [];
 
@@ -68,12 +71,17 @@ export class CuadranteProfesorComponent implements OnInit {
       },
     });
 
+    this.auth.me().subscribe({
+      next: (response) => {
+        if (response) {
+          this.user = response;
+        }
+      },
+    });
+
     this.auth.getAuthLevel().subscribe({
       next: (response) => {
         this.isAdmin = response;
-      },
-      error: (error) => {
-        console.error(error);
       },
     });
 
@@ -157,5 +165,40 @@ export class CuadranteProfesorComponent implements OnInit {
       return `${intervalo.horaInicio} - ${intervalo.horaFin}`;
     }
     return undefined;
+  }
+
+  firmarCuadrante(idCuadrante: number, idFalta: number) {
+    this.cuadranteService.firmar(idCuadrante, idFalta, 'firmado').subscribe({
+      next: (response) => {
+        console.log(response);
+        this.firmando = true;
+        this.cuadranteService.findCurrentWeek().subscribe({
+          next: (cuadrantes) => {
+            this.cuadrantes = cuadrantes;
+            this.firmando = false;
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
+
+  mostrarInfoProf(profesor: Profesor) {
+    this.confirmationService.confirm({
+      target: document.body as EventTarget,
+      message: `Nombre: ${profesor.nombre} ${profesor.apellidos} <br>Email: ${profesor.email} <br> Telefono: ${profesor.telefono}`,
+      header: 'Informacion profesor',
+      icon: 'pi pi-info',
+      acceptIcon: 'none',
+      acceptLabel: 'Aceptar',
+      rejectVisible: false,
+      accept: () => {},
+      reject: () => {},
+    });
   }
 }

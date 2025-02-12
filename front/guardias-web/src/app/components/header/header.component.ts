@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
-import { ButtonModule } from "primeng/button";
-import { InputTextModule } from "primeng/inputtext";
-import { RippleModule } from "primeng/ripple";
-import { Sidebar, SidebarModule } from "primeng/sidebar";
-import { SplitButtonModule } from "primeng/splitbutton";
-import { ToolbarModule } from "primeng/toolbar";
-import { StyleClassModule } from "primeng/styleclass";
-import { AvatarModule } from "primeng/avatar";
-import { CommonModule } from "@angular/common";
-import { AuthService } from "../../services/auth.service";
-import { Profesor } from "../../interfaces/profesor";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ToolbarModule } from 'primeng/toolbar';
+import { StyleClassModule } from 'primeng/styleclass';
+import { AvatarModule } from 'primeng/avatar';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Profesor } from '../../interfaces/profesor';
 
 @Component({
-  selector: "app-header",
+  selector: 'app-header',
   standalone: true,
   imports: [
     ToolbarModule,
@@ -26,76 +26,72 @@ import { Profesor } from "../../interfaces/profesor";
     AvatarModule,
     CommonModule,
   ],
-  templateUrl: "./header.component.html",
-  styleUrl: "./header.component.scss",
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
-  @ViewChild("sidebar") sidebar!: Sidebar;
+  @ViewChild('sidebar') sidebar!: Sidebar;
 
   user: Profesor | null = null;
 
   menuItems: any[] = [];
 
-  titulo = "HEADER";
+  titulo = 'HEADER';
   sidebarVisible = false;
 
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-  ) { }
+  constructor(private router: Router, private auth: AuthService) {}
 
   ngOnInit(): void {
     this.auth.me().subscribe({
       next: (prof) => {
-        this.user = prof
+        this.user = prof;
       },
-      error: (error) => {
-        console.error(error)
-      }
-    })
-    this.titulo = this.router.url.split("/")[1].toUpperCase().replace("-", " ");
+    });
+    this.titulo = this.router.url.split('/')[1].toUpperCase().replace('-', ' ');
     this.menuItems = [
       {
-        routerLink: "/cuadrante",
-        icon: "pi pi-home",
-        label: "Inicio",
+        routerLink: '/cuadrante',
+        icon: 'pi pi-home',
+        label: 'Inicio',
       },
       {
-        routerLink: "/nueva-falta",
-        icon: "pi pi-calendar-clock",
-        label: "Nueva falta",
+        routerLink: '/nueva-falta',
+        icon: 'pi pi-calendar-clock',
+        label: 'Nueva falta',
       },
     ];
 
     this.auth.getAuthLevel().subscribe({
       next: (isAdmin) => {
         if (isAdmin) {
-          this.menuItems.push({
-            routerLink: "/subir-sesiones",
-            icon: "pi pi-cloud-upload",
-            label: "Subir sesiones",
-          },
+          this.menuItems.push(
             {
-              routerLink: "/informes-faltas",
-              icon: "pi pi-chart-bar",
-              label: "Informes faltas",
+              routerLink: '/subir-sesiones',
+              icon: 'pi pi-cloud-upload',
+              label: 'Subir sesiones',
             },
             {
-              routerLink: "/informes-guardias",
-              icon: "pi pi-chart-line",
-              label: "Informes guardias",
+              routerLink: '/informes-faltas',
+              icon: 'pi pi-chart-bar',
+              label: 'Informes faltas',
             },
             {
-              routerLink: "/informes-incidencias",
-              icon: "pi pi-exclamation-triangle",
-              label: "Informes incidencias",
-            });
+              routerLink: '/informes-guardias',
+              icon: 'pi pi-chart-line',
+              label: 'Informes guardias',
+            },
+            {
+              routerLink: '/informes-incidencias',
+              icon: 'pi pi-exclamation-triangle',
+              label: 'Informes incidencias',
+            }
+          );
 
           this.menuItems.push({
-            routerLink: "/listado-profesores",
-            icon: "pi pi-list",
-            label: "Listado de profesores"
-          })
+            routerLink: '/listado-profesores',
+            icon: 'pi pi-list',
+            label: 'Listado de profesores',
+          });
         }
       },
     });
