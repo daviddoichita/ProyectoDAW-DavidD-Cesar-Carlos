@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -22,10 +22,17 @@ export class ProfesorService {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.auth.getAuthHeader() });
   }
 
-  save(profesor: any): Observable<any> {
-    const data = new FormData();
-    data.append('profesorDTO', JSON.stringify(profesor));
-    return this.http.post<any>(`${this.apiUrl}/save`, profesor, { headers: this.auth.getAuthHeader() });
+  save(profesor: Profesor, id: number): Observable<any> {
+    let headers = new HttpHeaders()
+    headers = headers.append("Authorization", "Bearer " + this.auth.getToken())
+    headers = headers.append("Content-Type", "application/json")
+
+    let params = new HttpParams()
+    console.log(id)
+    params = params.append('idProfesorBaja', id)
+
+    console.log(headers)
+    return this.http.post<any>(`${this.apiUrl}/save`, JSON.stringify(profesor), { params: params, headers: headers });
   }
 
   delete(id: number): Observable<any> {

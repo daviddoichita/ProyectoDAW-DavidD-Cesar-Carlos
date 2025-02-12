@@ -20,5 +20,5 @@ public interface SesionRepository extends JpaRepository<Sesion, Long> {
     public List<Sesion> findByAbreviacionDia(String abreviacion);
 
     @Query(value = "SELECT * FROM sesion WHERE idprofesor = ?1", nativeQuery = true)
-    public List<Sesion> findAllBySesiones(Long id);
+    public List<Sesion> findSesionesProfesor(Long id);
 }

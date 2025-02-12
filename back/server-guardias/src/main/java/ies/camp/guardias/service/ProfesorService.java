@@ -35,7 +35,7 @@ public interface ProfesorService {
      *
      * @param profesorDTO ProfesorDTO a guardar
      */
-    public void save(ProfesorDTO profesorDTO);
+    public void save(ProfesorDTO profesorDTO, Long idProfesorBaja);
 
     /**
      * Actualiza el ProfesorDTO introducido en la base de datos

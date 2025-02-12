@@ -127,10 +127,10 @@ public class ProfesorRestController {
          */
         @PostMapping(path = "/api/profesores/save")
         @PreAuthorize("hasRole('DIRECCION')")
-        public void save(@RequestBody ProfesorDTO profesorDTO) {
+        public void save(@RequestBody ProfesorDTO profesorDTO, @RequestParam Long idProfesorBaja) {
                 log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
 
-                this.profesorService.save(profesorDTO);
+                this.profesorService.save(profesorDTO, idProfesorBaja);
         }
 
         /**

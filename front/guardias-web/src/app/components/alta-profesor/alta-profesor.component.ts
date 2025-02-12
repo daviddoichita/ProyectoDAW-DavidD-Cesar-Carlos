@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SesionService } from '../../services/sesion.service';
+import { Profesor } from '../../interfaces/profesor';
 
 @Component({
   selector: 'app-alta-profesor',
@@ -29,8 +30,8 @@ export class AltaProfesorComponent implements OnInit {
   nif: string = '';
   direccion: string = '';
   email: string = '';
-  telefono: string = '';
-  sustituye: any = null;
+  telefono: number = 0;
+  sustituye: any = 0;
 
   mostrarErrores: boolean = false;
 
@@ -109,7 +110,7 @@ export class AltaProfesorComponent implements OnInit {
           : 'El teléfono debe tener 9 dígitos.';
         break;
       case 'sustituye':
-        this.errores['sustituye'] = this.sustituye && this.sustituye.value
+        this.errores['sustituye'] = this.sustituye && this.sustituye
           ? null
           : 'Selecciona un profesor para sustituir.';
         break;
@@ -129,48 +130,37 @@ export class AltaProfesorComponent implements OnInit {
       return;
     }
 
-    const nuevoProfesor = {
+    const profesor: Profesor = {
       nombre: this.nombre,
       apellidos: this.apellidos,
-      contrasenya: this.contrasenya,
       nif: this.nif,
       direccion: this.direccion,
-      email: this.email,
       telefono: this.telefono,
-      sustituyeId: this.sustituye?.value
-    };
+      email: this.email
+    }
 
-
-    this.sesionService.findSesionesPorProfesor(nuevoProfesor.sustituyeId).subscribe({
-      next: (sesiones: any[]) => {
-        this.confirmationService.confirm({
-          message: '¿Estás seguro de sustituir este profesor?',
-          header: 'Confirmación',
-          icon: 'pi pi-exclamation-triangle',
-          acceptLabel: 'Aceptar',
-          rejectLabel: 'Cancelar',
-          accept: () => {
-            this.profesorService.save(nuevoProfesor).subscribe({
-              next: (_response: any) => {
-                this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Profesor guardado y sesiones reasignadas.' });
-                setTimeout(() => {
-                  this.router.navigate(['/listado-profesores']);
-                }, 1000);
-              },
-              error: (error) => {
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el profesor.' });
-                console.error(error);
-              }
-            });
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de sustituir este profesor?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Aceptar',
+      rejectLabel: 'Cancelar',
+      accept: () => {
+        this.profesorService.save(profesor, this.sustituye.value).subscribe({
+          next: (_response: any) => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Profesor guardado y sesiones reasignadas.' });
+            setTimeout(() => {
+              this.router.navigate(['/listado-profesores']);
+            }, 1000);
           },
-          reject: () => {
-            this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'No se realizaron cambios.' });
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el profesor.' });
+            console.error(error);
           }
         });
       },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron obtener las sesiones del profesor sustituido.' });
-        console.error(error);
+      reject: () => {
+        this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'No se realizaron cambios.' });
       }
     });
   }

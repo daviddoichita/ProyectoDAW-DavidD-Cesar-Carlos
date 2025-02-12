@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.dao.ProfesorRepository;
+import ies.camp.guardias.repository.dao.RolRepository;
 import ies.camp.guardias.repository.entity.Profesor;
 
 @Service
@@ -20,6 +23,9 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Autowired
     private ProfesorRepository profesorRepository;
+
+    @Autowired
+    private RolRepository rolRepository;
 
     /*
      * @Override
@@ -82,7 +88,7 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public void save(ProfesorDTO profesorDTO) {
+    public void save(ProfesorDTO profesorDTO, Long idProfesorBaja) {
         log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
 
         String abreviacion = profesorDTO.getNombre();
@@ -93,18 +99,22 @@ public class ProfesorServiceImpl implements ProfesorService {
 
         Long nuevoNumero = profesorRepository.findProfesorConNumeroMayor().orElse(0L) + 1;
 
-        Profesor profesorAntiguo = profesorRepository.findById(profesorDTO.getId()).orElse(null);
-        if (profesorAntiguo != null) {
-            profesorAntiguo.setActivo(false);
-            profesorRepository.save(profesorAntiguo);
-        }
+        Profesor profesorBaja = this.profesorRepository.findById(idProfesorBaja).get();
+        profesorBaja.setActivo(false);
+        this.profesorRepository.save(profesorBaja);
 
-        Profesor profesor = ProfesorDTO.convertToEntity(profesorDTO);
+        Profesor profesor = new Profesor();
+        profesor.setNombre(profesorDTO.getNombre());
+        profesor.setApellidos(profesorDTO.getApellidos());
+        profesor.setNif(profesorDTO.getNif());
+        profesor.setDireccion(profesorDTO.getDireccion());
+        profesor.setTelefono(profesorDTO.getTelefono());
+        profesor.setEmail(profesorDTO.getEmail());
         profesor.setNumero(nuevoNumero);
         profesor.setAbreviacion(abreviacion);
         profesor.setAdmin(false);
         profesor.setActivo(true);
-        profesor.setRoles(null);
+        profesor.setRoles(Set.of(this.rolRepository.findByNombre("profesor").get()));
 
         profesorRepository.save(profesor);
     }

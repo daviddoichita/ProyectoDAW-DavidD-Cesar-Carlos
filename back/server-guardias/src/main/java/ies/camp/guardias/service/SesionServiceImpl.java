@@ -358,37 +358,7 @@ public class SesionServiceImpl implements SesionService {
                 log.info(this.getClass().getSimpleName()
                                 + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
                                 profesorDTO.getId());
-
-                List<Sesion> listaSesiones = sesionRepository.findAllBySesiones(profesorDTO.getId());
-
-                List<SesionDTO> listaResultadoDTO = new ArrayList<>();
-
-                Optional<Profesor> profesorAntiguoOpt = profesorRepository.findById(profesorDTO.getId());
-                if (profesorAntiguoOpt.isPresent()) {
-                        Profesor profesorAntiguo = profesorAntiguoOpt.get();
-
-                        Profesor nuevoProfesor = new Profesor();
-                        nuevoProfesor.setNombre(profesorDTO.getNombre());
-                        nuevoProfesor.setApellidos(profesorDTO.getApellidos());
-                        nuevoProfesor.setNif(profesorDTO.getNif());
-                        nuevoProfesor.setDireccion(profesorDTO.getDireccion());
-                        nuevoProfesor.setEmail(profesorDTO.getEmail());
-                        nuevoProfesor.setTelefono(profesorDTO.getTelefono());
-                        nuevoProfesor.setActivo(true);
-
-                        profesorRepository.save(nuevoProfesor);
-
-                        for (Sesion sesion : listaSesiones) {
-                                sesion.setProfesor(nuevoProfesor);
-                                sesionRepository.save(sesion);
-                                listaResultadoDTO.add(SesionDTO.convertToDTO(sesion));
-                        }
-
-                        profesorAntiguo.setActivo(false);
-                        profesorRepository.save(profesorAntiguo);
-                }
-
-                return listaResultadoDTO;
+                return null;
         }
 
 }
