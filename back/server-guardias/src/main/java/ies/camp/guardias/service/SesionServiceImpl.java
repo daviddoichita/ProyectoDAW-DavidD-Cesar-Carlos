@@ -93,7 +93,6 @@ public class SesionServiceImpl implements SesionService {
     private RolRepository rolRepository;
 
     @Override
-    @Async("async")
     public boolean loadFromCSV(MultipartFile csv, int year) {
         log.info(
                 this.getClass().getSimpleName() +
