@@ -111,8 +111,9 @@ export class CuadranteProfesorComponent implements OnInit {
     } else {
       this.intervaloService.findAll().subscribe({
         next: (intervalos) => {
-          this.intervalos = intervalos;
-          sessionStorage.setItem('intervalos', JSON.stringify(intervalos));
+          intervalos.forEach((i) => console.log(i));
+          this.intervalos = intervalos.filter((i) => i.id != 4);
+          sessionStorage.setItem('intervalos', JSON.stringify(this.intervalos));
         },
         error: (error) => {
           console.error(error);
