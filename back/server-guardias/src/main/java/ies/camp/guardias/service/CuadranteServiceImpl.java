@@ -6,8 +6,6 @@ import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.FaltaRepository;
 import ies.camp.guardias.repository.entity.Cuadrante;
 import ies.camp.guardias.repository.entity.Falta;
-import ies.camp.guardias.repository.entity.Sesion;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
@@ -111,7 +109,9 @@ public class CuadranteServiceImpl implements CuadranteService {
                         Cuadrante cuadrante = cuadranteOptional.get();
 
                         ProfesorDTO profesorDTO = (ProfesorDTO) currentUser;
-                        if (profesorDTO.getEmail().equals(cuadrante.getGuardia().getProfesor().getEmail())) {
+                        if (!profesorDTO.getEmail().equals(cuadrante.getGuardia().getProfesor().getEmail())) {
+                                estado = 2;
+                        } else {
                                 Falta falta = cuadrante.getFaltas().stream().filter(f -> f.getId().equals(idFalta))
                                                 .collect(Collectors.toList()).get(0);
                                 falta.setFirma(firma);
@@ -119,8 +119,6 @@ public class CuadranteServiceImpl implements CuadranteService {
                                 if (saved != null) {
                                         estado = 0;
                                 }
-                        } else {
-                                estado = 2;
                         }
 
                 }
