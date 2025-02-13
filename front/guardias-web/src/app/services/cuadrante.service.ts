@@ -44,4 +44,20 @@ export class CuadranteService {
       headers: this.auth.getAuthHeader(),
     });
   }
+
+  addIncidencia(
+    idCuadrante: number,
+    idFalta: number,
+    incidencia: string
+  ): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('idCuadrante', idCuadrante);
+    params = params.append('idFalta', idFalta);
+    params = params.append('incidencia', incidencia);
+
+    return this.http.get(this.url + '/incidencia', {
+      params: params,
+      headers: this.auth.getAuthHeader(),
+    });
+  }
 }

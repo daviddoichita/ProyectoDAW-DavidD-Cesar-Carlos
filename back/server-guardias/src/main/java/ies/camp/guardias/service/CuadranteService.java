@@ -55,8 +55,21 @@ public interface CuadranteService {
      * @return 0 ok
      * @return 1 error en actualizacion
      * @return 2 error de autorizacion
+     * @return 3 error de intervalo de tiempo
      */
     public int firmarCuadrante(UserDetails currentUser, Long id, Long idFalta, String firma);
+
+    /**
+     * Edita un cuadrante para asignarle una incidencia
+     * 
+     * @param incidencia incidencia con la que actualizar el cuadrante
+     * 
+     * @return 0 ok
+     * @return 1 error en actualizacion
+     * @return 2 error de autorizacion
+     * @return 3 error de intervalo de tiempo
+     */
+    public int addIncidenciaCuadrante(UserDetails currentUser, Long id, Long idFalta, String incidencia);
 
     /**
      * Devuelve una lista con todos los cuadrantes que tengan faltas

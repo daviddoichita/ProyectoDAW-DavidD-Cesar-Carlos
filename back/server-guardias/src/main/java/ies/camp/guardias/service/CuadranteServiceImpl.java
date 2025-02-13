@@ -4,6 +4,7 @@ import ies.camp.guardias.model.dto.CuadranteDTO;
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.FaltaRepository;
+import ies.camp.guardias.repository.dao.IntervaloRepository;
 import ies.camp.guardias.repository.entity.Cuadrante;
 import ies.camp.guardias.repository.entity.Falta;
 import java.time.DayOfWeek;
@@ -28,6 +29,9 @@ public class CuadranteServiceImpl implements CuadranteService {
 
         @Autowired
         private FaltaRepository faltaRepository;
+
+        @Autowired
+        private IntervaloRepository intervaloRepository;
 
         @Override
         public List<CuadranteDTO> findAll() {
@@ -108,19 +112,58 @@ public class CuadranteServiceImpl implements CuadranteService {
                 if (cuadranteOptional.isPresent()) {
                         Cuadrante cuadrante = cuadranteOptional.get();
 
-                        ProfesorDTO profesorDTO = (ProfesorDTO) currentUser;
-                        if (!profesorDTO.getEmail().equals(cuadrante.getGuardia().getProfesor().getEmail())) {
-                                estado = 2;
+                        if (cuadrante.getGuardia().getIntervalo() != this.intervaloRepository.findNow().get()) {
+                                estado = 3;
                         } else {
-                                Falta falta = cuadrante.getFaltas().stream().filter(f -> f.getId().equals(idFalta))
-                                                .collect(Collectors.toList()).get(0);
-                                falta.setFirma(firma);
-                                Falta saved = this.faltaRepository.save(falta);
-                                if (saved != null) {
-                                        estado = 0;
+
+                                ProfesorDTO profesorDTO = (ProfesorDTO) currentUser;
+                                if (!profesorDTO.getEmail().equals(cuadrante.getGuardia().getProfesor().getEmail())) {
+                                        estado = 2;
+                                } else {
+                                        Falta falta = cuadrante.getFaltas().stream()
+                                                        .filter(f -> f.getId().equals(idFalta))
+                                                        .collect(Collectors.toList()).get(0);
+                                        falta.setFirma(firma);
+                                        Falta saved = this.faltaRepository.save(falta);
+                                        if (saved != null) {
+                                                estado = 0;
+                                        }
                                 }
                         }
 
+                }
+
+                return estado;
+        }
+
+        @Override
+        public int addIncidenciaCuadrante(UserDetails currentUser, Long id, Long idFalta, String incidencia) {
+                log.info(this.getClass().getSimpleName()
+                                + " addIncidenciaCuadrante: asignar incidencia a cuadrante: {}", incidencia);
+
+                Optional<Cuadrante> cuadranteOptional = this.cuadranteRepository.findById(id);
+                int estado = 1;
+                if (cuadranteOptional.isPresent()) {
+                        Cuadrante cuadrante = cuadranteOptional.get();
+
+                        if (cuadrante.getGuardia().getIntervalo() != this.intervaloRepository.findNow().get()) {
+                                estado = 3;
+                        } else {
+
+                                ProfesorDTO profesorDTO = (ProfesorDTO) currentUser;
+                                if (!profesorDTO.getEmail().equals(cuadrante.getGuardia().getProfesor().getEmail())) {
+                                        estado = 2;
+                                } else {
+                                        Falta falta = cuadrante.getFaltas().stream()
+                                                        .filter(f -> f.getId().equals(idFalta))
+                                                        .collect(Collectors.toList()).get(0);
+                                        falta.setIncidencias(incidencia);
+                                        Falta saved = this.faltaRepository.save(falta);
+                                        if (saved != null) {
+                                                estado = 0;
+                                        }
+                                }
+                        }
                 }
 
                 return estado;

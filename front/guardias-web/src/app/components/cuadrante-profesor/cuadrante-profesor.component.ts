@@ -11,13 +11,17 @@ import { AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { DiaService } from '../../services/dia.service';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Router } from '@angular/router';
 import { GlobalStateService } from '../../services/global-state.service';
 import { AuthService } from '../../services/auth.service';
 import { ButtonModule } from 'primeng/button';
 import { Profesor } from '../../interfaces/profesor';
+import { ToastModule } from 'primeng/toast';
+import { HttpStatusCode } from '@angular/common/http';
+import { DialogModule } from 'primeng/dialog';
+import { Dia } from '../../interfaces/dia';
 
 @Component({
   selector: 'app-cuadrante-profesor',
@@ -32,22 +36,31 @@ import { Profesor } from '../../interfaces/profesor';
     FormsModule,
     ConfirmDialogModule,
     ButtonModule,
+    ToastModule,
+    DialogModule,
   ],
   templateUrl: './cuadrante-profesor.component.html',
   styleUrl: './cuadrante-profesor.component.scss',
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, MessageService],
 })
 export class CuadranteProfesorComponent implements OnInit {
   cuadrantes: Cuadrante[] = [];
   cuadrantesLoaded: boolean = false;
   isAdmin: boolean = false;
   user!: Profesor;
+
   firmando: boolean = false;
+  adding: boolean = false;
+  dialogVisible: boolean = false;
+  incidencia: string = '';
+  idCuadrante: number = 0;
+  idFalta: number = 0;
 
   intervalos: Intervalo[] = [];
 
   dias: any[] = [];
   dia!: string;
+  diaObj!: Dia;
 
   activeIndex!: number[];
 
@@ -58,7 +71,8 @@ export class CuadranteProfesorComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private globalStateService: GlobalStateService,
     public router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -75,6 +89,60 @@ export class CuadranteProfesorComponent implements OnInit {
       next: (response) => {
         if (response) {
           this.user = response;
+          const dias = sessionStorage.getItem('dias');
+          if (dias) {
+            this.dias = JSON.parse(dias);
+          } else {
+            this.diaService.findCurrentWeek().subscribe({
+              next: (dias) => {
+                dias.forEach((dia) => {
+                  this.dias.push({ name: dia.nombre, value: dia.abreviacion });
+                });
+                this.dia = this.dias[0].value;
+                this.diaObj = dias.filter((d) => d.nombre === this.dia)[0];
+                this.openHora();
+                const intervalos = sessionStorage.getItem('intervalos');
+                if (intervalos) {
+                  this.intervalos = JSON.parse(intervalos);
+                } else {
+                  this.intervaloService.findAll().subscribe({
+                    next: (intervalos) => {
+                      intervalos.forEach((i) => console.log(i));
+                      this.intervalos = intervalos.filter((i) => i.id != 4);
+                      sessionStorage.setItem(
+                        'intervalos',
+                        JSON.stringify(this.intervalos)
+                      );
+                    },
+                    error: (error) => {
+                      console.error(error);
+                    },
+                  });
+                  // if (this.user) {
+                  //   this.intervaloService
+                  //     .findIntervalosGuardiasProfesorByDia(
+                  //       this.user.id,
+                  //       this.diaObj.id
+                  //     )
+                  //     .subscribe({
+                  //       next: (intervalos) => {
+                  //         intervalos.forEach((i) => console.log(i));
+                  //         this.intervalos = intervalos.filter((i) => i.id != 4);
+                  //         sessionStorage.setItem(
+                  //           'intervalos',
+                  //           JSON.stringify(this.intervalos)
+                  //         );
+                  //       },
+                  //     });
+                  // } else {
+                  // }
+                }
+              },
+              error: (error) => {
+                console.error(error);
+              },
+            });
+          }
         }
       },
     });
@@ -94,40 +162,6 @@ export class CuadranteProfesorComponent implements OnInit {
         console.error(error);
       },
     });
-
-    const dias = sessionStorage.getItem('dias');
-    if (dias) {
-      this.dias = JSON.parse(dias);
-    } else {
-      this.diaService.findCurrentWeek().subscribe({
-        next: (dias) => {
-          dias.forEach((dia) => {
-            this.dias.push({ name: dia.nombre, value: dia.abreviacion });
-          });
-          this.dia = this.dias[0].value;
-          this.openHora();
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-
-    const intervalos = sessionStorage.getItem('intervalos');
-    if (intervalos) {
-      this.intervalos = JSON.parse(intervalos);
-    } else {
-      this.intervaloService.findAll().subscribe({
-        next: (intervalos) => {
-          intervalos.forEach((i) => console.log(i));
-          this.intervalos = intervalos.filter((i) => i.id != 4);
-          sessionStorage.setItem('intervalos', JSON.stringify(this.intervalos));
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
   }
 
   openHora() {
@@ -170,22 +204,100 @@ export class CuadranteProfesorComponent implements OnInit {
   firmarCuadrante(idCuadrante: number, idFalta: number) {
     this.cuadranteService.firmar(idCuadrante, idFalta, 'firmado').subscribe({
       next: (response) => {
-        console.log(response);
-        this.firmando = true;
-        this.cuadranteService.findCurrentWeek().subscribe({
-          next: (cuadrantes) => {
-            this.cuadrantes = cuadrantes;
-            this.firmando = false;
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
+        if (Number(response) === 0) {
+          this.firmando = true;
+          this.cuadranteService.findCurrentWeek().subscribe({
+            next: (cuadrantes) => {
+              this.cuadrantes = cuadrantes;
+              this.firmando = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Exito',
+                detail: 'Firmado correcto',
+              });
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+        }
       },
       error: (error) => {
-        console.error(error);
+        if (error.status === HttpStatusCode.BadRequest) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Este cuadrante no se puede firmar en este momento',
+          });
+        } else if (error.status === HttpStatusCode.Unauthorized) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No tienes permiso para firmar este cuadrante',
+          });
+        } else if (error.status === HttpStatusCode.InternalServerError) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al firmar el cuadrante',
+          });
+        }
       },
     });
+  }
+
+  showIncidenciaDialog(idCuadrante: number, idFalta: number) {
+    this.idCuadrante = idCuadrante;
+    this.idFalta = idFalta;
+    this.dialogVisible = true;
+  }
+
+  addIncidencia() {
+    this.dialogVisible = false;
+    this.cuadranteService
+      .addIncidencia(this.idCuadrante, this.idFalta, this.incidencia)
+      .subscribe({
+        next: (response) => {
+          if (Number(response) === 0) {
+            this.adding = true;
+            this.cuadranteService.findCurrentWeek().subscribe({
+              next: (cuadrantes) => {
+                this.cuadrantes = cuadrantes;
+                this.adding = false;
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Exito',
+                  detail: 'Incidencia asignada',
+                });
+              },
+              error: (error) => {
+                console.error(error);
+              },
+            });
+          }
+        },
+        error: (error) => {
+          if (error.status === HttpStatusCode.BadRequest) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Este cuadrante no se puede editar en este momento',
+            });
+          } else if (error.status === HttpStatusCode.Unauthorized) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No tienes permiso para editar este cuadrante',
+            });
+          } else if (error.status === HttpStatusCode.InternalServerError) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error al editar el cuadrante',
+            });
+          }
+        },
+      });
   }
 
   mostrarInfoProf(profesor: Profesor) {
@@ -193,7 +305,21 @@ export class CuadranteProfesorComponent implements OnInit {
       target: document.body as EventTarget,
       message: `Nombre: ${profesor.nombre} ${profesor.apellidos} <br>Email: ${profesor.email} <br> Telefono: ${profesor.telefono}`,
       header: 'Informacion profesor',
-      icon: 'pi pi-info',
+      icon: 'pi pi-info-circle',
+      acceptIcon: 'none',
+      acceptLabel: 'Aceptar',
+      rejectVisible: false,
+      accept: () => {},
+      reject: () => {},
+    });
+  }
+
+  mostrarIncidencia(incidencia: string) {
+    this.confirmationService.confirm({
+      target: document.body as EventTarget,
+      message: incidencia,
+      header: 'Informacion incidencia',
+      icon: 'pi pi-info-circle',
       acceptIcon: 'none',
       acceptLabel: 'Aceptar',
       rejectVisible: false,
