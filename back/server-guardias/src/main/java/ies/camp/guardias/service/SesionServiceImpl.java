@@ -1,8 +1,11 @@
 package ies.camp.guardias.service;
 
-import ies.camp.guardias.model.dto.CuadranteDTO;
+import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.model.dto.SesionDTO;
 import ies.camp.guardias.repository.dao.AulaRepository;
 import ies.camp.guardias.repository.dao.CargoRepository;
+import ies.camp.guardias.repository.dao.CuadranteRepository;
+
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
@@ -162,99 +165,6 @@ public class SesionServiceImpl implements SesionService {
                 return true;
         }
 
-    private void loadCuadrantes(int year) {
-        LocalDate start = LocalDate.of(year, 9, 9);
-        LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
-
-        List<Sesion> sesiones = this.sesionRepository.findSesionesGuardia();
-        List<Intervalo> intervalos = this.intervaloRepository.findAll();
-        List<Cargo> cargos = this.cargoRepository.findAll();
-
-        List<Object> cuadrantes = new ArrayList<>();
-        String[] dias = { "L", "M", "X", "J", "V" };
-
-        while (!start.isAfter(end)) {
-            if (start.getDayOfWeek() == DayOfWeek.SATURDAY) {
-                start = start.plusDays(2);
-            } else {
-                final LocalDate startFinal = start;
-
-                List<Sesion> sesionesDia = sesiones
-                        .stream()
-                        .filter(ses -> ses
-                                .getDia()
-                                .getAbreviacion()
-                                .equals(
-                                        dias[startFinal.getDayOfWeek().getValue() - 1]))
-                        .collect(Collectors.toList());
-
-                for (Intervalo inter : intervalos) {
-                    List<Sesion> sesionesIntervalo = sesionesDia
-                            .stream()
-                            .filter(ses -> ses.getIntervalo().equals(inter))
-                            .collect(Collectors.toList());
-
-                    Collections.shuffle(sesionesIntervalo);
-
-                    for (int i = 0; i < sesionesIntervalo.size(); i++) {
-                        cuadrantes.add(
-                                Cuadrante.builder()
-                                        .cargo(cargos.get(i))
-                                        .guardia(sesionesIntervalo.get(i))
-                                        .fecha(startFinal)
-                                        .build());
-                    }
-                }
-
-                // HashSets para los datos existentes
-                Set<Materia> materias = this.materiaRepository.findAll()
-                                .stream()
-                                .collect(Collectors.toSet());
-                Set<Grupo> grupos = this.grupoRepository.findAll().stream().collect(Collectors.toSet());
-                Set<Aula> aulas = this.aulaRepository.findAll().stream().collect(Collectors.toSet());
-                Set<Profesor> profesores = this.profesorRepository.findAll()
-                                .stream()
-                                .collect(Collectors.toSet());
-
-                // Creacion de objetos a guardar
-                Faker faker = new Faker();
-                Rol rol = this.rolRepository.findByNombre("profesor").get();
-                for (int i = 1; i < lines.size(); i++) {
-                        List<String> fields = Arrays.asList(lines.get(i).split(";"));
-
-                        if (fields.get(6).trim() != "") {
-                                grupos.add(this.loadGrupo(fields.subList(6, 10)));
-                        }
-                        materias.add(this.loadMateria(fields.subList(0, 6)));
-                        aulas.add(this.loadAula(fields.subList(10, 13)));
-
-                        Profesor profesor = this.loadProfesor(fields.subList(13, 15), faker, rol);
-                        log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
-                        profesores.add(profesor);
-                }
-
-                // Cargar las tablas
-                try {
-                        materias.forEach(this.materiaRepository::save);
-                        grupos.forEach(this.grupoRepository::save);
-                        aulas.forEach(this.aulaRepository::save);
-                        profesores.forEach(this.profesorRepository::save);
-
-                        this.faltaRepository.deleteAllInBatch();
-                        this.cuadranteRepository.deleteAllInBatch();
-                        this.sesionRepository.deleteAllInBatch();
-
-                        this.loadSesiones(lines.subList(1, lines.size()));
-                        this.loadCuadrantes(year);
-                } catch (Exception e) {
-                        log.error(
-                                        this.getClass().getSimpleName() +
-                                                        " loadFromCSV: error al guardar datos: {}",
-                                        e);
-                }
-                return true;
-        }
-
         private void loadCuadrantes(int year) {
                 LocalDate start = LocalDate.of(year, 9, 9);
                 LocalDate end = start.plusYears(1).withMonth(6).withDayOfMonth(18);
@@ -263,25 +173,8 @@ public class SesionServiceImpl implements SesionService {
                 List<Intervalo> intervalos = this.intervaloRepository.findAll();
                 List<Cargo> cargos = this.cargoRepository.findAll();
 
-                // Cargar las tablas a HashTables para menor numero de peticiones a base de
-                // datos
-                Hashtable<Long, Profesor> profesores = new Hashtable<Long, Profesor>();
-                this.profesorRepository.findAll()
-                                .forEach(profesor -> profesores.put(profesor.getNumero(), profesor));
-                Hashtable<Long, Materia> materias = new Hashtable<Long, Materia>();
-                this.materiaRepository.findAll()
-                                .forEach(materia -> materias.put(materia.getNumero(), materia));
-                Hashtable<Long, Grupo> grupos = new Hashtable<Long, Grupo>();
-                this.grupoRepository.findAll()
-                                .forEach(grupo -> grupos.put(grupo.getNumero(), grupo));
-                Hashtable<Long, Aula> aulas = new Hashtable<Long, Aula>();
-                this.aulaRepository.findAll()
-                                .forEach(aula -> aulas.put(aula.getNumero(), aula));
-                Hashtable<String, Dia> dias = new Hashtable<String, Dia>();
-                this.diaRepository.findAll()
-                                .forEach(dia -> dias.put(dia.getAbreviacion(), dia));
-                Hashtable<Long, Intervalo> intervalos = new Hashtable<Long, Intervalo>();
-                this.intervaloRepository.findAll().forEach(intervalo -> intervalos.put(intervalo.getId(), intervalo));
+                List<Object> cuadrantes = new ArrayList<>();
+                String[] dias = { "L", "M", "X", "J", "V" };
 
                 while (!start.isAfter(end)) {
                         if (start.getDayOfWeek() == DayOfWeek.SATURDAY) {
