@@ -1,99 +1,96 @@
 <div class="app-layout">
     <app-header></app-header>
     <div class="main-section">
-        <form>
+        <div class="grid gap-4 pt-8 px-8">
 
-
-            <div class="grid gap-4 pt-8 px-8">
-
-                <div class="col-12 grid gap-4">
-                    <div class="col-5">
-                        <input id="nombre" type="text" pInputText placeholder="Nombre" class="w-full"
-                            [(ngModel)]="nombre" (ngModelChange)="validarCampo('nombre')" required
-                            autocomplete="given-name" aria-label="Nombre" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('nombre')" severity="error"
-                                [text]="getErrores('nombre') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <input id="apellidos" type="text" pInputText placeholder="Apellidos" class="w-full"
-                            [(ngModel)]="apellidos" required (ngModelChange)="validarCampo('apellidos')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('apellidos')" severity="error"
-                                [text]="getErrores('apellidos') ?? undefined"></p-message>
-                        </div>
+            <div class="col-12 grid gap-4">
+                <div class="col-5">
+                    <input id="nombre" type="text" pInputText placeholder="Nombre" class="w-full" [(ngModel)]="nombre"
+                        (ngModelChange)="validarCampo('nombre')" required autocomplete="given-name"
+                        aria-label="Nombre" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('nombre')" severity="error"
+                            [text]="getErrores('nombre') ?? undefined"></p-message>
                     </div>
                 </div>
-
-                <div class="col-12 grid gap-4">
-                    <div class="col-5">
-                        <input id="contrasenya" type="password" pInputText placeholder="Contraseña" class="w-full"
-                            [(ngModel)]="contrasenya" required (ngModelChange)="validarCampo('contrasenya')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('contrasenya')" severity="error"
-                                [text]="getErrores('contrasenya') ?? undefined"></p-message>
-                        </div>
+                <div class="col-5">
+                    <input id="apellidos" type="text" pInputText placeholder="Apellidos" class="w-full"
+                        [(ngModel)]="apellidos" required (ngModelChange)="validarCampo('apellidos')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('apellidos')" severity="error"
+                            [text]="getErrores('apellidos') ?? undefined"></p-message>
                     </div>
-                    <div class="col-5">
-                        <input id="nif" type="text" pInputText placeholder="NIF" class="w-full" [(ngModel)]="nif"
-                            required (ngModelChange)="validarCampo('nif')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('nif')" severity="error"
-                                [text]="getErrores('nif') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 grid gap-4">
-                    <div class="col-5">
-                        <input id="direccion" type="text" pInputText placeholder="Dirección" class="w-full"
-                            [(ngModel)]="direccion" required (ngModelChange)="validarCampo('direccion')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('direccion')" severity="error"
-                                [text]="getErrores('direccion') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <input id="email" type="email" pInputText placeholder="Correo electrónico" class="w-full"
-                            [(ngModel)]="email" required (ngModelChange)="validarCampo('email')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('email')" severity="error"
-                                [text]="getErrores('email') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 grid gap-4">
-                    <div class="col-5">
-                        <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full"
-                            [(ngModel)]="telefono" required (ngModelChange)="validarCampo('telefono')" />
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('telefono')" severity="error"
-                                [text]="getErrores('telefono') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <p-dropdown id="sustituye" [options]="profesores" optionLabel="label"
-                            [placeholder]="profesores.length ? 'Sustituye a...' : 'No hay profesores disponibles'"
-                            [(ngModel)]="sustituye" class="w-full" required
-                            (ngModelChange)="validarCampo('sustituye')"></p-dropdown>
-
-                        <div class="contenedorError">
-                            <p-message *ngIf="getErrores('sustituye')" severity="error"
-                                [text]="getErrores('sustituye') ?? undefined"></p-message>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-10 flex justify-content-end gap-4">
-                    <p-toast pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
-                        (click)="cancelar()"></p-toast>
-                    <p-toast pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
-                        (click)="guardar()"></p-toast>
                 </div>
             </div>
-        </form>
+
+            <div class="col-12 grid gap-4">
+                <div class="col-5">
+                    <input id="contrasenya" type="password" pInputText placeholder="Contraseña" class="w-full"
+                        [(ngModel)]="contrasenya" required (ngModelChange)="validarCampo('contrasenya')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('contrasenya')" severity="error"
+                            [text]="getErrores('contrasenya') ?? undefined"></p-message>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <input id="nif" type="text" pInputText placeholder="NIF" class="w-full" [(ngModel)]="nif" required
+                        (ngModelChange)="validarCampo('nif')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('nif')" severity="error"
+                            [text]="getErrores('nif') ?? undefined"></p-message>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 grid gap-4">
+                <div class="col-5">
+                    <input id="direccion" type="text" pInputText placeholder="Dirección" class="w-full"
+                        [(ngModel)]="direccion" required (ngModelChange)="validarCampo('direccion')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('direccion')" severity="error"
+                            [text]="getErrores('direccion') ?? undefined"></p-message>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <input id="email" type="email" pInputText placeholder="Correo electrónico" class="w-full"
+                        [(ngModel)]="email" required (ngModelChange)="validarCampo('email')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('email')" severity="error"
+                            [text]="getErrores('email') ?? undefined"></p-message>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 grid gap-4">
+                <div class="col-5">
+                    <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full"
+                        [(ngModel)]="telefono" required (ngModelChange)="validarCampo('telefono')" />
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('telefono')" severity="error"
+                            [text]="getErrores('telefono') ?? undefined"></p-message>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <p-dropdown id="sustituye" [options]="profesores" optionLabel="label"
+                        [placeholder]="profesores.length ? 'Sustituye a...' : 'No hay profesores disponibles'"
+                        [(ngModel)]="sustituye" class="w-full" required
+                        (ngModelChange)="validarCampo('sustituye')"></p-dropdown>
+
+                    <div class="contenedorError">
+                        <p-message *ngIf="getErrores('sustituye')" severity="error"
+                            [text]="getErrores('sustituye') ?? undefined"></p-message>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-10 flex justify-content-end gap-4">
+                <p-confirmDialog />
+                <p-toast pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
+                    (click)="cancelar()"></p-toast>
+                <p-toast pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
+                    (click)="guardar()"></p-toast>
+            </div>
+        </div>
     </div>
 
 </div>
