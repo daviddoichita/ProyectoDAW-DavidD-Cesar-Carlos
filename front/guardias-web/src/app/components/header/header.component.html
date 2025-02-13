@@ -25,8 +25,9 @@
           class="m-3 flex no-underline align-items-center cursor-pointer p-3 gap-2 border-round-md text-400 hover:surface-700 transition-duration-150 transition-colors p-ripple"
           routerLink="/logout">
           <!-- <p-avatar image="/assets/imgs/avatar.jpg" shape="circle" /> -->
-          <span class="font-bold mt-1">{{user?.nombre + " " + user?.apellidos}}</span>
-          <i class="pi pi-sign-out ml-1 text-lg"></i>
+          <span class="font-bold text-xl">{{letraInicialMayuscula(user?.nombre) + " " +
+            letraInicialMayuscula(user?.apellidos)}}</span>
+          <i class="pi pi-sign-out ml-auto mr-2 text-xl"></i>
         </a>
       </div>
     </div>

@@ -19,6 +19,7 @@ import { RippleModule } from "primeng/ripple";
 import { AuthService } from "../../services/auth.service";
 import { HttpClientModule } from "@angular/common/http";
 import { GlobalStateService } from "../../services/global-state.service";
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: "app-login",
@@ -40,6 +41,7 @@ import { GlobalStateService } from "../../services/global-state.service";
     MessagesModule,
     MessageModule,
     RouterModule,
+    DialogModule
   ],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
@@ -47,6 +49,16 @@ import { GlobalStateService } from "../../services/global-state.service";
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   credentialsError: boolean = false;
+
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  hideDialog() {
+    this.visible = false;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -130,7 +142,7 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         console.error('Error en el inicio de sesión:', error);
 
-        if (error.status === 403 || error.status === 401) {
+        if (error.status === 403 || error.status === 404 || error.status === 401) {
           this.credentialsError = true;
           console.error('Credenciales incorrectas');
         } else {

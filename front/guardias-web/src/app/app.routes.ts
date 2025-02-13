@@ -23,12 +23,12 @@ export const routes: Routes = [
     canActivate: [adminGuard],
   },
   { path: 'login', component: LoginComponent },
-  { path: 'listado-profesores', component: ListadoProfesoresComponent },
-  { path: 'alta-profesor', component: AltaProfesorComponent },
-  { path: 'editar-profesor/:id', component: EditarProfesorComponent },
-  { path: 'informes-faltas', component: InformesFaltasComponent, canActivate: [authGuard] },
-  { path: 'informes-guardias', component: InformesAsistenciasComponent, canActivate: [authGuard] },
-  { path: 'informes-incidencias', component: InformesIncidenciasComponent, canActivate: [authGuard] },
+  { path: 'listado-profesores', component: ListadoProfesoresComponent, canActivate: [adminGuard] },
+  { path: 'alta-profesor', component: AltaProfesorComponent, canActivate: [adminGuard] },
+  { path: 'editar-profesor/:id', component: EditarProfesorComponent, canActivate: [adminGuard] },
+  { path: 'informes-faltas', component: InformesFaltasComponent, canActivate: [adminGuard] },
+  { path: 'informes-guardias', component: InformesAsistenciasComponent, canActivate: [adminGuard] },
+  { path: 'informes-incidencias', component: InformesIncidenciasComponent, canActivate: [adminGuard] },
   {
     path: 'nueva-falta',
     component: NuevaFaltaComponent,
@@ -37,7 +37,7 @@ export const routes: Routes = [
   {
     path: 'subir-sesiones',
     component: SubirSesionesComponent,
-    canActivate: [authGuard],
+    canActivate: [adminGuard],
   },
   { path: 'logout', component: LogoutComponent },
 ];

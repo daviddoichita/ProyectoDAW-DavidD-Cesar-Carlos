@@ -118,10 +118,12 @@ hr {
 }
 
 .inputUsuario input:focus,
-.inputContraseña input:focus {
+.inputContraseña input:focus,
+.inputRecuperarContra:focus {
   border-color: #95D3D1;
   box-shadow: 0 0 5px rgba(120, 210, 230, 0.5);
 }
+
 
 .inputUsuario i,
 .inputContraseña i {

@@ -80,9 +80,10 @@
                         <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.apellidos }}</td>
                         <td class="text-xl text-center p-3">{{ cuadrante.guardia.profesor.nif }}</td>
                         <td class="text-xl text-center p-3">
-                            <p-button (onClick)="showDialog(cuadrante)" [styleClass]="'text-xl focus:shadow-none'"
-                                [link]="true">
-                                Ver incidencia
+                            <p-button (onClick)="showDialog(cuadrante)"
+                                [styleClass]="'text-xl text-center focus:shadow-none'" [link]="true">
+
+                                <span class="pi pi-exclamation-triangle text-2xl mt-1 ml-2"></span>
                             </p-button>
                         </td>
                     </tr>
