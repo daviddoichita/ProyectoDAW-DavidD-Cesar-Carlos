@@ -11,15 +11,21 @@
                 </span>
             </div>
 
-            <div class="w-10rem">
-                <p-calendar #calendar [(ngModel)]="date" (ngModelChange)="filtrarPorMes()" view="month"
-                    dateFormat="mm/yy" [readonlyInput]="true" placeholder="Filtrar por mes" [showIcon]="true"
-                    [iconDisplay]="'input'" [showClear]="!!date" [showOnFocus]="false" class="ml-2" readonly>
-                    <ng-template pTemplate="footer">
-                        <button type="button" pButton label="Borrar filtro"
-                            (click)="borrarFiltro(); calendar.hideOverlay()" class="p-button-text w-full"></button>
-                    </ng-template>
-                </p-calendar>
+            <div class="w-11rem flex align-items-center ml-2">
+                <div class="relative w-full">
+                    <p-calendar #calendar [(ngModel)]="date" (ngModelChange)="filtrarPorMes()" view="month"
+                        dateFormat="mm/yy" [readonlyInput]="true" placeholder="Filtrar por mes" [showIcon]="true"
+                        [iconDisplay]="'input'" inputId="buttondisplay" [showOnFocus]="true"
+                        styleClass="focus:shadow-none" [inputStyleClass]="'focus:shadow-none'" class="w-full" readonly>
+                        <ng-template pTemplate="footer">
+                            <button type="button" pButton label="Borrar filtro"
+                                (click)="borrarFiltro(); calendar.hideOverlay()" class="p-button-text w-full"></button>
+                        </ng-template>
+                    </p-calendar>
+                    <button *ngIf="date" pButton type="button" icon="pi pi-times" (click)="borrarFiltro()"
+                        class="absolute right-0 top-0 h-full p-button-primary border-none border-noround-left">
+                    </button>
+                </div>
             </div>
 
 
