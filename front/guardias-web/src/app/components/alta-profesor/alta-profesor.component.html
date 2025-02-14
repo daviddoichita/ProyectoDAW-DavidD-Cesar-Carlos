@@ -70,6 +70,7 @@
                     <div class="col-5">
                         <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full"
                             formControlName="telefono" />
+
                         <div class="mt-2">
                             <p-message
                                 *ngIf="altaForm.get('telefono')?.errors && (altaForm.get('telefono')?.touched || altaForm.get('telefono')?.dirty || mostrarErrores)"
@@ -81,11 +82,13 @@
                             [placeholder]="profesores.length ? 'Sustituye a...' : 'No hay profesores disponibles'"
                             formControlName="sustituye" class="w-full"></p-dropdown>
 
-                        <div class="mt-2">
-                            <p-message
-                                *ngIf="altaForm.get('sustituye')?.errors && (altaForm.get('sustituye')?.touched || altaForm.get('sustituye')?.dirty || mostrarErrores)"
-                                severity="error" [text]="getErrores('sustituye') ?? undefined"></p-message>
-                        </div>
+                            <div class="mt-2">
+                                <p-message
+                                    *ngIf="altaForm.get('sustituye')?.invalid && (altaForm.get('sustituye')?.touched || mostrarErrores)"
+                                    severity="error"
+                                    text="Debes seleccionar un profesor">
+                                </p-message>
+                            </div>                            
                     </div>
                 </div>
 

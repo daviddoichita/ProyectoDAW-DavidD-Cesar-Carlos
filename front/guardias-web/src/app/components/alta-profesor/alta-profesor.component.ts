@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from "../header/header.component";
+import { HeaderComponent } from '../header/header.component';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProfesorService } from '../../services/profesor.service';
@@ -18,13 +23,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-alta-profesor',
   standalone: true,
-  imports: [HeaderComponent, TableModule, ButtonModule, InputTextModule, FormsModule, DropdownModule, MessageModule, CommonModule, ToastModule,
-    ConfirmDialogModule, ReactiveFormsModule],
+  imports: [
+    HeaderComponent,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    FormsModule,
+    DropdownModule,
+    MessageModule,
+    CommonModule,
+    ToastModule,
+    ConfirmDialogModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './alta-profesor.component.html',
-  providers: [MessageService, ConfirmDialogModule, ConfirmationService]
+  providers: [MessageService, ConfirmDialogModule, ConfirmationService],
 })
 export class AltaProfesorComponent implements OnInit {
-
   altaForm: FormGroup;
 
   nombre: string = '';
@@ -46,7 +61,7 @@ export class AltaProfesorComponent implements OnInit {
     direccion: null,
     email: null,
     telefono: null,
-    sustituye: null
+    sustituye: null,
   };
 
   profesores: { label: string; value: any; }[] = [];
@@ -109,6 +124,7 @@ export class AltaProfesorComponent implements OnInit {
         ],
       ],
       sustituye: [
+        null,
         [
           Validators.required,
         ],
@@ -140,6 +156,8 @@ export class AltaProfesorComponent implements OnInit {
             return 'Formato de correo electrónico inválido';
           case 'telefono':
             return 'Formato de teléfono inválido';
+          case 'sustituye':
+            return 'Debes seleccionar un profesor';
           default:
             return 'Formato inválido';
         }
@@ -152,12 +170,12 @@ export class AltaProfesorComponent implements OnInit {
 
   cargarProfesoresActivos(): void {
     this.profesorService.findAll().subscribe((data: any[]) => {
-      this.profesores = data.map(profesor => ({
+      this.profesores = data.map((profesor) => ({
         label: `${profesor.nombre} ${profesor.apellidos}`,
-        value: profesor.id
+        value: profesor.id,
       }));
       if (this.profesores.length) {
-        this.altaForm.patchValue({ sustituye: this.profesores[0].value });
+        this.altaForm.patchValue({ sustituye: null });
       }
     });
   }
@@ -167,7 +185,11 @@ export class AltaProfesorComponent implements OnInit {
 
     if (this.altaForm.invalid) {
       this.altaForm.markAllAsTouched();
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor, corrige los errores antes de guardar.' });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, corrige los errores antes de guardar.',
+      });
       return;
     }
 
@@ -177,8 +199,8 @@ export class AltaProfesorComponent implements OnInit {
       nif: this.altaForm.value.nif,
       direccion: this.altaForm.value.direccion,
       telefono: this.altaForm.value.telefono,
-      email: this.altaForm.value.email
-    }
+      email: this.altaForm.value.email,
+    };
     this.sustituye = this.altaForm.get('sustituye')?.value;
 
     this.confirmationService.confirm({
@@ -187,24 +209,35 @@ export class AltaProfesorComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Aceptar',
       rejectLabel: 'Cancelar',
-      //this.altaForm.value.sustituye
       accept: () => {
         this.profesorService.save(profesor, this.sustituye.value).subscribe({
           next: (_response: any) => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Profesor guardado y sesiones reasignadas.' });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Profesor guardado y sesiones reasignadas.',
+            });
             setTimeout(() => {
               this.router.navigate(['/listado-profesores']);
             }, 1000);
           },
           error: (error) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el profesor.' });
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo guardar el profesor.',
+            });
             console.error(error);
-          }
+          },
         });
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Cancelado', detail: 'No se realizaron cambios.' });
-      }
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelado',
+          detail: 'No se realizaron cambios.',
+        });
+      },
     });
   }
 
@@ -213,21 +246,28 @@ export class AltaProfesorComponent implements OnInit {
       message: '¿Estas seguro que quieres cancelarlo?',
       header: 'Confirmacion',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon: "none",
-      acceptLabel: "Aceptar",
-      rejectLabel: "Cancelar",
-      rejectIcon: "none",
-      rejectButtonStyleClass: "p-button-danger",
+      acceptIcon: 'none',
+      acceptLabel: 'Aceptar',
+      rejectLabel: 'Cancelar',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-danger',
       accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmado', detail: 'Se han cancelado los cambios' })
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Confirmado',
+          detail: 'Se han cancelado los cambios',
+        });
         setTimeout(() => {
-          this.router.navigate(['/listado-profesores'])
-        }, 1000)
+          this.router.navigate(['/listado-profesores']);
+        }, 1000);
       },
       reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Cancelado', detail: 'Cancelado' })
-      }
-    })
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Cancelado',
+          detail: 'Cancelado',
+        });
+      },
+    });
   }
-
 }
