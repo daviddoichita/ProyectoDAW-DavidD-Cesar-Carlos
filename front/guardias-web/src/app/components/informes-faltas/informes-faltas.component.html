@@ -14,7 +14,7 @@
             <div class="w-10rem">
                 <p-calendar #calendar [(ngModel)]="date" (ngModelChange)="filtrarPorMes()" view="month"
                     dateFormat="mm/yy" [readonlyInput]="true" placeholder="Filtrar por mes" [showIcon]="true"
-                    [iconDisplay]="'input'" inputId="buttondisplay" [showOnFocus]="true" class="ml-2" readonly>
+                    [iconDisplay]="'input'" [showClear]="!!date" [showOnFocus]="false" class="ml-2" readonly>
                     <ng-template pTemplate="footer">
                         <button type="button" pButton label="Borrar filtro"
                             (click)="borrarFiltro(); calendar.hideOverlay()" class="p-button-text w-full"></button>
