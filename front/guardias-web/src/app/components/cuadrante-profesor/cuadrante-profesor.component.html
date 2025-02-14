@@ -54,7 +54,12 @@
       </div>
       <div class="w-4"></div>
     </div>
-    <p-accordion [multiple]="true" id="accordion" [activeIndex]="activeIndex">
+    <p-accordion
+      [multiple]="true"
+      id="accordion"
+      [activeIndex]="activeIndex"
+      (activeIndexChange)="activeIndexChange($event)"
+    >
       <p-accordionTab
         *ngFor="let intervalo of intervalos"
         [header]="getNombreHora(intervalo.id)"
@@ -152,11 +157,13 @@
                             label="Ver incidencia"
                             severity="info"
                             (onClick)="mostrarIncidencia(falta.incidencias)"
+                            [loading]="firmando"
                           ></p-button>
                           <p-button
                             *ngIf="!falta?.incidencias"
                             label="Ver incidencia"
                             severity="info"
+                            [loading]="firmando"
                             (onClick)="mostrarIncidencia('Sin incidencias')"
                           ></p-button>
                           <p-button
@@ -165,6 +172,7 @@
                             (onClick)="
                               showIncidenciaDialog(cuadrante.id, falta.id)
                             "
+                            [loading]="firmando"
                           ></p-button>
                         </div>
                         <div
