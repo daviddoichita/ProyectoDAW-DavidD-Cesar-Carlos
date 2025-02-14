@@ -81,3 +81,107 @@
         </div>
     </div>
 </div>
+
+/*
+<!-- <div class="app-layout">
+    <app-header></app-header>
+    <div class="main-section">
+        <form [formGroup]="editarForm" (ngSubmit)="guardar()">
+            <div class="grid gap-4 pt-8 px-8">
+                <div class="col-12 grid gap-4">
+                    <div class="col-5">
+                        <input type="text" pInputText placeholder="Nombre" class="w-full" formControlName="nombre"
+                            autocomplete="given-name" aria-label="Nombre" />
+
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('nombre')?.errors && (editarForm.get('nombre')?.touched || editarForm.get('nombre')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('nombre') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <input id="apellidos" type="text" pInputText placeholder="Apellidos" class="w-full"
+                            formControlName="apellidos" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('apellidos')?.errors && (editarForm.get('apellidos')?.touched || editarForm.get('apellidos')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('apellidos') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 grid gap-4">
+                    <div class="col-5">
+                        <input id="contrasenya" type="password" pInputText placeholder="Contraseña" class="w-full"
+                            formControlName="contrasenya" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('contrasenya')?.errors && (editarForm.get('contrasenya')?.touched || editarForm.get('contrasenya')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('contrasenya') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <input id="nif" type="text" pInputText placeholder="NIF" class="w-full" formControlName="nif" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('nif')?.errors && (editarForm.get('nif')?.touched || editarForm.get('nif')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('nif') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 grid gap-4">
+                    <div class="col-5">
+                        <input id="direccion" type="text" pInputText placeholder="Dirección" class="w-full"
+                            formControlName="direccion" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('direccion')?.errors && (editarForm.get('direccion')?.touched || editarForm.get('direccion')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('direccion') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <input id="email" type="email" pInputText placeholder="Correo electrónico" class="w-full"
+                            formControlName="email" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('email')?.errors && (editarForm.get('email')?.touched || editarForm.get('email')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('email') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 grid gap-4">
+                    <div class="col-5">
+                        <input id="telefono" type="text" pInputText placeholder="Teléfono" class="w-full"
+                            formControlName="telefono" />
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('telefono')?.errors && (editarForm.get('telefono')?.touched || editarForm.get('telefono')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('telefono') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <p-dropdown id="sustituye" [options]="profesores" optionLabel="label"
+                            [placeholder]="profesores.length ? 'Sustituye a...' : 'No hay profesores disponibles'"
+                            formControlName="sustituye" class="w-full"></p-dropdown>
+
+                        <div class="mt-2">
+                            <p-message
+                                *ngIf="editarForm.get('sustituye')?.errors && (editarForm.get('sustituye')?.touched || editarForm.get('sustituye')?.dirty || mostrarErrores)"
+                                severity="error" [text]="getErrores('sustituye') ?? undefined"></p-message>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-10 flex justify-content-end gap-4">
+                    <p-confirmDialog />
+                    <p-toast pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem text-xl"
+                        (click)="cancelar()"></p-toast>
+                    <p-toast pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem text-xl"
+                        (click)="guardar()"></p-toast>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>*/ -->
