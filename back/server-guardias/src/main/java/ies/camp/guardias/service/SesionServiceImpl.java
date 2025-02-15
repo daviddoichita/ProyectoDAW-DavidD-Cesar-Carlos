@@ -1,7 +1,11 @@
 package ies.camp.guardias.service;
 
+import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.model.dto.SesionDTO;
 import ies.camp.guardias.repository.dao.AulaRepository;
 import ies.camp.guardias.repository.dao.CargoRepository;
+import ies.camp.guardias.repository.dao.CuadranteRepository;
+
 import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
@@ -95,7 +99,6 @@ public class SesionServiceImpl implements SesionService {
                 log.info(
                                 this.getClass().getSimpleName() +
                                                 " loadFromCSV: empezar a cargar la base de datos desde un CSV");
-
                 // Carga archivo a un ArrayList
                 ArrayList<String> lines = new ArrayList<>();
                 try {
@@ -346,6 +349,14 @@ public class SesionServiceImpl implements SesionService {
                 char letra = letras.charAt(numeros.intValue() % letras.length());
 
                 return numeros.toString() + letra;
+        }
+
+        @Override
+        public List<SesionDTO> findAllBySesiones(ProfesorDTO profesorDTO) {
+                log.info(this.getClass().getSimpleName()
+                                + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
+                                profesorDTO.getId());
+                return null;
         }
 
 }

@@ -1,8 +1,12 @@
 package ies.camp.guardias.web.restController;
 
 import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.model.dto.SesionDTO;
+import ies.camp.guardias.repository.entity.Profesor;
 import ies.camp.guardias.service.JwtService;
 import ies.camp.guardias.service.ProfesorService;
+import ies.camp.guardias.service.SesionService;
+
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -13,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProfesorRestController {
 
-        private static final Logger log = LoggerFactory.getLogger(
-                        ProfesorRestController.class);
+        private static final Logger log = LoggerFactory.getLogger(ProfesorRestController.class);
+
+        @Autowired
+        private BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @Autowired
         private ProfesorService profesorService;
@@ -47,16 +55,13 @@ public class ProfesorRestController {
                                 "token",
                                 token);
 
-                log.info(
-                                this.getClass().getSimpleName() + " me: devolver usuario logeado");
+                log.info(this.getClass().getSimpleName() + " me: devolver usuario logeado");
                 return ResponseEntity.ok(response);
         }
 
         @GetMapping(path = "/api/authLevel")
         public ResponseEntity<Map<String, Object>> authLevel() {
-                log.info(
-                                this.getClass().getSimpleName() +
-                                                " authLevel: devolver nivel de autoridad profesor");
+                log.info(this.getClass().getSimpleName() + " authLevel: devolver nivel de autoridad profesor");
 
                 Authentication authentication = SecurityContextHolder.getContext()
                                 .getAuthentication();
@@ -80,9 +85,7 @@ public class ProfesorRestController {
         @GetMapping(path = "/api/profesores")
         @PreAuthorize("hasRole('DIRECCION')")
         public List<ProfesorDTO> findAll() {
-                log.info(
-                                this.getClass().getSimpleName() +
-                                                " findAll: devolver todos los profesores");
+                log.info(this.getClass().getSimpleName() + " findAll: devolver todos los profesores");
 
                 return this.profesorService.findAll();
         }
@@ -97,10 +100,7 @@ public class ProfesorRestController {
         @GetMapping(path = "/api/profesores/{id}")
         @PreAuthorize("hasRole('DIRECCION')")
         public ProfesorDTO findById(@PathVariable Long id) {
-                log.info(
-                                this.getClass().getSimpleName() +
-                                                " findById: devolver profesor con id: {}",
-                                id);
+                log.info(this.getClass().getSimpleName() + " findById: devolver profesor con id: {}", id);
 
                 return this.profesorService.findById(id);
         }
@@ -113,10 +113,7 @@ public class ProfesorRestController {
         @GetMapping(path = "/api/profesores/{id}/delete")
         @PreAuthorize("hasRole('DIRECCION')")
         public void delete(@PathVariable Long id) {
-                log.info(
-                                this.getClass().getSimpleName() +
-                                                " deleteById: borrar profesor con id: {}",
-                                id);
+                log.info(this.getClass().getSimpleName() + " deleteById: borrar profesor con id: {}", id);
 
                 this.profesorService.delete(id);
         }
@@ -128,12 +125,10 @@ public class ProfesorRestController {
          */
         @PostMapping(path = "/api/profesores/save")
         @PreAuthorize("hasRole('DIRECCION')")
-        public void save(@RequestBody ProfesorDTO profesorDTO) {
-                log.info(
-                                this.getClass().getSimpleName() +
-                                                " save: guardar profesor con id: {}",
-                                profesorDTO.getId());
-                this.profesorService.save(profesorDTO);
+        public void save(@RequestBody ProfesorDTO profesorDTO, @RequestParam Long idProfesorBaja) {
+                log.info(this.getClass().getSimpleName() + " save: guardar profesor con id: {}", profesorDTO.getId());
+
+                this.profesorService.save(profesorDTO, idProfesorBaja);
         }
 
         /**
@@ -149,10 +144,14 @@ public class ProfesorRestController {
                 ProfesorDTO existeProfesor = this.profesorService.findById(id);
                 if (existeProfesor == null) {
                         log.error("El profesor con id {} no existe.", id);
+                        return;
                 }
+
                 existeProfesor.setNombre(profesorDTO.getNombre());
                 existeProfesor.setApellidos(profesorDTO.getApellidos());
-                existeProfesor.setContrasenya(profesorDTO.getContrasenya());
+                if (profesorDTO.getContrasenya() != null && !profesorDTO.getContrasenya().isEmpty()) {
+                        existeProfesor.setContrasenya(bCryptPasswordEncoder.encode(profesorDTO.getContrasenya()));
+                }
                 existeProfesor.setNif(profesorDTO.getNif());
                 existeProfesor.setDireccion(profesorDTO.getDireccion());
                 existeProfesor.setEmail(profesorDTO.getEmail());

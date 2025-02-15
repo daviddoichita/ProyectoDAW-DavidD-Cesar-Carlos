@@ -41,7 +41,9 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-profesor>
-                <tr [pSelectableRow]="profesor">
+                <tr [pSelectableRow]="profesor" [ngClass]="{'p-highlight': profesorSeleccionadosIds.has(profesor.id)}"
+                    [style.background-color]="profesorSeleccionadosIds.has(profesor.id) ? '#eaeaea' : 'inherit'"
+                    [style.color]="profesorSeleccionadosIds.has(profesor.id) ? 'black' : 'inherit'">
                     <td class="text-center">
                         <p-tableCheckbox [value]="profesor"></p-tableCheckbox>
                     </td>
