@@ -3,6 +3,8 @@ package ies.camp.guardias.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import ies.camp.guardias.model.dto.CuadranteDTO;
 
 public interface CuadranteService {
@@ -44,6 +46,17 @@ public interface CuadranteService {
      * @return lista de CuadranteDTO del dia actual
      */
     public List<CuadranteDTO> findToday();
+
+    /**
+     * Firma un cuadrante y devuelve el estado de la actualizacion
+     * 
+     * @param firma Firma con la que actualizar el cuadrante
+     * 
+     * @return 0 ok
+     * @return 1 error en actualizacion
+     * @return 2 error de autorizacion
+     */
+    public int firmarCuadrante(UserDetails currentUser, Long id, Long idFalta, String firma);
 
     /**
      * Devuelve una lista con todos los cuadrantes que tengan faltas

@@ -202,5 +202,6 @@ CREATE TABLE sesionfalta (
     FOREIGN KEY (idcuadrante) REFERENCES cuadrante (id)
 );
 
-INSERT INTO profesor (email, contrasenya, numero) values ("admin@gmail.com", "$2y$12$5K9vWyNbeCULvkASrnrMhOlN.Lzus5A6WoKJJY4iwq4Sx9k6S5frO", 999);
+
+INSERT INTO profesor (nombre, apellidos, numero, abreviacion, nif, contrasenya, admin, direccion, telefono, email, activo) values ("admin", "admin", 1, "adm", "12345678A", "$2y$12$5K9vWyNbeCULvkASrnrMhOlN.Lzus5A6WoKJJY4iwq4Sx9k6S5frO", 1, "admin", 123456789, "admin@gmail.com", 1);
 INSERT INTO profesor_roles values (1,1,1);

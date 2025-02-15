@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { HeaderComponent } from "../header/header.component";
 import { RippleModule } from 'primeng/ripple';
 import { AccordionModule } from 'primeng/accordion';
+import { ProfesorService } from '../../services/profesor.service';
 
 @Component({
   selector: 'app-nueva-falta',
@@ -19,8 +20,26 @@ import { AccordionModule } from 'primeng/accordion';
     CheckboxModule, HeaderComponent, RippleModule, AccordionModule],
   templateUrl: './nueva-falta.component.html',
 })
-export class NuevaFaltaComponent {
+export class NuevaFaltaComponent implements OnInit {
+
+  profesores: { label: string; value: any; }[] = [];
+
   rangeDates: Date[] | undefined;
+
+  constructor(private profesorService: ProfesorService) { }
+
+  ngOnInit() {
+    this.cargarProfesoresActivos();
+  }
+
+  cargarProfesoresActivos(): void {
+    this.profesorService.findAll().subscribe((data: any[]) => {
+      this.profesores = data.map(profesor => ({
+        label: `${profesor.nombre} ${profesor.apellidos}`,
+        value: profesor.id
+      }));
+    });
+  }
 
   horariosManana = [
     { indice: 1, hora: '8:20 - 9:15' },

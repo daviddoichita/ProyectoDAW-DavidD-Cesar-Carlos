@@ -21,4 +21,7 @@ public interface ProfesorRepository extends JpaRepository<Profesor, Long> {
 
     @Query(value = "SELECT * FROM profesor WHERE numero = ?1", nativeQuery = true)
     public Optional<Profesor> findByNumero(Long numero);
+
+    @Query(value = "SELECT numero FROM profesor ORDER BY numero DESC LIMIT 1", nativeQuery = true)
+    Optional<Long> findProfesorConNumeroMayor();
 }

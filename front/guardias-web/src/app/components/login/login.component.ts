@@ -22,7 +22,7 @@ import { GlobalStateService } from "../../services/global-state.service";
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: "app-login",
+  selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
@@ -43,8 +43,8 @@ import { DialogModule } from 'primeng/dialog';
     RouterModule,
     DialogModule
   ],
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -64,15 +64,15 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private globalStateService: GlobalStateService,
+    private globalStateService: GlobalStateService
   ) {
     this.loginForm = this.fb.group({
       emailOrNif: [
-        "",
+        '',
         [Validators.required, this.emailOrNifValidator.bind(this)],
       ],
       password: [
-        "",
+        '',
         [
           Validators.required,
           Validators.minLength(6),
@@ -84,10 +84,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const session = sessionStorage.getItem("token");
-    const local = localStorage.getItem("token");
+    const session = sessionStorage.getItem('token');
+    const local = localStorage.getItem('token');
     if (session || local) {
-      this.router.navigate(["cuadrante"]);
+      this.router.navigate(['cuadrante']);
     }
 
     this.loginForm.get('emailOrNif')?.valueChanges.subscribe(() => {
@@ -106,27 +106,29 @@ export class LoginComponent implements OnInit {
     }
 
     this.credentialsError = false;
-    let user: { email?: string, nif?: string, password: string } = { password: "" };
+    let user: { email?: string; nif?: string; password: string } = {
+      password: '',
+    };
 
     if (this.isEmail(this.loginForm.value.emailOrNif)) {
       user = {
         email: this.loginForm.value.emailOrNif,
         password: this.loginForm.value.password,
-      }
+      };
     } else {
       user = {
         nif: this.loginForm.value.emailOrNif,
         password: this.loginForm.value.password,
-      }
+      };
     }
     this.authService.login(user).subscribe({
       next: (response) => {
         if (this.loginForm.value.rememberMe) {
-          localStorage.setItem("token", response.token);
-          localStorage.setItem("tokenDate", new Date().toISOString());
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('tokenDate', new Date().toISOString());
         } else {
-          sessionStorage.setItem("token", response.token);
-          sessionStorage.setItem("tokenDate", new Date().toISOString());
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('tokenDate', new Date().toISOString());
         }
         this.globalStateService.alertMessage.subscribe({
           next: (route) => {
@@ -134,7 +136,7 @@ export class LoginComponent implements OnInit {
               this.globalStateService.clearAlertMessage();
               this.router.navigate([route]);
             } else {
-              this.router.navigate(["cuadrante"]);
+              this.router.navigate(['cuadrante']);
             }
           },
         });
@@ -146,7 +148,7 @@ export class LoginComponent implements OnInit {
           this.credentialsError = true;
           console.error('Credenciales incorrectas');
         } else {
-          console.error("Error");
+          console.error('Error');
         }
       },
     });
@@ -166,8 +168,8 @@ export class LoginComponent implements OnInit {
       return null;
     }
 
-    const isEmail = this.isEmail(value)
-    const isNif = this.isNif(value)
+    const isEmail = this.isEmail(value);
+    const isNif = this.isNif(value);
 
     if (isEmail || isNif) {
       return null;
@@ -184,7 +186,7 @@ export class LoginComponent implements OnInit {
 
     const numero = parseInt(nif.slice(0, 8), 10);
     const letra = nif.slice(8).toUpperCase();
-    const controlLetras = "TRWAGMYFPDXBNJZSQVHLCKE";
+    const controlLetras = 'TRWAGMYFPDXBNJZSQVHLCKE';
     const letraEsperada = controlLetras[numero % 23];
 
     return letra === letraEsperada;

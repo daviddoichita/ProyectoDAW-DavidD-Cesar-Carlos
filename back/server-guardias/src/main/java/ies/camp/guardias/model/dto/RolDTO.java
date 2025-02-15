@@ -1,7 +1,6 @@
 package ies.camp.guardias.model.dto;
 
 import ies.camp.guardias.repository.entity.Rol;
-import jakarta.annotation.Generated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
