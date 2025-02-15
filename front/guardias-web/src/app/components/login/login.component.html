@@ -57,15 +57,31 @@
             </div>
 
             <button pButton pRipple type="submit" class="colorBtn p-element p-ripple w-full p-3 p-button p-component">
-              <span class="p-button-label">Entrar</span>
+              <span class="p-button-label ">Entrar</span>
             </button>
-
           </form>
 
           <div class="olvidadoContra">
-            <a href="#">¿Has olvidado la contraseña?</a>
+            <a class="cursor-pointer" (click)="showDialog()">¿Has olvidado la contraseña?</a>
           </div>
         </div>
+
+        <p-dialog [(visible)]="visible" header="¿Has olvidado la contraseña?" [draggable]="false" [resizable]="false"
+          [closable]="false" [modal]="true" class="text-center" [style]="{ width: '20vw' }">
+          <p class=" text-color-secondary -mt-1 mb-4">Introduce tu email corporativo para recibir las instrucciones de
+            recuperación:</p>
+          <form>
+            <span class="p-input-icon-left mb-2">
+              <i class="pi pi-user"></i>
+              <input type="text" pInputText placeholder="Email" required
+                class="inputRecuperarContra p-inputtext p-component p-element w-full">
+            </span>
+            <button pButton pRipple type="submit" class="colorBtn p-element p-ripple w-full p-button p-component">
+              <span class="p-button-label ">Aceptar</span>
+            </button>
+          </form>
+          <a (click)="hideDialog()" class="text-color-secondary cursor-pointer text-center">Volver al login</a>
+        </p-dialog>
 
         <div class="noTienesCuenta">
           <p-divider align="center" styleclass="my-6" class="separador">

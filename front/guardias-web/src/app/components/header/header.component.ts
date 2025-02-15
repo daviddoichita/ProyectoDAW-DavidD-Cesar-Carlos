@@ -104,4 +104,8 @@ export class HeaderComponent implements OnInit {
   closeCallback(e: Event): void {
     this.sidebar.close(e);
   }
+
+  letraInicialMayuscula(name: string | undefined): string {
+    return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
+  }
 }
