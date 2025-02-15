@@ -26,9 +26,21 @@ export const routes: Routes = [
   { path: 'listado-profesores', component: ListadoProfesoresComponent },
   { path: 'alta-profesor', component: AltaProfesorComponent },
   { path: 'editar-profesor/:id', component: EditarProfesorComponent },
-  { path: 'informes-faltas', component: InformesFaltasComponent, canActivate: [authGuard] },
-  { path: 'informes-guardias', component: InformesAsistenciasComponent, canActivate: [authGuard] },
-  { path: 'informes-incidencias', component: InformesIncidenciasComponent, canActivate: [authGuard] },
+  {
+    path: 'informes-faltas',
+    component: InformesFaltasComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'informes-guardias',
+    component: InformesAsistenciasComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'informes-incidencias',
+    component: InformesIncidenciasComponent,
+    canActivate: [authGuard],
+  },
   {
     path: 'nueva-falta',
     component: NuevaFaltaComponent,

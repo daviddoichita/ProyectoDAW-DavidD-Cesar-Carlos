@@ -99,7 +99,6 @@ public class SesionServiceImpl implements SesionService {
                 log.info(
                                 this.getClass().getSimpleName() +
                                                 " loadFromCSV: empezar a cargar la base de datos desde un CSV");
-
                 // Carga archivo a un ArrayList
                 ArrayList<String> lines = new ArrayList<>();
                 try {
