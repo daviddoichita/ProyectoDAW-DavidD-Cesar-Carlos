@@ -170,6 +170,40 @@ public class CuadranteServiceImpl implements CuadranteService {
         }
 
         @Override
+        public int cambiarProfesorGuardia(Long from, Long idFalta, Long to) {
+                log.info(this.getClass().getSimpleName()
+                                + " cambiarProfesorGuardia: cambiar la guardia: {} del cuadrante: {} al cuadrante: {}",
+                                idFalta, from, to);
+
+                Optional<Cuadrante> fromOptional = this.cuadranteRepository.findById(from);
+                Optional<Cuadrante> toOptional = this.cuadranteRepository.findById(to);
+                int estado = 1;
+                if (fromOptional.isPresent() && toOptional.isPresent()) {
+                        Cuadrante fromCuadrante = fromOptional.get();
+                        Cuadrante toCuadrante = toOptional.get();
+
+                        if (fromCuadrante.getFecha().isBefore(LocalDate.now())) {
+                                estado = 3;
+                        } else {
+                                Falta falta = fromCuadrante.getFaltas().stream().filter(f -> f.getId().equals(idFalta))
+                                                .toList().get(0);
+
+                                fromCuadrante.getFaltas().remove(falta);
+                                Cuadrante fromSaved = this.cuadranteRepository.save(fromCuadrante);
+
+                                toCuadrante.getFaltas().add(falta);
+                                Cuadrante toSaved = this.cuadranteRepository.save(toCuadrante);
+
+                                if (fromSaved != null && toSaved != null) {
+                                        estado = 0;
+                                }
+                        }
+                }
+
+                return estado;
+        }
+
+        @Override
         public List<CuadranteDTO> findCuadranteConFaltas() {
                 log.info(this.getClass().getSimpleName()
                                 + " findCuadranteConFalta: devolver los cuadrantes con faltas");

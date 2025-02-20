@@ -155,4 +155,24 @@ public class CuadranteRestController {
                         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
         }
+
+        @GetMapping(path = "/cambiar")
+        @PreAuthorize("hasRole('DIRECCION')")
+        public ResponseEntity<Integer> cambiarProfesorFalta(@RequestParam Long from, @RequestParam Long to,
+                        @RequestParam Long idFalta) {
+                log.info(this.getClass().getSimpleName()
+                                + " cambiarProfesorFalta: cambiar profesor de guardia de la falta: {}", idFalta);
+
+                Integer status = this.cuadranteService.cambiarProfesorGuardia(from, idFalta, to);
+
+                if (status == 0) {
+                        return ResponseEntity.ok(status);
+                } else if (status == 2) {
+                        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                } else if (status == 3) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                } else {
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+        }
 }
