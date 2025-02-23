@@ -1,5 +1,11 @@
 package ies.camp.guardias.service;
 
+import ies.camp.guardias.model.dto.AulaDTO;
+import ies.camp.guardias.model.dto.CursoDTO;
+import ies.camp.guardias.model.dto.DiaDTO;
+import ies.camp.guardias.model.dto.GrupoDTO;
+import ies.camp.guardias.model.dto.IntervaloDTO;
+import ies.camp.guardias.model.dto.MateriaDTO;
 import ies.camp.guardias.model.dto.ProfesorDTO;
 import ies.camp.guardias.model.dto.SesionDTO;
 import ies.camp.guardias.repository.dao.AulaRepository;
@@ -353,10 +359,32 @@ public class SesionServiceImpl implements SesionService {
 
         @Override
         public List<SesionDTO> findAllBySesiones(ProfesorDTO profesorDTO) {
-                log.info(this.getClass().getSimpleName()
-                                + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
-                                profesorDTO.getId());
-                return null;
-        }
+            log.info(this.getClass().getSimpleName()
+                    + " findAllBySesiones: Lista de todas las sesiones del profesor: {}",
+                    profesorDTO.getId());
+        
+            List<Sesion> sesiones = sesionRepository.findSesionesProfesor(profesorDTO.getId());
+        
+                return sesiones.stream()
+                        .map(sesion -> SesionDTO.builder()
+                                .id(sesion.getId())
+                                .profesor(ProfesorDTO.convertToDTO(sesion.getProfesor()))
+                                .materia(MateriaDTO.convertToDTO(sesion.getMateria()))
+                                .grupo(sesion.getGrupo() != null ? GrupoDTO.convertToDTO(sesion.getGrupo()) : null)
+                                .aula(AulaDTO.convertToDTO(sesion.getAula()))
+                                .intervalo(IntervaloDTO.convertToDTO(sesion.getIntervalo()))
+                                .curso(CursoDTO.convertToDTO(sesion.getCurso()))
+                                .dia(DiaDTO.convertToDTO(sesion.getDia()))
+                                .build())
+                        .collect(Collectors.toList());
 
+        }
+        
+
+        public List<Sesion> findByProfesor(Long idProfesor) {
+                List<Sesion> sesiones = sesionRepository.findSesionesProfesor(idProfesor);
+                log.info("Sesiones encontradas para el profesor {}: {}", idProfesor, sesiones.size());
+                return sesiones;
+            }
+            
 }
