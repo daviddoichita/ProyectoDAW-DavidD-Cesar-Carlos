@@ -3,6 +3,8 @@ package ies.camp.guardias.service;
 import ies.camp.guardias.repository.dao.AulaRepository;
 import ies.camp.guardias.repository.dao.CargoRepository;
 import ies.camp.guardias.repository.dao.CuadranteRepository;
+
+import ies.camp.guardias.repository.dao.CuadranteRepository;
 import ies.camp.guardias.repository.dao.CursoRepository;
 import ies.camp.guardias.repository.dao.DiaRepository;
 import ies.camp.guardias.repository.dao.FaltaRepository;
@@ -138,7 +140,6 @@ public class SesionServiceImpl implements SesionService {
                         log.info(this.getClass().getSimpleName() + " load: profesor generado: {}", profesor);
                         profesores.add(profesor);
                 }
-
                 // Cargar las tablas
                 try {
                         materias.forEach(this.materiaRepository::save);

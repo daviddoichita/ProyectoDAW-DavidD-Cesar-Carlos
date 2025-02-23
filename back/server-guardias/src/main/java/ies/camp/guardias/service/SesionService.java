@@ -2,6 +2,9 @@ package ies.camp.guardias.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import ies.camp.guardias.model.dto.ProfesorDTO;
+import ies.camp.guardias.model.dto.SesionDTO;
+
 public interface SesionService {
 
     /**
@@ -13,4 +16,5 @@ public interface SesionService {
      */
     public boolean loadFromCSV(MultipartFile csv, int year);
 
+    public List<SesionDTO> findAllBySesiones(ProfesorDTO profesorDTO);
 }
