@@ -2,14 +2,15 @@
     <app-header></app-header>
     <div class="main-section">
         <div class="flex justify-content-center align-items-center gap-6 mb-5 mt-2">
-            <p-dropdown class="w-20rem" [options]="profesores"
-                [placeholder]="profesores.length ? 'Selecciona un profesor' : 'No hay profesores'"></p-dropdown>
-            <p-floatLabel class="w-20rem">
+            <p-dropdown class="w-20rem" [options]="profesores" [(ngModel)]="profesorSeleccionado" 
+            (onChange)="cargarHorarioProfesor()" [placeholder]="profesores.length ? 'Selecciona un profesor' : 'No hay profesores'">
+            </p-dropdown>        
+            <!-- <p-floatLabel class="w-20rem">
                 <p-calendar inputId="rango" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
-                    class="w-full">
+                    class="w-full" (onSelect)="filtrarHorariosPorFecha()">
                 </p-calendar>
                 <label for="rango">Selecciona un rango</label>
-            </p-floatLabel>
+            </p-floatLabel> -->
         </div>
 
         <p-accordion [multiple]="true" [activeIndex]="[0]">
@@ -20,23 +21,18 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th class="text-2xl bg-gray-300 text-center">HORA</th>
-                                <th class="text-2xl bg-gray-300 text-center"></th>
-                                <th class="text-2xl bg-gray-300 text-center">LUNES</th>
-                                <th class="text-2xl bg-gray-300 text-center">MARTES</th>
-                                <th class="text-2xl bg-gray-300 text-center">MIÉRCOLES</th>
-                                <th class="text-2xl bg-gray-300 text-center">JUEVES</th>
-                                <th class="text-2xl bg-gray-300 text-center">VIERNES</th>
+                                <th class="text-xl text-center" *ngFor="let dia of diasSemana">{{ dia }}</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-horario let-i="index">
                             <tr [ngClass]="{ 'bg-gray-300': !horario.indice }">
-                                <td class="text-xl text-center">{{ horario.hora }}</td>
-                                <td class="text-xl text-center">{{ horario.indice || '' }}</td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
+                                <td class="text-xl text-center">
+                                {{ horario.hora }}
+                                <td class="text-xl text-center cursor-pointer hover:bg-gray-200" 
+                                    *ngFor="let dia of diasSemana"
+                                    (click)="seleccionarAsignatura(horario[dia.toLowerCase()], horario.hora, dia)">
+                                    {{ horario[dia.toLowerCase()]?.materia || '-' }}
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -50,23 +46,19 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th class="text-2xl bg-gray-300 text-center">HORA</th>
-                                <th class="text-2xl bg-gray-300 text-center"></th>
-                                <th class="text-2xl bg-gray-300 text-center">LUNES</th>
-                                <th class="text-2xl bg-gray-300 text-center">MARTES</th>
-                                <th class="text-2xl bg-gray-300 text-center">MIÉRCOLES</th>
-                                <th class="text-2xl bg-gray-300 text-center">JUEVES</th>
-                                <th class="text-2xl bg-gray-300 text-center">VIERNES</th>
+                                <th class="text-xl text-center" *ngFor="let dia of diasSemana">{{ dia }}</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-horario let-i="index">
                             <tr [ngClass]="{ 'bg-gray-300': !horario.indice }">
-                                <td class="text-xl text-center">{{ horario.hora }}</td>
-                                <td class="text-xl text-center">{{ horario.indice || '' }}</td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
-                                <td class="text-xl text-center"></td>
+                                <td class="text-xl text-center">
+                                    {{ horario.hora }}
+                                </td>
+                                <td class="text-xl text-center cursor-pointer hover:bg-gray-200" 
+                                    *ngFor="let dia of diasSemana"
+                                    (click)="seleccionarAsignatura(horario[dia.toLowerCase()], horario.hora, dia)">
+                                    {{ horario[dia.toLowerCase()]?.materia || '-' }}
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -100,8 +92,9 @@
         </div>
 
         <div class="flex justify-content-center gap-4 mt-6">
-            <button pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem"></button>
-            <button pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem"></button>
+            <p-confirmDialog />
+            <p-toast pButton pRipple label="Guardar" class="p-button-success p-button-lg w-9rem" (click)="guardarFalta()"></p-toast>
+            <p-toast pButton pRipple label="Cancelar" class="p-button-danger p-button-lg w-9rem" (click)="cancelar()"></p-toast>
         </div>
     </div>
 </div>
