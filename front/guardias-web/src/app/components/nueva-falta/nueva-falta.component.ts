@@ -216,9 +216,12 @@ seleccionarAsignatura(asignatura: any, hora: string, dia: string) {
     }
 
     const faltaData = {
-      sesiones: this.sesionesSeleccionadas.map(sesion => ({
-        idsesion: sesion.id,
-        idcuadrante: this.idCuadranteSeleccionado
+      profesorId: this.profesorSeleccionado,
+      asignaturas: this.asignaturasSeleccionadas.map(asig => ({
+        nombre: asig.nombre,
+        hora: asig.hora,
+        dia: asig.dia,
+        deberes: asig.deberes
       }))
     };
 
