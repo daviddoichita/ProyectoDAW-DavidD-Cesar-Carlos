@@ -26,4 +26,9 @@ export class SesionService {
 
     return this.http.get<Sesion[]>(`${this.url}/profesor/${id}`, { headers: this.auth.getAuthHeader() });
   }
+
+  findByProfesor(profesorId: number): Observable<Sesion[]> {
+
+    return this.http.get<Sesion[]>(`${this.url}/profesor/${profesorId}`, { headers: this.auth.getAuthHeader() });
+  }  
 }
