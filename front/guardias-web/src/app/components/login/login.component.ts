@@ -144,7 +144,11 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         console.error('Error en el inicio de sesión:', error);
 
-        if (error.status === 403 || error.status === 404 || error.status === 401) {
+        if (
+          error.status === 403 ||
+          error.status === 401 ||
+          error.status === 404
+        ) {
           this.credentialsError = true;
           console.error('Credenciales incorrectas');
         } else {

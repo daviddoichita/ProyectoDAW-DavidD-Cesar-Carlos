@@ -1,28 +1,32 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, map } from "rxjs";
-import { Router } from "@angular/router";
-import { GlobalStateService } from "./global-state.service";
-import { ConfirmationDialogTemplatesService } from "./confirmation-dialog-templates.service";
-import { Profesor } from "../interfaces/profesor";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { Router } from '@angular/router';
+import { GlobalStateService } from './global-state.service';
+import { ConfirmationDialogTemplatesService } from './confirmation-dialog-templates.service';
+import { Profesor } from '../interfaces/profesor';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = "https://localhost:8000/api/auth";
+  private apiUrl = 'https://localhost:8000/api/auth';
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private globalStateService: GlobalStateService,
-    private confirmationDialogTemplatesService: ConfirmationDialogTemplatesService,
-  ) { }
+    private confirmationDialogTemplatesService: ConfirmationDialogTemplatesService
+  ) {}
 
-  login(credentials: { email?: string, nif?: string, password: string }): Observable<any> {
+  login(credentials: {
+    email?: string;
+    nif?: string;
+    password: string;
+  }): Observable<any> {
     const user = JSON.stringify(credentials);
     return this.http.post(`${this.apiUrl}/login`, user, {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
@@ -31,20 +35,20 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    const local = localStorage.getItem("token");
+    const local = localStorage.getItem('token');
     if (local) {
       return local;
     }
-    const session = sessionStorage.getItem("token");
+    const session = sessionStorage.getItem('token');
     return session;
   }
 
   getTokenDate(): string | null {
-    const local = localStorage.getItem("tokenDate");
+    const local = localStorage.getItem('tokenDate');
     if (local) {
       return local;
     }
-    const session = sessionStorage.getItem("tokenDate");
+    const session = sessionStorage.getItem('tokenDate');
     return session;
   }
 
@@ -59,17 +63,17 @@ export class AuthService {
 
       if (diffHours > 24) {
         const clearToken = () => {
-          localStorage.removeItem("token");
-          sessionStorage.removeItem("token");
-          localStorage.removeItem("tokenDate");
-          sessionStorage.removeItem("tokenDate");
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+          localStorage.removeItem('tokenDate');
+          sessionStorage.removeItem('tokenDate');
         };
 
         this.globalStateService.setConfirmDialog(
           this.confirmationDialogTemplatesService.loginTimeoutAlert(() => {
-            this.router.navigate(["/login"]);
+            this.router.navigate(['/login']);
             clearToken();
-          }, clearToken),
+          }, clearToken)
         );
 
         this.router.navigate([this.router.url]);
@@ -77,26 +81,26 @@ export class AuthService {
     }
 
     return new HttpHeaders({
-      Authorization: "Bearer " + token,
+      Authorization: 'Bearer ' + token,
     });
   }
 
   getAuthLevel(): Observable<boolean> {
     return this.http
-      .get<boolean>(this.apiUrl + "Level", {
+      .get<boolean>(this.apiUrl + 'Level', {
         headers: this.getAuthHeader(),
       })
       .pipe(
         map((response) => {
           const respJson = JSON.parse(JSON.stringify(response));
-          return respJson.authLevel === "ROLE_DIRECCION";
-        }),
+          return respJson?.authLevel === 'ROLE_DIRECCION';
+        })
       );
   }
 
   isLogged(): boolean {
-    const local = localStorage.getItem("token");
-    const session = sessionStorage.getItem("token");
+    const local = localStorage.getItem('token');
+    const session = sessionStorage.getItem('token');
     if (!local && !session) {
       return false;
     }
@@ -104,10 +108,14 @@ export class AuthService {
   }
 
   me(): Observable<Profesor> {
-    return this.http.get<{ user: Profesor, token: string }>("https://localhost:8000/api/me", { headers: this.getAuthHeader() }).pipe(
-      map((response) => {
-        return response.user;
+    return this.http
+      .get<{ user: Profesor; token: string }>('https://localhost:8000/api/me', {
+        headers: this.getAuthHeader(),
       })
-    )
+      .pipe(
+        map((response) => {
+          return response?.user;
+        })
+      );
   }
 }

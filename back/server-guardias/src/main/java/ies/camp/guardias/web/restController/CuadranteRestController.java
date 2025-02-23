@@ -126,6 +126,51 @@ public class CuadranteRestController {
                         return ResponseEntity.ok(status);
                 } else if (status == 2) {
                         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                } else if (status == 3) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                } else {
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+        }
+
+        @GetMapping(path = "/incidencia")
+        public ResponseEntity<Integer> addIncidenciaCuadrante(@RequestParam Long idCuadrante,
+                        @RequestParam Long idFalta, @RequestParam String incidencia) {
+                log.info(this.getClass().getSimpleName()
+                                + " addIncidenciaCuadrante: asignar incidencia a cuadrante: {}", incidencia);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                UserDetails currentUser = (UserDetails) authentication.getPrincipal();
+
+                Integer status = this.cuadranteService.addIncidenciaCuadrante(currentUser, idCuadrante, idFalta,
+                                incidencia);
+
+                if (status == 0) {
+                        return ResponseEntity.ok(status);
+                } else if (status == 2) {
+                        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                } else if (status == 3) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                } else {
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+        }
+
+        @GetMapping(path = "/cambiar")
+        @PreAuthorize("hasRole('DIRECCION')")
+        public ResponseEntity<Integer> cambiarProfesorFalta(@RequestParam Long from, @RequestParam Long to,
+                        @RequestParam Long idFalta) {
+                log.info(this.getClass().getSimpleName()
+                                + " cambiarProfesorFalta: cambiar profesor de guardia de la falta: {}", idFalta);
+
+                Integer status = this.cuadranteService.cambiarProfesorGuardia(from, idFalta, to);
+
+                if (status == 0) {
+                        return ResponseEntity.ok(status);
+                } else if (status == 2) {
+                        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                } else if (status == 3) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 } else {
                         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }

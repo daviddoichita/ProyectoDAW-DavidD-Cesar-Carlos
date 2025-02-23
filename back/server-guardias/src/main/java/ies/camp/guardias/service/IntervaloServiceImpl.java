@@ -26,4 +26,29 @@ public class IntervaloServiceImpl implements IntervaloService {
         return this.intervaloRepository.findAll().stream().map(IntervaloDTO::convertToDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<IntervaloDTO> findIntervalosGuardiasProfesor(Long idProfesor) {
+        log.info(this.getClass().getSimpleName()
+                + " findIntervalosGuardiasProfesor: devolver los intervalos de guardia del profesor: {}", idProfesor);
+
+        return this.intervaloRepository.findIntervalosGuardiasProfesor(idProfesor).stream()
+                .map(IntervaloDTO::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IntervaloDTO> findIntervalosGuardiasProfesorByDia(Long idProfesor, Long idDia) {
+        log.info(this.getClass().getSimpleName()
+                + " findIntervalosGuardiasProfesorByDia: devolver los intervalos de guardia del profesor: {} del dia: {}",
+                idProfesor, idDia);
+
+        return this.intervaloRepository.findIntervalosGuardiasProfesorByDia(idProfesor, idDia).stream()
+                .map(IntervaloDTO::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public IntervaloDTO findNow() {
+        log.info(this.getClass().getSimpleName() + " findNow: devolver el intervalo asociado a la hora actual");
+
+        return this.intervaloRepository.findNow().map(IntervaloDTO::convertToDTO).orElse(null);
+    }
 }
