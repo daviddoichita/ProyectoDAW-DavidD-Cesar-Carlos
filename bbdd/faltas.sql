@@ -1,0 +1,1 @@
+insert into sesionfalta (idcuadrante, idsesion, incidencias, deberes, firma) values (6067, 20, null, 0, null), (6074, 21, null, 1, null), (6082, 22, null, 0, null), (6090, 23, null, 1, null), (6097, 24, null, 0, null), (6104, 25, null, 0, null), (6104, 26, null, 1, null);

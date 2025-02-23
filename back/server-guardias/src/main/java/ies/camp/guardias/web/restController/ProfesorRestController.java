@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProfesorRestController {
 
-        private static final Logger log = LoggerFactory.getLogger(ProfesorRestController.class);
+        private static final Logger log = LoggerFactory.getLogger(
+                        ProfesorRestController.class);
 
         @Autowired
         private BCryptPasswordEncoder bCryptPasswordEncoder;

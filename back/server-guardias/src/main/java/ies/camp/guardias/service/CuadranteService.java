@@ -50,13 +50,46 @@ public interface CuadranteService {
     /**
      * Firma un cuadrante y devuelve el estado de la actualizacion
      * 
-     * @param firma Firma con la que actualizar el cuadrante
+     * @param currentUser Usuario con la sesion iniciada actual
+     * @param id          id del cuadrante con la falta a firmar
+     * @param idFalta     id de la falta a firmar
+     * @param firma       Firma con la que actualizar el cuadrante
      * 
      * @return 0 ok
      * @return 1 error en actualizacion
      * @return 2 error de autorizacion
+     * @return 3 error de intervalo de tiempo
      */
     public int firmarCuadrante(UserDetails currentUser, Long id, Long idFalta, String firma);
+
+    /**
+     * Edita un cuadrante para asignarle una incidencia
+     * 
+     * @param currentUser Usuario con la sesion iniciada actual
+     * @param id          id del cuadrante con la falta a asignar incidencia
+     * @param idFalta     id de la falta a asignar incidencia
+     * @param incidencia  incidencia con la que actualizar el cuadrante
+     * 
+     * @return 0 ok
+     * @return 1 error en actualizacion
+     * @return 2 error de autorizacion
+     * @return 3 error de intervalo de tiempo
+     */
+    public int addIncidenciaCuadrante(UserDetails currentUser, Long id, Long idFalta, String incidencia);
+
+    /**
+     * Cambiar una falta de un cudrante a otro
+     * 
+     * @param from    Cuadrante que contiene la falta actualmente
+     * @param idFalta Falta a la que cambiar la relacion
+     * @param to      Cuadrante al que va la falta
+     * 
+     * @return 0 ok
+     * @return 1 error en la actualizacion
+     * @return 2 error de autorizacion
+     * @return 3 error de fecha
+     */
+    public int cambiarProfesorGuardia(Long from, Long idFalta, Long to);
 
     /**
      * Devuelve una lista con todos los cuadrantes que tengan faltas
