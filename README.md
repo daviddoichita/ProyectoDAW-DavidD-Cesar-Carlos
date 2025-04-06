@@ -52,9 +52,9 @@ Debido a que el certificado HTTPS es autofirmado los navegadores no lo aceptan s
 - Entrar primero a https://localhost:8000/api/intervalos (por ejemplo) y aceptar el certificado
 - Despues de esto, ya puedes entrar al [front](https://localhost:4200/), aceptar el certificado e iniciar sesion como admin
   
-  | **Email** | **Contraseña** |
-  | ----------|----------------|
-  | admin     | admin1         |
+  | **Email**           | **Contraseña** |
+  | --------------------|----------------|
+  | admin@gmail.com     | admin1         |
 
 # Mas
 ### Sentencias insercion faltas manualmente
